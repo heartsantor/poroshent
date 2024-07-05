@@ -2,6 +2,7 @@ import React, { Suspense, Fragment, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Loader from './components/Loader/Loader';
+import AdminLayout from './layouts/AdminLayout';
 
 export const renderRoutes = (routes = []) => (
   <Suspense fallback={<Loader />}>
@@ -32,6 +33,17 @@ const routes = [
     exact: 'true',
     path: '/',
     element: lazy(() => import('./views/auth/signin/SignIn'))
+  },
+  {
+    path: '*',
+    layout: AdminLayout,
+    routes: [
+      {
+        exact: 'true',
+        path: '/dashboard',
+        element: lazy(() => import('./views/dashboard'))
+      }
+    ]
   }
 ];
 
