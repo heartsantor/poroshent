@@ -1,11 +1,8 @@
 import React from 'react';
 
-const SignIn = () => {
-  return (
-    <>
-      <h1>signin</h1>
-    </>
-  );
+
+const Signin = () => {
+  return <React.Fragment>dfgfdgdfg</React.Fragment>;
 };
 
-export default SignIn;
+export default Signin;
