@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, ListGroup, Dropdown } from 'react-bootstrap';
+import { ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
@@ -13,101 +15,45 @@ import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
 const NavRight = () => {
   const [listOpen, setListOpen] = useState(false);
 
-  const notiData = [
-    {
-      name: 'Joseph William',
-      image: avatar2,
-      details: 'Purchase New Theme and make payment',
-      activity: '30 min'
-    },
-    {
-      name: 'Sara Soudein',
-      image: avatar3,
-      details: 'currently login',
-      activity: '30 min'
-    },
-    {
-      name: 'Suzen',
-      image: avatar4,
-      details: 'Purchase New Theme and make payment',
-      activity: 'yesterday'
-    }
+  const { i18n } = useTranslation();
+  const [radioValue, setRadioValue] = useState(i18n.language);
+
+  useEffect(() => {
+    setRadioValue(i18n.language);
+  }, [i18n.language]);
+
+  const handleChange = (e) => {
+    const lang = e.currentTarget.value;
+    i18n.changeLanguage(lang);
+    localStorage.setItem('i18nextLng', lang);
+    setRadioValue(lang);
+  };
+
+  const radios = [
+    { name: 'বাংলা', value: 'bn' },
+    { name: 'English', value: 'en' }
   ];
 
   return (
     <React.Fragment>
       <ListGroup as="ul" bsPrefix=" " className="navbar-nav ml-auto" id="navbar-right">
-        <ListGroup.Item as="li" bsPrefix=" ">
-          <Dropdown align="end">
-            <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
-              <i className="feather icon-bell icon" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu align="end" className="notification notification-scroll">
-              <div className="noti-head">
-                <h6 className="d-inline-block m-b-0">Notifications</h6>
-                <div className="float-end">
-                  <Link to="#" className="me-2">
-                    mark as read
-                  </Link>
-                  <Link to="#">clear all</Link>
-                </div>
-              </div>
-              <PerfectScrollbar>
-                <ListGroup as="ul" bsPrefix=" " variant="flush" className="noti-body">
-                  <ListGroup.Item as="li" bsPrefix=" " className="n-title">
-                    <p className="m-b-0">NEW</p>
-                  </ListGroup.Item>
-                  <ListGroup.Item as="li" bsPrefix=" " className="notification">
-                    <Card
-                      className="d-flex align-items-center shadow-none mb-0 p-0"
-                      style={{ flexDirection: 'row', backgroundColor: 'unset' }}
-                    >
-                      <img className="img-radius" src={avatar1} alt="Generic placeholder" />
-                      <Card.Body className="p-0">
-                        <p>
-                          <strong>John Doe</strong>
-                          <span className="n-time text-muted">
-                            <i className="icon feather icon-clock me-2" />
-                            30 min
-                          </span>
-                        </p>
-                        <p>New ticket Added</p>
-                      </Card.Body>
-                    </Card>
-                  </ListGroup.Item>
-                  <ListGroup.Item as="li" bsPrefix=" " className="n-title">
-                    <p className="m-b-0">EARLIER</p>
-                  </ListGroup.Item>
-                  {notiData.map((data, index) => {
-                    return (
-                      <ListGroup.Item key={index} as="li" bsPrefix=" " className="notification">
-                        <Card
-                          className="d-flex align-items-center shadow-none mb-0 p-0"
-                          style={{ flexDirection: 'row', backgroundColor: 'unset' }}
-                        >
-                          <img className="img-radius" src={data.image} alt="Generic placeholder" />
-                          <Card.Body className="p-0">
-                            <p>
-                              <strong>{data.name}</strong>
-                              <span className="n-time text-muted">
-                                <i className="icon feather icon-clock me-2" />
-                                {data.activity}
-                              </span>
-                            </p>
-                            <p>{data.details}</p>
-                          </Card.Body>
-                        </Card>
-                      </ListGroup.Item>
-                    );
-                  })}
-                </ListGroup>
-              </PerfectScrollbar>
-              <div className="noti-footer">
-                <Link to="#">show all</Link>
-              </div>
-            </Dropdown.Menu>
-          </Dropdown>
-        </ListGroup.Item>
+        <ButtonGroup toggle>
+          {radios.map((radio, idx) => (
+            <ToggleButton
+              className="toggle-button"
+              key={idx}
+              id={`radio-${idx}`}
+              type="radio"
+              variant={radioValue === radio.value ? 'outline-primary' : 'outline-light'}
+              name="radio"
+              value={radio.value}
+              checked={radioValue === radio.value}
+              onChange={handleChange}
+            >
+              {radio.name}
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
         <ListGroup.Item as="li" bsPrefix=" ">
           <Dropdown>
             <Dropdown.Toggle as={Link} variant="link" to="#" className="displayChatbox" onClick={() => setListOpen(true)}>

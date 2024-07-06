@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useTranslation } from 'react-i18next';
 import NavLeft from './NavLeft';
 import NavRight from './NavRight';
 
@@ -8,6 +8,7 @@ import { ConfigContext } from '../../../contexts/ConfigContext';
 import * as actionType from '../../../store/actions';
 
 const NavBar = () => {
+  const { t } = useTranslation();
   const [moreToggle, setMoreToggle] = useState(false);
   const configContext = useContext(ConfigContext);
   const { collapseMenu, headerFixedLayout, layout } = configContext.state;
@@ -43,9 +44,9 @@ const NavBar = () => {
         </Link>
         <Link to="#" className="b-brand">
           <div className="b-bg">
-            <i className="feather icon-trending-up" />
+            <i className="feather icon-home" />
           </div>
-          <span className="b-title">Datta Able</span>
+          <span className="b-title"> {t('porosh_ent')}</span>
         </Link>
         <Link to="#" className={moreClass.join(' ')} onClick={() => setMoreToggle(!moreToggle)}>
           <i className="feather icon-more-vertical" />

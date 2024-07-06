@@ -12,7 +12,8 @@ export default defineConfig(({ mode }) => {
       // this ensures that the browser opens upon server start
       open: true,
       // this sets a default port to 3000
-      port: PORT
+      port: PORT,
+      host: true // Use network IP
     },
     define: {
       global: 'window'
@@ -60,6 +61,9 @@ export default defineConfig(({ mode }) => {
       }
     },
     base: API_URL,
-    plugins: [react(), jsconfigPaths()]
+    plugins: [react(), jsconfigPaths()],
+    build: {
+      outDir: 'dist'
+    }
   };
 });

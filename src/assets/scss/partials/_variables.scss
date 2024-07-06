@@ -3,6 +3,39 @@
 // =======================================
 /*
 */
+
+@import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap");
+
+.hind-siliguri-light {
+  font-family: "Hind Siliguri", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.hind-siliguri-regular {
+  font-family: "Hind Siliguri", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.hind-siliguri-medium {
+  font-family: "Hind Siliguri", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.hind-siliguri-semibold {
+  font-family: "Hind Siliguri", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.hind-siliguri-bold {
+  font-family: "Hind Siliguri", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
 $header-height: 70px;
 $Menu-width: 264px;
 $Menu-collapsed-width: 80px;
@@ -10,6 +43,7 @@ $Menu-collapsed-width: 80px;
 // color list for build layouts
 // temp variables
 $theme-color: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%);
+$logo-color: linear-gradient(-135deg, #676969 0%, #7a7a7a 100%);
 $theme-color2: linear-gradient(-135deg, #899fd4 0%, #a389d4 100%);
 $primary-color: #04a9f5;
 $warning-color: #f4c22b;
@@ -61,7 +95,7 @@ $color-title-color: $primary-color, #ff5252, #9575cd, #23b7e5, lighten($dark-lay
 // layout-6 background color
 $layout-6-bg-color: #23b7e5;
 
-$theme-font-family: 'Open Sans', sans-serif;
+$theme-font-family: "Hind Siliguri", sans-serif;
 $theme-font-size: 14px;
 $theme-background: #f4f7fa;
 $theme-font-color: #888;
@@ -75,19 +109,17 @@ $color-bt-color: $primary-color, $danger-color, $success-color, $warning-color, 
 // form-control variables
 $form-bg: #f0f3f6;
 
-$theme-colors: () !default;
-$theme-colors: map-merge(
-  (
-    'primary': $primary-color,
-    'secondary': $secondary-color,
-    'success': $success-color,
-    'info': $info-color,
-    'warning': $warning-color,
-    'danger': $danger-color,
-    'light': $light-color,
-    'dark': $dark-color
-  ),
-  $theme-colors
+$theme-colors: (
+  ) !default;
+$theme-colors: map-merge(('primary': $primary-color,
+      'secondary': $secondary-color,
+      'success': $success-color,
+      'info': $info-color,
+      'warning': $warning-color,
+      'danger': $danger-color,
+      'light': $light-color,
+      'dark': $dark-color ),
+    $theme-colors
 ); // Color contrast
 $yiq-contrasted-threshold: 200 !default;
 $yiq-dark-color: #37474f;

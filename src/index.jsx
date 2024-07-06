@@ -6,6 +6,7 @@ import { ConfigProvider } from './contexts/ConfigContext';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './i18n';
 
 const container = document.getElementById('root');
 const root = createRoot(container);

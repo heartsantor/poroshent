@@ -1,16 +1,20 @@
 import React from 'react';
 import { Row, Col, Alert, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { Formik } from 'formik';
 
 const JWTLogin = () => {
+  const { t } = useTranslation();
   return (
     <Formik
-      initialValues={{
-        email: 'info@codedthemes.com',
-        password: '123456',
-        submit: null
-      }}
+      initialValues={
+        {
+          // email: 'info@codedthemes.com',
+          // password: '123456',
+          // submit: null
+        }
+      }
       validationSchema={Yup.object().shape({
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
         password: Yup.string().max(255).required('Password is required')
@@ -21,6 +25,7 @@ const JWTLogin = () => {
           <div className="form-group mb-3">
             <input
               className="form-control"
+              placeholder="Email Address"
               label="Email Address / Username"
               name="email"
               onBlur={handleBlur}
@@ -34,6 +39,7 @@ const JWTLogin = () => {
             <input
               className="form-control"
               label="Password"
+              placeholder="Password"
               name="password"
               onBlur={handleBlur}
               onChange={handleChange}
@@ -46,7 +52,7 @@ const JWTLogin = () => {
           <div className="custom-control custom-checkbox  text-start mb-4 mt-2">
             <input type="checkbox" className="custom-control-input mx-2" id="customCheck1" />
             <label className="custom-control-label" htmlFor="customCheck1">
-              Save credentials.
+              Remember Me
             </label>
           </div>
 
@@ -59,7 +65,7 @@ const JWTLogin = () => {
           <Row>
             <Col mt={2}>
               <Button className="btn-block mb-4" color="primary" disabled={isSubmitting} size="large" type="submit" variant="primary">
-                Signin
+                {t('login')}
               </Button>
             </Col>
           </Row>

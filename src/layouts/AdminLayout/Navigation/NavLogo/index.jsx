@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-
+import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../../../../contexts/ConfigContext';
 import * as actionType from '../../../../store/actions';
 
 const NavLogo = () => {
+  const { t } = useTranslation();
   const configContext = useContext(ConfigContext);
   const { collapseMenu } = configContext.state;
   const { dispatch } = configContext;
@@ -19,9 +20,9 @@ const NavLogo = () => {
       <div className="navbar-brand header-logo">
         <Link to="#" className="b-brand">
           <div className="b-bg">
-            <i className="feather icon-trending-up" />
+            <i className="feather icon-home" />
           </div>
-          <span className="b-title">Datta Able</span>
+          <span className="b-title">{t('porosh_ent')}</span>
         </Link>
         <Link to="#" className={toggleClass.join(' ')} id="mobile-collapse" onClick={() => dispatch({ type: actionType.COLLAPSE_MENU })}>
           <span />
