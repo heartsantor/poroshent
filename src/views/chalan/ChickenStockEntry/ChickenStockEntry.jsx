@@ -110,10 +110,8 @@ const ChickenStockEntry = () => {
                   <Form.Control as="textarea" rows="3" />
                 </Form.Group>
               </Col>
-              <Col md={4}>
-                <Button variant="primary">সংরক্ষণ</Button>
-              </Col>
             </Row>
+            <Button variant="primary">সংরক্ষণ</Button>
           </Form>
         </Card.Body>
       </Card>
