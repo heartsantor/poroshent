@@ -32,7 +32,7 @@ const routes = [
   {
     exact: 'true',
     path: '/',
-    element: lazy(() => import('./views/auth/signin/SignIn'))
+    element: lazy(() => import('./views/signin/SignIn'))
   },
   {
     path: '*',
@@ -42,6 +42,11 @@ const routes = [
         exact: 'true',
         path: '/dashboard',
         element: lazy(() => import('./views/dashboard'))
+      },
+      {
+        exact: 'true',
+        path: '/chalan/product-name-entry',
+        element: lazy(() => import('./views/chalan/ProductNameEntry/ProductNameEntry'))
       }
     ]
   }
