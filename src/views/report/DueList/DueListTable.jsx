@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTable, usePagination } from 'react-table';
 import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
@@ -44,12 +44,15 @@ const columns = [
 ];
 
 const DueListTable = ({ handlePrint, tableRef }) => {
+  const [printMode, setPrintMode] = useState(false);
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page,
+    rows, // Use all rows for printing
+    page, // Only use page for normal display
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -67,9 +70,17 @@ const DueListTable = ({ handlePrint, tableRef }) => {
     usePagination
   );
 
+  const handlePrintClick = () => {
+    setPrintMode(true);
+    setTimeout(() => {
+      handlePrint();
+      setPrintMode(false);
+    }, 1000);
+  };
+
   return (
     <div className="table-container">
-      <button className="print-button" onClick={handlePrint}>
+      <button className="print-button" onClick={handlePrintClick}>
         Print
       </button>
       <div ref={tableRef}>
@@ -85,7 +96,7 @@ const DueListTable = ({ handlePrint, tableRef }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
+            {(printMode ? rows : page).map((row, i) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
@@ -98,41 +109,43 @@ const DueListTable = ({ handlePrint, tableRef }) => {
           </tbody>
         </table>
       </div>
-      <div className="pagination-controls">
-        <div className="d-flex gap-2">
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
-          </button>
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>
-          <button onClick={() => gotoPage(pageOptions.length - 1)} disabled={!canNextPage}>
-            {'>>'}
-          </button>
-        </div>
+      {!printMode && (
+        <div className="pagination-controls">
+          <div className="d-flex gap-2">
+            <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+              {'<<'}
+            </button>
+            <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+              {'<'}
+            </button>
+            <button onClick={() => nextPage()} disabled={!canNextPage}>
+              {'>'}
+            </button>
+            <button onClick={() => gotoPage(pageOptions.length - 1)} disabled={!canNextPage}>
+              {'>>'}
+            </button>
+          </div>
 
-        <span>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </span>
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[5, 10, 20].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
+          <span>
+            Page{' '}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{' '}
+          </span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[5, 10, 20].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   );
 };
