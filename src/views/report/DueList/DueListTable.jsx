@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useTable, usePagination } from 'react-table';
+
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { utils, writeFile } from 'xlsx';
 import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
 const data = [
@@ -83,14 +87,54 @@ const DueListTable = ({ handlePrint, tableRef }) => {
     }, 1000);
   };
 
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+
+    const headers = columns.map((col) => col.Header);
+    const body = rows.map((row) => row.cells.map((cell) => cell.value));
+
+    doc.autoTable({
+      head: [headers],
+      body: body
+    });
+
+    doc.save('due-list.pdf');
+  };
+
+  const exportToExcel = () => {
+    const worksheet = utils.json_to_sheet(
+      rows.map((row) => {
+        const rowObj = {};
+        row.cells.forEach((cell) => {
+          const header = cell.column.Header;
+          rowObj[header] = cell.value;
+        });
+        return rowObj;
+      })
+    );
+
+    const workbook = {
+      Sheets: { 'Due List': worksheet },
+      SheetNames: ['Due List']
+    };
+
+    writeFile(workbook, 'due-list.xlsx');
+  };
+
   return (
     <div className="table-container">
       <button className="print-button" onClick={handlePrintClick}>
         Print
       </button>
+      <button className="pdf-button" onClick={exportToPDF}>
+        Save as PDF
+      </button>
+      <button className="excel-button" onClick={exportToExcel}>
+        Save as Excel
+      </button>
       <div ref={tableRef}>
         <ReportHeader />
-        <h4 className='text-center'>বাকির রিপোর্ট</h4>
+        <h4 className="text-center">বাকির রিপোর্ট</h4>
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
