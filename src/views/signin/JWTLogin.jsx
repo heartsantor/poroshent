@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Row, Col, Alert, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +7,7 @@ import { Formik } from 'formik';
 
 const JWTLogin = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <Formik
       initialValues={
@@ -64,7 +66,15 @@ const JWTLogin = () => {
 
           <Row>
             <Col mt={2}>
-              <Button className="btn-block mb-4" color="primary" disabled={isSubmitting} size="large" type="submit" variant="primary">
+              <Button
+                onClick={() => navigate('/dashboard')}
+                className="btn-block mb-4"
+                color="primary"
+                disabled={isSubmitting}
+                size="large"
+                type="submit"
+                variant="primary"
+              >
                 {t('login')}
               </Button>
             </Col>

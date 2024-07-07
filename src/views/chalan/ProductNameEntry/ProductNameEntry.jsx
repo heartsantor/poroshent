@@ -6,7 +6,7 @@ const ProductNameEntry = () => {
     <div>
       <Card>
         <Card.Header>
-          <Card.Title as="h5">Form controls</Card.Title>
+          <Card.Title as="h5">প্রোডাক্টের নাম এন্ট্রি</Card.Title>
         </Card.Header>
         <Card.Body>
           <Form>
@@ -21,10 +21,26 @@ const ProductNameEntry = () => {
                     <option>ঔষধ</option>
                   </Form.Control>
                 </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>আইটেমের কোড </Form.Label>
+                  <Form.Control type="text" placeholder="আইটেমের কোড" />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                   <Form.Label>আইটেমের নাম (English)</Form.Label>
                   <Form.Control type="text" placeholder="আইটেমের নাম " />
                 </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Label>আইটেমের নাম (বাংলা)</Form.Label>
+                  <Form.Control type="text" placeholder="আইটেমের নাম " />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
                 <Form.Group className="mb-3" controlId="formBasicChecbox">
                   <Form.Label>ব্যাগ সাইজ</Form.Label>
                   <div className="d-flex gap-4">
@@ -33,22 +49,15 @@ const ProductNameEntry = () => {
                     <Form.Check type="checkbox" label="50KG" />
                   </div>
                 </Form.Group>
-                <Button variant="primary">সংরক্ষণ</Button>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>আইটেমের কোড </Form.Label>
-                  <Form.Control type="text" placeholder="আইটেমের কোড" />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>আইটেমের নাম (বাংলা)</Form.Label>
-                  <Form.Control type="text" placeholder="আইটেমের নাম " />
-                </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                   <Form.Label>নোট</Form.Label>
                   <Form.Control as="textarea" rows="3" />
                 </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Button variant="primary">সংরক্ষণ</Button>
               </Col>
             </Row>
           </Form>
