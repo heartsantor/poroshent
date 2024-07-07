@@ -3,44 +3,49 @@ import { useTable, usePagination } from 'react-table';
 import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
 const data = [
-  { name: 'Katelyn Huber', address: 'Id dolor minus omni', previousBalance: 6760, sales: 6904, totalBill: 0, discount: 6914, due: -65 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 },
-  { name: 'joshim', address: 'shiabazzir', previousBalance: 1650, sales: 1650, totalBill: 0, discount: 1400, due: 1400 }
+  {
+    customer_name: 'Katelyn Huber',
+    customer_address: 'Id dolor minus omni',
+    pre_due: 6760,
+    sales: 6904,
+    total_bill: 0,
+    return_sale: 6914,
+    cash_amount: 0,
+    discount: 0,
+    due: -65
+  },
+  {
+    customer_name: 'Katelyn Huber',
+    customer_address: 'Id dolor minus omni',
+    pre_due: 6760,
+    sales: 6904,
+    total_bill: 0,
+    return_sale: 6914,
+    cash_amount: 0,
+    discount: 0,
+    due: -65
+  }
 ];
 
 const columns = [
   { Header: 'SL', accessor: (row, i) => i + 1 },
-  { Header: 'Name', accessor: 'name' },
-  { Header: 'Address', accessor: 'address' },
-  { Header: 'Previous Balance', accessor: 'previousBalance' },
-  { Header: 'Sales', accessor: 'sales' },
-  { Header: 'Total Bill', accessor: 'totalBill' },
-  { Header: 'Discount', accessor: 'discount' },
-  { Header: 'Due', accessor: 'due' }
+  {
+    Header: 'কাস্টমার তথ্য',
+    accessor: (row) => `${row.customer_name}, ${row.customer_address}`,
+    Cell: ({ cell: { value } }) => (
+      <div>
+        <strong>name :{value.split(', ')[0]}</strong>
+        <div>address: {value.split(', ')[1]}</div>
+      </div>
+    )
+  },
+  { Header: 'পূর্বের বাকি', accessor: 'pre_due' },
+  { Header: 'বিক্রয় ', accessor: 'sales' },
+  { Header: 'মোট বিল', accessor: 'total_bill' },
+  { Header: 'বিক্রয় ফেরত', accessor: 'return_sale' },
+  { Header: 'আদায়', accessor: 'cash_amount' },
+  { Header: 'ডিসকাউন্ট', accessor: 'discount' },
+  { Header: 'বাকি', accessor: 'due' }
 ];
 
 const DueListTable = ({ handlePrint, tableRef }) => {
@@ -85,6 +90,7 @@ const DueListTable = ({ handlePrint, tableRef }) => {
       </button>
       <div ref={tableRef}>
         <ReportHeader />
+        <h4 className='text-center'>বাকির রিপোর্ট</h4>
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (

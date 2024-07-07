@@ -54,7 +54,6 @@ const DueList = () => {
 
   return (
     <div>
-      <h1>My Table</h1>
       <DueListTable handlePrint={handlePrint} tableRef={tableRef} />
     </div>
   );
