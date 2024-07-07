@@ -56,6 +56,12 @@ const menuItems = {
               title: 'প্রোডাক্টের নাম এন্ট্রি',
               type: 'item',
               url: '/chalan/product-name-entry'
+            },
+            {
+              id: 'product-stock-entry',
+              title: 'স্টক এন্ট্রি',
+              type: 'item',
+              url: '/chalan/product-stock-entry'
             }
           ]
         },

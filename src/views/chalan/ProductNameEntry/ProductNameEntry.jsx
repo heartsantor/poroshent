@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
-
+import ProductList from './ProductList';
 const ProductNameEntry = () => {
   return (
     <div>
@@ -63,6 +63,8 @@ const ProductNameEntry = () => {
           </Form>
         </Card.Body>
       </Card>
+      
+      <ProductList />
     </div>
   );
 };
