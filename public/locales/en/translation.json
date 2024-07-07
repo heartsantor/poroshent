@@ -1,8 +1,8 @@
 {
+  "navigation": "Navigation",
+  "dashboard": "Dashboard",
   "welcome": "Welcome",
-  "greeting": "Hello",
-  "farewell": "Goodbye",
-  "thank_you": "Thank you",
-  "good_morning": "Good Morning",
-  "good_night": "Good Night"
+  "ms_porosh_ent": "MS Porosh Enterprise",
+  "porosh_ent": "Porosh Enterpris",
+  "login": "Login"
 }

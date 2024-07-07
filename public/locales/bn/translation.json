@@ -1,8 +1,8 @@
 {
+  "navigation": "ন্যাভিগেশন",
+  "dashboard": "ড্যাশবোর্ড",
   "welcome": "স্বাগতম",
-  "greeting": "হ্যালো",
-  "farewell": "বিদায়",
-  "thank_you": "ধন্যবাদ",
-  "good_morning": "সুপ্রভাত",
-  "good_night": "শুভ রাত্রি"
+  "ms_porosh_ent": "মেসার্স পরশ এন্টারপ্রাইজ",
+  "porosh_ent": "পরশ এন্টারপ্রাইজ",
+  "login": "লগইন"
 }
