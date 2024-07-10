@@ -92,10 +92,16 @@ const menuItems = {
           icon: 'feather icon-box',
           children: [
             {
-              id: 'button',
-              title: 'Button',
+              id: 'customer-add',
+              title: 'কাস্টমার তৈরি',
               type: 'item',
-              url: '/basic/button'
+              url: '/customer/customer-add'
+            },
+            {
+              id: 'customer-list',
+              title: 'কাস্টমার লিস্ট',
+              type: 'item',
+              url: '/customer/customer-list'
             }
           ]
         }

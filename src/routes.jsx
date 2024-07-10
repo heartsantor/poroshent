@@ -62,6 +62,16 @@ const routes = [
         exact: 'true',
         path: '/all-report/due-report',
         element: lazy(() => import('./views/report/DueList/DueList'))
+      },
+      {
+        exact: 'true',
+        path: '/customer/customer-add',
+        element: lazy(() => import('./views/customer/CustomerAdd/CustomerAdd'))
+      },
+      {
+        exact: 'true',
+        path: '/customer/customer-list',
+        element: lazy(() => import('./views/customer/CustomerList/CustomerList'))
       }
     ]
   }
