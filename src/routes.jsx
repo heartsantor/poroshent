@@ -55,6 +55,11 @@ const routes = [
       },
       {
         exact: 'true',
+        path: '/selling/chicken-selling',
+        element: lazy(() => import('./views/selling/ChickenSelling/ChickenSelling'))
+      },
+      {
+        exact: 'true',
         path: '/all-report/due-report',
         element: lazy(() => import('./views/report/DueList/DueList'))
       }

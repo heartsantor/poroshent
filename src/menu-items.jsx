@@ -23,7 +23,7 @@ const menuItems = {
               id: 'chiken-food',
               title: 'মুরগীর খাবার ',
               type: 'item',
-              url: '/sell/chiken-food'
+              url: '/selling/chicken-selling'
             },
             {
               id: 'fish-food',

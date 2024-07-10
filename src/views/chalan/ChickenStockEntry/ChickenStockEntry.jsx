@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 const ChickenStockEntry = () => {
   const [startDate, setStartDate] = useState(new Date());
