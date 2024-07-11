@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, Button, Alert } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 // import Breadcrumb from '../../../layouts/AdminLayout/Breadcrumb';
 
@@ -10,13 +12,17 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import AuthLogin from './JWTLogin';
 
 const Signin = () => {
+  const { accessToken } = useSelector((state) => state.auth);
+
   const { t, i18n } = useTranslation();
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     localStorage.setItem('i18nextLng', lng); // Save the selected language to local storage
   };
-
+  if (accessToken) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
     <React.Fragment>
       {/* <Breadcrumb /> */}

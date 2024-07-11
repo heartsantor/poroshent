@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef } from 'react';
-
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Navigation from './Navigation';
 import NavBar from './NavBar';
 import Breadcrumb from './Breadcrumb';
@@ -11,6 +12,8 @@ import { ConfigContext } from '../../contexts/ConfigContext';
 import * as actionType from '../../store/actions';
 
 const AdminLayout = ({ children }) => {
+  const { accessToken } = useSelector((state) => state.auth);
+
   const windowSize = useWindowSize();
   const ref = useRef();
   const configContext = useContext(ConfigContext);
@@ -92,12 +95,15 @@ const AdminLayout = ({ children }) => {
     );
   }
 
-  return (
-    <React.Fragment>
-      {common}
-      {mainContainer}
-    </React.Fragment>
-  );
+  if (accessToken) {
+    return (
+      <React.Fragment>
+        {common}
+        {mainContainer}
+      </React.Fragment>
+    );
+  }
+  return <Navigate to="/" />;
 };
 
 AdminLayout.propTypes = {

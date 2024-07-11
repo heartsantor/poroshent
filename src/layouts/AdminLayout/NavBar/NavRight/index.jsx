@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, ListGroup, Dropdown } from 'react-bootstrap';
-import { ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { ButtonGroup, ToggleButton, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-
+import { userLoggedOut } from '../../../../store/features/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import ChatList from './ChatList';
 
 import avatar1 from '../../../../assets/images/user/avatar-1.jpg';
@@ -13,6 +14,8 @@ import avatar3 from '../../../../assets/images/user/avatar-3.jpg';
 import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
 
 const NavRight = () => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [listOpen, setListOpen] = useState(false);
 
   const { i18n } = useTranslation();
@@ -21,6 +24,10 @@ const NavRight = () => {
   useEffect(() => {
     setRadioValue(i18n.language);
   }, [i18n.language]);
+
+  const handleLogOut = () => {
+    dispatch(userLoggedOut());
+  };
 
   const handleChange = (e) => {
     const lang = e.currentTarget.value;
@@ -67,12 +74,16 @@ const NavRight = () => {
               <i className="icon feather icon-settings" />
             </Dropdown.Toggle>
             <Dropdown.Menu align="end" className="profile-notification">
-              <div className="pro-head">
+              <div className="pro-head d-flex">
                 <img src={avatar1} className="img-radius" alt="User Profile" />
-                <span>John Doe</span>
-                <Link to="#" className="dud-logout" title="Logout">
+                <div className="d-flex flex-column">
+                  <span className="m-0">{user?.dealerName}</span>
+                  <p className="m-0 text-light">{user?.dealerphone}</p>
+                </div>
+
+                <Button onClick={handleLogOut} className="dud-logout" title="Logout">
                   <i className="feather icon-log-out" />
-                </Link>
+                </Button>
               </div>
               <ListGroup as="ul" bsPrefix=" " variant="flush" className="pro-body">
                 <ListGroup.Item as="li" bsPrefix=" ">

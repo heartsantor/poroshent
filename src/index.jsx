@@ -6,11 +6,12 @@ import { ConfigProvider } from './contexts/ConfigContext';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 
-import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './i18n';
+import './index.scss';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './i18n';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
