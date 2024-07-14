@@ -23,7 +23,6 @@ const ProductEntryForm = () => {
     notes: ''
   });
 
-  console.log('🚀 ~ ProductEntryForm ~ createProduct:', mutationData);
 
   const [createProduct, { isLoading }] = useCreateProductMutation();
 
