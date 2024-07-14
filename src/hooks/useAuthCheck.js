@@ -1,7 +1,6 @@
-import { size } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { userLoggedIn } from '../store/features/auth/authSlice';
+import { userLoggedIn, userLoggedOut } from '../store/features/auth/authSlice';
 
 const useAuthCheck = () => {
   const [authChecked, setAuthChecked] = useState(false);
@@ -10,19 +9,29 @@ const useAuthCheck = () => {
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem('auth')) || '';
 
-    if (size(auth)) {
+    if (auth && auth.accessToken && auth.user) {
       const userInfo = {
-        accessToken: auth?.accessToken,
-        user: auth?.user
+        accessToken: auth.accessToken,
+        user: auth.user
       };
+      dispatch(userLoggedIn(userInfo));
 
-      if (auth?.accessToken && auth?.user) {
-        dispatch(userLoggedIn(userInfo));
+      // Calculate time until token expiration
+      const currentTime = Math.floor(Date.now() / 1000);
+      const timeUntilExpire = auth.user.exp - currentTime;
+
+      if (timeUntilExpire > 0) {
+        // Set a timeout to auto-logout when the token expires
+        setTimeout(() => {
+          dispatch(userLoggedOut());
+        }, timeUntilExpire * 1000);
+      } else {
+        // If token is already expired, log out immediately
+        dispatch(userLoggedOut());
       }
     }
-    setTimeout(() => {
-      setAuthChecked(true);
-    }, 1000);
+
+    setAuthChecked(true);
   }, [dispatch]);
 
   return authChecked;

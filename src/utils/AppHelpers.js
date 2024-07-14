@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 const position = {
   theme: 'light',
   position: 'top-right',
-  autoClose: 1000
+  autoClose: 2000
 };
 
 // alert message
