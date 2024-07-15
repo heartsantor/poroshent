@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { size } from 'lodash';
 import { Table, Badge } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -38,9 +38,8 @@ const generateBadges = (item) => {
     ));
 };
 
-const ProductTable = ({ productData }) => {
+const ProductTable = ({ productData, onDeleteSuccess }) => {
   const { accessToken } = useSelector((state) => state.auth);
-  const toastId = useRef(null);
 
   const [deleteProduct, { isLoading }] = useDeleteProductMutation();
   const [showModal, setShowModal] = useState(false);
@@ -64,17 +63,10 @@ const ProductTable = ({ productData }) => {
       .unwrap()
       .then((res) => {
         if (size(res)) {
-          console.log('🚀 ~ .then ~ res:', res);
           if (res.flag === 200) {
             toastAlert('success', res.message);
-          }
-          if (res.flag === 404) {
-            toastAlert('error', res.error);
-          }
-          if (res.flag === 102) {
-            toastAlert('error', res.error);
-          }
-          if (res.flag === 401) {
+            onDeleteSuccess();
+          } else {
             toastAlert('error', res.error);
           }
         }

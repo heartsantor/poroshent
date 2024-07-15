@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Tab, Spinner } from 'react-bootstrap';
+import { Tabs, Tab, Spinner, Card } from 'react-bootstrap';
 import { size } from 'lodash';
 
 import { useSelector } from 'react-redux';
 import { useGetProductMutation } from '../../../store/features/product/productApi';
 
 import ProductTable from './ProductTable';
+import ProductEntryForm from './ProductEntryForm';
 
 const ProductList = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading, isError }] = useGetProductMutation();
-  console.log('🚀 ~ ProductList ~ isError:', isError);
   const [activeKey, setActiveKey] = useState('1');
   const [products, setProducts] = useState([]);
-  console.log("🚀 ~ ProductList ~ products:", products)
 
   const fetchProductData = async (type) => {
     const data = {
@@ -30,6 +29,10 @@ const ProductList = () => {
     }
   };
 
+  const handleDeleteSuccess = () => {
+    fetchProductData(activeKey);
+  };
+
   useEffect(() => {
     fetchProductData(activeKey);
   }, [activeKey]);
@@ -37,10 +40,25 @@ const ProductList = () => {
   const productTableList = isError ? (
     <div>No Data/ Error</div>
   ) : (
-    <>{isLoading ? <Spinner animation="border" variant="primary" /> : <ProductTable productData={products} />}</>
+    <>
+      {isLoading ? (
+        <Spinner animation="border" variant="primary" />
+      ) : (
+        <ProductTable productData={products} onDeleteSuccess={handleDeleteSuccess} />
+      )}
+    </>
   );
   return (
     <>
+      <Card>
+        <Card.Header>
+          <Card.Title as="h5">প্রোডাক্টের নাম এন্ট্রি</Card.Title>
+        </Card.Header>
+        <Card.Body>
+          <ProductEntryForm onDeleteSuccess={handleDeleteSuccess} />
+        </Card.Body>
+      </Card>
+
       <h5 className="mt-4">প্রোডাক্ট লিস্ট</h5>
       <hr />
       <Tabs variant="pills" activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">

@@ -5,7 +5,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { useCreateProductMutation } from '../../../store/features/product/productApi';
 import { toast } from 'react-toastify';
 import { toastAlert } from '../../../utils/AppHelpers';
-const ProductEntryForm = () => {
+const ProductEntryForm = ({ onDeleteSuccess }) => {
   const { accessToken } = useSelector((state) => state.auth);
   const toastId = useRef(null);
 
@@ -22,7 +22,6 @@ const ProductEntryForm = () => {
     stock_50: 0,
     notes: ''
   });
-
 
   const [createProduct, { isLoading }] = useCreateProductMutation();
 
@@ -51,7 +50,6 @@ const ProductEntryForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     toast.dismiss(toastId.current);
-    console.log('🚀 ~ handleSubmit ~ e:');
 
     const updatedData = {
       accessToken,
@@ -66,25 +64,17 @@ const ProductEntryForm = () => {
       stock_25: mutationData.stock_25 === 1 ? 0 : null,
       stock_50: mutationData.stock_50 === 1 ? 0 : null
     };
-    console.log('🚀 ~ handleSubmit ~ updatedData:', updatedData);
 
     if (updatedData.type !== '' && updatedData.code) {
       createProduct(updatedData)
         .unwrap()
         .then((res) => {
           if (size(res)) {
-            console.log('🚀 ~ .then ~ res:', res);
-            if (res.flag === 404) {
-              toastAlert('error', res.error);
-            }
-            if (res.flag === 102) {
-              toastAlert('error', res.error);
-            }
-            if (res.flag === 401) {
-              toastAlert('error', res.error);
-            }
             if (res.flag === 200) {
               toastAlert('success', res.message);
+              onDeleteSuccess(); // Refetch product data after successful deletion
+            } else {
+              toastAlert('error', res.error);
             }
           }
         })
