@@ -479,3 +479,25 @@ table {
     z-index: 10; // Ensure it's above the form-content
   }
 }
+
+.custom-tab-content {
+  min-height: 500px;
+}
+
+.custom-placeholder {
+  .placeholder {
+    background-color: #d9d9d9 !important;
+    /* Slightly darker color */
+    border-radius: 4px;
+    /* Optional: Add some border radius for smoother edges */
+  }
+
+  .placeholder-glow::before {
+    background-color: #c9c9c9 !important;
+    /* Slightly darker glow effect */
+  }
+
+  .placeholder-xs-12 {
+    width: 100%;
+  }
+}

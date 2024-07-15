@@ -41,11 +41,13 @@ const ProductList = () => {
     <div>No Data/ Error</div>
   ) : (
     <>
-      {isLoading ? (
+      {/* {isLoading ? (
         <Spinner animation="border" variant="primary" />
       ) : (
-        <ProductTable productData={products} onDeleteSuccess={handleDeleteSuccess} activeKey={activeKey} />
-      )}
+        <ProductTable productData={products} onDeleteSuccess={handleDeleteSuccess} activeKey={activeKey} isLoading={isLoading} />
+      )} */}
+
+      <ProductTable productData={products} onDeleteSuccess={handleDeleteSuccess} activeKey={activeKey} isLoading={isLoading} />
     </>
   );
   return (
@@ -62,16 +64,16 @@ const ProductList = () => {
       <h5 className="mt-4">প্রোডাক্ট লিস্ট</h5>
       <hr />
       <Tabs variant="pills" activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
-        <Tab eventKey="1" title="মুরগীর খাবার">
+        <Tab eventKey="1" title="মুরগীর খাবার" className="custom-tab-content">
           {productTableList}
         </Tab>
-        <Tab eventKey="2" title="মাছের খাবার ">
+        <Tab eventKey="2" title="মাছের খাবার" className="custom-tab-content">
           {productTableList}
         </Tab>
-        <Tab eventKey="3" title="গরুর খাবার">
+        <Tab eventKey="3" title="গরুর খাবার" className="custom-tab-content">
           {productTableList}
         </Tab>
-        <Tab eventKey="4" title="ঔষধ">
+        <Tab eventKey="4" title="ঔষধ" className="custom-tab-content">
           {productTableList}
         </Tab>
       </Tabs>

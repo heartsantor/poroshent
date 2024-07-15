@@ -7,6 +7,7 @@ import { getItemName } from '../../../utils/getItemName';
 import { useDeleteProductMutation } from '../../../store/features/product/productApi';
 import { toastAlert } from '../../../utils/AppHelpers';
 import WarningModal from '../../../components/WarningModal/WarningModal';
+import SkeletonLoader from '../../../components/Skeleton/SkeletonLoader';
 
 const getColorForStock = (key) => {
   const stockColorMap = {
@@ -45,11 +46,10 @@ const scrollToTop = () => {
   });
 };
 
-const ProductTable = ({ productData, onDeleteSuccess, activeKey }) => {
-  console.log('🚀 ~ ProductTable ~ productData:', productData);
+const ProductTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => {
   const { accessToken } = useSelector((state) => state.auth);
 
-  const [deleteProduct, { isLoading }] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -84,6 +84,10 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey }) => {
         console.error('Error:', error);
       });
   };
+
+  if (isLoading) {
+    return <SkeletonLoader rows={5} cols={9} />;
+  }
 
   return (
     <div>
@@ -156,7 +160,7 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey }) => {
         handleConfirm={confirmDeleteProductItem}
         title="Confirmation"
         body="Are you sure you want to delete this product?"
-        isLoading={isLoading}
+        isLoading={isDeleting}
       />
     </div>
   );
