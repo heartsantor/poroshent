@@ -28,8 +28,8 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
   const additionalCategoryOptions = {
     2: [
       { value: '', label: 'Select One' },
-      { value: 'float_food', label: 'ভাসমান' },
-      { value: 'dubonto_food', label: 'ডুবন্ত' }
+      { value: 'ভাসমান', label: 'ভাসমান' },
+      { value: 'ডুবন্ত', label: 'ডুবন্ত' }
     ]
   };
 

@@ -44,7 +44,7 @@ const ProductList = () => {
       {isLoading ? (
         <Spinner animation="border" variant="primary" />
       ) : (
-        <ProductTable productData={products} onDeleteSuccess={handleDeleteSuccess} />
+        <ProductTable productData={products} onDeleteSuccess={handleDeleteSuccess} activeKey={activeKey} />
       )}
     </>
   );

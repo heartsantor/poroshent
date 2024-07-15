@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { size } from 'lodash';
-import { Table, Badge } from 'react-bootstrap';
+import { Table, Badge, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getItemName } from '../../../utils/getItemName';
@@ -38,7 +38,8 @@ const generateBadges = (item) => {
     ));
 };
 
-const ProductTable = ({ productData, onDeleteSuccess }) => {
+const ProductTable = ({ productData, onDeleteSuccess, activeKey }) => {
+  console.log('🚀 ~ ProductTable ~ productData:', productData);
   const { accessToken } = useSelector((state) => state.auth);
 
   const [deleteProduct, { isLoading }] = useDeleteProductMutation();
@@ -66,6 +67,7 @@ const ProductTable = ({ productData, onDeleteSuccess }) => {
           if (res.flag === 200) {
             toastAlert('success', res.message);
             onDeleteSuccess();
+            handleClose();
           } else {
             toastAlert('error', res.error);
           }
@@ -74,8 +76,6 @@ const ProductTable = ({ productData, onDeleteSuccess }) => {
       .catch((error) => {
         console.error('Error:', error);
       });
-
-    handleClose();
   };
 
   return (
@@ -86,6 +86,7 @@ const ProductTable = ({ productData, onDeleteSuccess }) => {
             <th>#</th>
             <th>আইটেমের নাম (English)</th>
             <th>আইটেমের নাম (বাংলা)</th>
+            {activeKey === '2' && <th>category</th>}
             <th>আইটেমের কোড</th>
             <th>আইটেম টাইপ</th>
             <th>ব্যাগ সাইজ</th>
@@ -105,6 +106,12 @@ const ProductTable = ({ productData, onDeleteSuccess }) => {
               <td>
                 <p className="m-0">{item.name}</p>
               </td>
+              {activeKey === '2' && (
+                <td>
+                  <p className="m-0">{item.category}</p>
+                </td>
+              )}
+
               <td>
                 <p className="m-0">{item.code}</p>
               </td>
@@ -115,10 +122,10 @@ const ProductTable = ({ productData, onDeleteSuccess }) => {
                 <div className="d-flex gap-2">{generateBadges(item)}</div>
               </td>
               <td>
-                <p className="m-0">{item.stock_price} টাকা</p>
+                <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>
               </td>
               <td>
-                <p className="m-0">{item.sell_price} টাকা</p>
+                <p className="m-0">{item.sell_price === null ? 0 : item.sell_price} টাকা</p>
               </td>
               {/* <td>
                 <p className="m-0">none</p>
@@ -142,6 +149,7 @@ const ProductTable = ({ productData, onDeleteSuccess }) => {
         handleConfirm={confirmDeleteProductItem}
         title="Confirmation"
         body="Are you sure you want to delete this product?"
+        isLoading={isLoading}
       />
     </div>
   );
