@@ -1,11 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { size } from 'lodash';
-import { Row, Col, Form, Button } from 'react-bootstrap';
-import { useCreateProductMutation, useEditProductMutation } from '../../../store/features/product/productApi';
+import { Row, Col, Form, Button, Spinner } from 'react-bootstrap';
+import { useCreateProductMutation, useEditProductMutation, useGetSingleProductMutation } from '../../../store/features/product/productApi';
 import { toast } from 'react-toastify';
 import { toastAlert } from '../../../utils/AppHelpers';
+
 const ProductEntryForm = ({ onDeleteSuccess }) => {
+  const { productId } = useParams();
+  const navigate = useNavigate();
+  console.log('🚀 ~ ProductEntryForm ~ productId:', productId);
   const { accessToken } = useSelector((state) => state.auth);
   const toastId = useRef(null);
 
@@ -23,33 +28,54 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
     notes: ''
   });
 
+  console.log('🚀 ~ ProductEntryForm ~ mutationData:', mutationData);
   const [createProduct, { isLoading }] = useCreateProductMutation();
   const [editProduct, { isLoading: isEditLoading }] = useEditProductMutation();
+  const [getSingleProduct, { isLoading: isSingleProductLoading }] = useGetSingleProductMutation();
 
-  const additionalCategoryOptions = {
-    2: [
-      { value: '', label: 'Select One' },
-      { value: 'ভাসমান', label: 'ভাসমান' },
-      { value: 'ডুবন্ত', label: 'ডুবন্ত' }
-    ]
-  };
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await getSingleProduct({ accessToken, product_id: productId });
+        console.log('🚀 ~ fetchProduct ~ response:', response.data);
+        if (response.data.flag === 200) {
+          const { data } = response;
+          setMutationData({
+            type: data.product.type,
+            code: data.product.code,
+            name: data.product.name,
+            name_en: data.product.name_en,
+            category: data.product.category,
+            stock_1: data.product.stock_1 === null ? 0 : 1,
+            stock_5: data.product.stock_5 === null ? 0 : 1,
+            stock_10: data.product.stock_10 === null ? 0 : 1,
+            stock_25: data.product.stock_25 === null ? 0 : 1,
+            stock_50: data.product.stock_50 === null ? 0 : 1,
+            notes: data.product.notes
+          });
+        } else {
+          toastAlert('error', response.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toastAlert('error', 'Something went wrong');
+      }
+    };
+
+    if (productId) {
+      fetchProduct();
+    }
+  }, [accessToken, productId, getSingleProduct]);
 
   const handleChange = (type, value) => {
-    if (type === 'fish-category') {
-      setMutationData((prevData) => ({
-        ...prevData,
-        type: value
-      }));
-    } else {
-      setMutationData((prevData) => ({
-        ...prevData,
-        [type]: value
-      }));
-    }
+    setMutationData((prevData) => ({
+      ...prevData,
+      [type]: value
+    }));
   };
 
   const resetAfterSubmit = () => {
-    const data = {
+    setMutationData({
       type: '',
       code: '',
       name: '',
@@ -61,9 +87,9 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
       stock_25: 0,
       stock_50: 0,
       notes: ''
-    };
-    setMutationData(data);
+    });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     toast.dismiss(toastId.current);
@@ -79,38 +105,47 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
       stock_5: mutationData.stock_5 === 1 ? 0 : null,
       stock_10: mutationData.stock_10 === 1 ? 0 : null,
       stock_25: mutationData.stock_25 === 1 ? 0 : null,
-      stock_50: mutationData.stock_50 === 1 ? 0 : null
+      stock_50: mutationData.stock_50 === 1 ? 0 : null,
+      notes: mutationData.notes
     };
 
-    if (updatedData.type !== '' && updatedData.code) {
-      createProduct(updatedData)
-        .unwrap()
-        .then((res) => {
-          if (size(res)) {
-            if (res.flag === 200) {
-              toastAlert('success', res.message);
-              resetAfterSubmit();
-              onDeleteSuccess(); // Refetch product data after successful deletion
-            } else {
-              toastAlert('error', res.error);
+    const submitMutation = productId ? editProduct : createProduct;
+
+    submitMutation({ ...updatedData, product_id: productId })
+      .unwrap()
+      .then((res) => {
+        if (size(res)) {
+          if (res.flag === 200) {
+            toastAlert('success', res.message);
+            resetAfterSubmit();
+            onDeleteSuccess(); // Refetch product data after successful deletion
+            if (productId) {
+              navigate('/chalan/product-name-entry');
             }
+          } else {
+            toastAlert('error', res.error);
           }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          toastAlert('error', 'Something is wrong');
-        });
-    }
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        toastAlert('error', 'Something is wrong');
+      });
   };
 
   return (
-    <>
-      <Form>
+    <div className="form-container">
+      {isSingleProductLoading && (
+        <div className="loading-overlay">
+          <Spinner animation="border" variant="light" />
+        </div>
+      )}
+      <Form className="form-content" onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label>আইটেম সিলেক্ট</Form.Label>
-              <Form.Control as="select" value={mutationData.type} onChange={(e) => handleChange('fish-category', e.target.value)}>
+              <Form.Control as="select" value={mutationData.type} onChange={(e) => handleChange('type', e.target.value)}>
                 <option value="">Select One</option>
                 <option value="1">মুরগীর খাবার</option>
                 <option value="2">মাছের খাবার</option>
@@ -119,20 +154,14 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
               </Form.Control>
             </Form.Group>
           </Col>
-          {mutationData.type === '2' && (
+          {(mutationData.type === '2' || mutationData.type === 2) && (
             <Col md={6}>
               <Form.Group className="mb-3">
                 <Form.Label>অতিরিক্ত ক্যাটাগরি</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={mutationData.additionalCategory}
-                  onChange={(e) => handleChange('category', e.target.value)}
-                >
-                  {additionalCategoryOptions['2'].map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
+                <Form.Control as="select" value={mutationData.category} onChange={(e) => handleChange('category', e.target.value)}>
+                  <option value="">Select One</option>
+                  <option value="ভাসমান">ভাসমান</option>
+                  <option value="ডুবন্ত">ডুবন্ত</option>
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -213,14 +242,24 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
               <Form.Control as="textarea" rows="3" value={mutationData.notes} onChange={(e) => handleChange('notes', e.target.value)} />
             </Form.Group>
           </Col>
-          <Col md={6}>
-            <Button onClick={handleSubmit} disabled={isLoading} type="submit" variant="primary">
-              {isLoading ? 'Saving' : 'Save'}
-            </Button>
-          </Col>
         </Row>
+        <Button variant="primary" type="submit" disabled={isLoading || isEditLoading}>
+          {isLoading || isEditLoading ? 'Saving...' : productId ? 'Update' : 'Submit'}
+        </Button>
+        {productId ? (
+          <Button
+            variant="secondary"
+            disabled={isLoading || isEditLoading}
+            onClick={() => {
+              navigate('/chalan/product-name-entry');
+              resetAfterSubmit();
+            }}
+          >
+            cancel
+          </Button>
+        ) : null}
       </Form>
-    </>
+    </div>
   );
 };
 

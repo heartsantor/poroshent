@@ -23,6 +23,13 @@ export const productApi = apiSlice.injectEndpoints({
         body: data
       })
     }),
+    getSingleProduct: builder.mutation({
+      query: (data) => ({
+        url: '/product/singleProduct',
+        method: 'POST',
+        body: data
+      })
+    }),
     deleteProduct: builder.mutation({
       query: (data) => ({
         url: '/product/deleteProduct',
@@ -33,4 +40,10 @@ export const productApi = apiSlice.injectEndpoints({
   })
 });
 
-export const { useCreateProductMutation, useGetProductMutation, useDeleteProductMutation, useEditProductMutation } = productApi;
+export const {
+  useCreateProductMutation,
+  useGetProductMutation,
+  useDeleteProductMutation,
+  useEditProductMutation,
+  useGetSingleProductMutation
+} = productApi;

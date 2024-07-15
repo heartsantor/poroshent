@@ -45,7 +45,7 @@ const routes = [
       },
       {
         exact: 'true',
-        path: '/chalan/product-name-entry',
+        path: '/chalan/product-name-entry/:productId?',
         element: lazy(() => import('./views/chalan/ProductNameEntry/ProductNameEntry'))
       },
       {

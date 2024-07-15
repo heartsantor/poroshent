@@ -451,3 +451,31 @@ table {
 .react-datepicker-wrapper {
   width: 100%;
 }
+
+
+.form-container {
+  // position: relative;
+
+  .form-content {
+    transition: opacity 0.3s ease;
+
+    // Default state
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.5; // Adjust opacity as needed
+    }
+  }
+
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); // Semi-transparent background
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; // Ensure it's above the form-content
+  }
+}

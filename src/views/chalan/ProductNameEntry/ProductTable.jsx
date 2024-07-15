@@ -38,6 +38,13 @@ const generateBadges = (item) => {
     ));
 };
 
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
+
 const ProductTable = ({ productData, onDeleteSuccess, activeKey }) => {
   console.log('🚀 ~ ProductTable ~ productData:', productData);
   const { accessToken } = useSelector((state) => state.auth);
@@ -131,7 +138,7 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey }) => {
                 <p className="m-0">none</p>
               </td> */}
               <td>
-                <Link to="#" className="label theme-bg text-white f-12">
+                <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
                   এডিট
                 </Link>
                 <Link to="#" className="label theme-bg2 text-white f-12" onClick={() => handleShow(item)}>
