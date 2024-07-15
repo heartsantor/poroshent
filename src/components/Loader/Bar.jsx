@@ -5,8 +5,8 @@ const Bar = ({ animationDuration, progress }) => {
   return (
     <div
       style={{
-        background: '#fff',
-        height: 2,
+        background: '#04a9f5',
+        height: 3,
         left: 0,
         marginLeft: `${(-1 + progress) * 100}%`,
         position: 'fixed',
