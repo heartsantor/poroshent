@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { size } from 'lodash';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import { useCreateProductMutation } from '../../../store/features/product/productApi';
+import { useCreateProductMutation, useEditProductMutation } from '../../../store/features/product/productApi';
 import { toast } from 'react-toastify';
 import { toastAlert } from '../../../utils/AppHelpers';
 const ProductEntryForm = ({ onDeleteSuccess }) => {
@@ -24,6 +24,7 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
   });
 
   const [createProduct, { isLoading }] = useCreateProductMutation();
+  const [editProduct, { isLoading: isEditLoading }] = useEditProductMutation();
 
   const additionalCategoryOptions = {
     2: [
@@ -47,6 +48,22 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
     }
   };
 
+  const resetAfterSubmit = () => {
+    const data = {
+      type: '',
+      code: '',
+      name: '',
+      name_en: '',
+      category: '',
+      stock_1: 0,
+      stock_5: 0,
+      stock_10: 0,
+      stock_25: 0,
+      stock_50: 0,
+      notes: ''
+    };
+    setMutationData(data);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     toast.dismiss(toastId.current);
@@ -72,6 +89,7 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
           if (size(res)) {
             if (res.flag === 200) {
               toastAlert('success', res.message);
+              resetAfterSubmit();
               onDeleteSuccess(); // Refetch product data after successful deletion
             } else {
               toastAlert('error', res.error);
@@ -123,7 +141,7 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
             <Form.Group className="mb-3">
               <Form.Label>আইটেমের কোড</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 placeholder="আইটেমের কোড"
                 value={mutationData.code}
                 onChange={(e) => handleChange('code', e.target.value)}
