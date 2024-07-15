@@ -1,113 +1,221 @@
-const menuItems = {
-  items: [
-    {
-      id: 'sell',
-      title: 'ন্যাভিগেশন',
-      type: 'group',
-      icon: 'icon-navigation',
-      children: [
-        {
-          id: 'dashboard',
-          title: 'ড্যাশবোর্ড',
-          type: 'item',
-          icon: 'feather icon-home',
-          url: '/dashboard'
-        },
-        {
-          id: 'food-sell',
-          title: 'খাবার বিক্রয়',
-          type: 'collapse',
-          icon: 'feather icon-box',
-          children: [
-            {
-              id: 'chiken-food',
-              title: 'মুরগীর খাবার ',
-              type: 'item',
-              url: '/selling/chicken-selling'
-            },
-            {
-              id: 'fish-food',
-              title: 'মাছের খাবার ',
-              type: 'item',
-              url: '/sell/fish-food'
-            },
-            {
-              id: 'cattle-food',
-              title: 'গরুর খাবার ',
-              type: 'item',
-              url: '/sell/cattle-food'
-            },
-            {
-              id: 'medicine',
-              title: 'ঔষধ',
-              type: 'item',
-              url: '/sell/medicine'
-            }
-          ]
-        },
-        {
-          id: 'chalan-entry',
-          title: 'চালান এন্ট্রি ',
-          type: 'collapse',
-          icon: 'feather icon-box',
-          children: [
-            {
-              id: 'product-name-entry',
-              title: 'প্রোডাক্টের নাম এন্ট্রি',
-              type: 'item',
-              url: '/chalan/product-name-entry'
-            },
-            {
-              id: 'product-stock-entry',
-              title: 'স্টক এন্ট্রি',
-              type: 'item',
-              url: '/chalan/product-stock-entry'
-            }
-          ]
-        },
-        {
-          id: 'all-report',
-          title: 'সকল রিপোর্ট',
-          type: 'collapse',
-          icon: 'feather icon-box',
-          children: [
-            {
-              id: 'due-report',
-              title: 'বাকির রিপোর্ট',
-              type: 'item',
-              url: '/all-report/due-report'
-            },
-            {
-              id: 'customer-statement',
-              title: 'কাস্টমার স্টেটমেন্ট',
-              type: 'item',
-              url: '/all-report/customer-statement'
-            }
-          ]
-        },
-        {
-          id: 'customers',
-          title: 'কাস্টমার',
-          type: 'collapse',
-          icon: 'feather icon-box',
-          children: [
-            {
-              id: 'customer-add',
-              title: 'কাস্টমার তৈরি',
-              type: 'item',
-              url: '/customer/customer-add'
-            },
-            {
-              id: 'customer-list',
-              title: 'কাস্টমার লিস্ট',
-              type: 'item',
-              url: '/customer/customer-list'
-            }
-          ]
-        }
-      ]
-    }
-  ]
-};
+const menuItemsBn = [
+  {
+    id: 'sell',
+    title: 'ন্যাভিগেশন',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'dashboard',
+        title: 'ড্যাশবোর্ড',
+        type: 'item',
+        icon: 'feather icon-home',
+        url: '/dashboard'
+      },
+      {
+        id: 'food-sell',
+        title: 'খাবার বিক্রয়',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'chiken-food',
+            title: 'মুরগীর খাবার ',
+            type: 'item',
+            url: '/selling/chicken-selling'
+          },
+          {
+            id: 'fish-food',
+            title: 'মাছের খাবার ',
+            type: 'item',
+            url: '/sell/fish-food'
+          },
+          {
+            id: 'cattle-food',
+            title: 'গরুর খাবার ',
+            type: 'item',
+            url: '/sell/cattle-food'
+          },
+          {
+            id: 'medicine',
+            title: 'ঔষধ',
+            type: 'item',
+            url: '/sell/medicine'
+          }
+        ]
+      },
+      {
+        id: 'chalan-entry',
+        title: 'চালান এন্ট্রি ',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'product-name-entry',
+            title: 'প্রোডাক্টের নাম এন্ট্রি',
+            type: 'item',
+            url: '/chalan/product-name-entry'
+          },
+          {
+            id: 'product-stock-entry',
+            title: 'স্টক এন্ট্রি',
+            type: 'item',
+            url: '/chalan/product-stock-entry'
+          }
+        ]
+      },
+      {
+        id: 'all-report',
+        title: 'সকল রিপোর্ট',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'due-report',
+            title: 'বাকির রিপোর্ট',
+            type: 'item',
+            url: '/all-report/due-report'
+          },
+          {
+            id: 'customer-statement',
+            title: 'কাস্টমার স্টেটমেন্ট',
+            type: 'item',
+            url: '/all-report/customer-statement'
+          }
+        ]
+      },
+      {
+        id: 'customers',
+        title: 'কাস্টমার',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'customer-add',
+            title: 'কাস্টমার তৈরি',
+            type: 'item',
+            url: '/customer/customer-add'
+          },
+          {
+            id: 'customer-list',
+            title: 'কাস্টমার লিস্ট',
+            type: 'item',
+            url: '/customer/customer-list'
+          }
+        ]
+      }
+    ]
+  }
+];
 
-export default menuItems;
+const menuItemsEn = [
+  {
+    id: 'sell',
+    title: 'navvv',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'dashboard',
+        title: 'Dashboard',
+        type: 'item',
+        icon: 'feather icon-home',
+        url: '/dashboard'
+      },
+      {
+        id: 'food-sell',
+        title: 'Food Sell',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'chicken-food',
+            title: 'Chicken Food',
+            type: 'item',
+            url: '/selling/chicken-selling'
+          },
+          {
+            id: 'fish-food',
+            title: 'Fish Food',
+            type: 'item',
+            url: '/sell/fish-food'
+          },
+          {
+            id: 'cattle-food',
+            title: 'Cattle Food',
+            type: 'item',
+            url: '/sell/cattle-food'
+          },
+          {
+            id: 'medicine',
+            title: 'Medicine',
+            type: 'item',
+            url: '/sell/medicine'
+          }
+        ]
+      },
+      {
+        id: 'chalan-entry',
+        title: 'Chalan Entry',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'product-name-entry',
+            title: 'Product Name Entry',
+            type: 'item',
+            url: '/chalan/product-name-entry'
+          },
+          {
+            id: 'product-stock-entry',
+            title: 'Stock Entry',
+            type: 'item',
+            url: '/chalan/product-stock-entry'
+          }
+        ]
+      },
+      {
+        id: 'all-report',
+        title: 'All Reports',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'due-report',
+            title: 'Due Report',
+            type: 'item',
+            url: '/all-report/due-report'
+          },
+          {
+            id: 'customer-statement',
+            title: 'Customer Statement',
+            type: 'item',
+            url: '/all-report/customer-statement'
+          }
+        ]
+      },
+      {
+        id: 'customers',
+        title: 'Customers',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'customer-add',
+            title: 'Add Customer',
+            type: 'item',
+            url: '/customer/customer-add'
+          },
+          {
+            id: 'customer-list',
+            title: 'Customer List',
+            type: 'item',
+            url: '/customer/customer-list'
+          }
+        ]
+      }
+    ]
+  }
+];
+
+export { menuItemsEn, menuItemsBn };

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
-
+import { useSelector } from 'react-redux';
 import { ConfigContext } from '../../../contexts/ConfigContext';
 import useWindowSize from '../../../hooks/useWindowSize';
 
 import NavLogo from './NavLogo';
 import NavContent from './NavContent';
-import navigation from '../../../menu-items';
 
 const Navigation = () => {
+  const { menuData } = useSelector((state) => state.menu);
   const configContext = useContext(ConfigContext);
   const { collapseMenu } = configContext.state;
   const windowSize = useWindowSize();
@@ -27,14 +27,14 @@ const Navigation = () => {
   let navContent = (
     <div className={navBarClass.join(' ')}>
       <NavLogo />
-      <NavContent navigation={navigation.items} />
+      <NavContent navigation={menuData} />
     </div>
   );
   if (windowSize.width < 992) {
     navContent = (
       <div className="navbar-wrapper">
         <NavLogo />
-        <NavContent navigation={navigation.items} />
+        <NavContent navigation={menuData} />
       </div>
     );
   }

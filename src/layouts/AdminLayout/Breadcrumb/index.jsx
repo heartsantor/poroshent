@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-
-import navigation from '../../../menu-items';
+import { useSelector } from 'react-redux';
 import { BASE_TITLE } from '../../../config/constant';
 
 const Breadcrumb = () => {
+  const { menuData } = useSelector((state) => state.menu);
+
   const location = useLocation();
 
   const [main, setMain] = useState([]);
   const [item, setItem] = useState([]);
 
   useEffect(() => {
-    navigation.items.map((item, index) => {
+    menuData.map((item, index) => {
       if (item.type && item.type === 'group') {
         getCollapse(item, index);
       }

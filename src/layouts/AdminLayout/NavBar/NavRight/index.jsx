@@ -5,13 +5,11 @@ import { ButtonGroup, ToggleButton, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { userLoggedOut } from '../../../../store/features/auth/authSlice';
+import { setMenuData } from '../../../../store/features/menu/menuSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatList from './ChatList';
-
+import { menuItemsEn, menuItemsBn } from '../../../../menu-items';
 import avatar1 from '../../../../assets/images/user/avatar-1.jpg';
-import avatar2 from '../../../../assets/images/user/avatar-2.jpg';
-import avatar3 from '../../../../assets/images/user/avatar-3.jpg';
-import avatar4 from '../../../../assets/images/user/avatar-4.jpg';
 
 const NavRight = () => {
   const { user } = useSelector((state) => state.auth);
@@ -23,6 +21,19 @@ const NavRight = () => {
 
   useEffect(() => {
     setRadioValue(i18n.language);
+    if (i18n.language === 'en') {
+      dispatch(
+        setMenuData({
+          menuData: menuItemsEn
+        })
+      );
+    } else {
+      dispatch(
+        setMenuData({
+          menuData: menuItemsBn
+        })
+      );
+    }
   }, [i18n.language]);
 
   const handleLogOut = () => {
@@ -35,7 +46,6 @@ const NavRight = () => {
     localStorage.setItem('i18nextLng', lang);
     setRadioValue(lang);
   };
-
   const radios = [
     { name: 'বাংলা', value: 'bn' },
     { name: 'English', value: 'en' }
