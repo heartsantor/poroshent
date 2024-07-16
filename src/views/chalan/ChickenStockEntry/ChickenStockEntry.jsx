@@ -6,11 +6,13 @@ import { useSelector } from 'react-redux';
 import { Chicken } from '../../../assets/icon';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import { useGetProductMutation, useGetSingleProductMutation } from '../../../store/features/product/productApi';
+import { useTakeSupplyMutation } from '../../../store/features/supply/supplyApi';
 
 const ChickenStockEntry = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [getSingleProduct, { isLoading: singleProductLoading }] = useGetSingleProductMutation();
+  const [takeSupply, { isLoading: takeSupplyLoading }] = useTakeSupplyMutation();
 
   const [startDate, setStartDate] = useState(new Date());
 
@@ -19,7 +21,17 @@ const ChickenStockEntry = () => {
 
   const [products, setProducts] = useState([]);
   const [singleProducts, setSingleProducts] = useState({});
-  console.log('🚀 ~ ChickenStockEntry ~ singleProducts:', singleProducts);
+
+  const [mutationData, setMutationData] = useState({
+    stock_1: 0,
+    stock_5: 0,
+    stock_10: 0,
+    stock_25: 0,
+    stock_50: 0,
+    chalan_no: '',
+    stock_price: 0,
+    sell_price: 0
+  });
 
   const selectedProductData = (products || []).map((item) => ({
     value: item.id,
@@ -73,6 +85,68 @@ const ChickenStockEntry = () => {
     }
   };
 
+  const clearAll = () => {
+    setSelectedOption(null);
+    setSingleProducts({});
+    setRadioValue('1');
+  };
+
+  const createUpdatedData = (mutationData) => {
+    const updatedData = {
+      accessToken,
+      product_id: selectedOption !== null ? selectedOption.value : '',
+      chalan_no: mutationData.chalan_no,
+      sell_price: mutationData.sell_price,
+      stock_price: mutationData.stock_price
+    };
+
+    const stockProperties = ['stock_1', 'stock_5', 'stock_10', 'stock_25', 'stock_50'];
+
+    stockProperties.forEach((property) => {
+      const value = mutationData[property];
+      if (value !== null && value > 0) {
+        updatedData[property] = value;
+      }
+    });
+
+    return updatedData;
+  };
+  const updatedData = createUpdatedData(mutationData);
+  console.log('🚀 ~ ChickenStockEntry ~ updatedData:', updatedData);
+
+  const handleChange = (type, value) => {
+    setMutationData((prevData) => ({
+      ...prevData,
+      [type]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    toast.dismiss(toastId.current);
+
+    takeSupply(updatedData)
+      .unwrap()
+      .then((res) => {
+        if (size(res)) {
+          if (res.flag === 200) {
+            toastAlert('success', res.message);
+            resetAfterSubmit();
+            onDeleteSuccess(); // Refetch product data after successful deletion
+            if (productId) {
+              navigate('/chalan/product-name-entry');
+            }
+          } else {
+            toastAlert('error', res.error);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        toastAlert('error', 'Something is wrong');
+      });
+  };
+
   useEffect(() => {
     fetchProductData(radioValue);
     setSelectedOption(null);
@@ -100,24 +174,29 @@ const ChickenStockEntry = () => {
                 </div>
               </Col>
             </Row>
-            <ButtonGroup className="mb-3">
-              {radios.map((radio, idx) => (
-                <ToggleButton
-                  size="sm"
-                  key={idx}
-                  id={`radi-${idx}`}
-                  type="radio"
-                  variant="outline-secondary"
-                  name="aa"
-                  value={radio.value}
-                  checked={radioValue === radio.value}
-                  onChange={(e) => setRadioValue(e.currentTarget.value)}
-                >
-                  {/* {radio.icon} */}
-                  {radio.name}
-                </ToggleButton>
-              ))}
-            </ButtonGroup>
+            <Row>
+              <Col md={4}>
+                <ButtonGroup className="mb-3 w-100">
+                  {radios.map((radio, idx) => (
+                    <ToggleButton
+                      size="sm"
+                      key={idx}
+                      id={`radi-${idx}`}
+                      type="radio"
+                      variant="outline-secondary"
+                      name="aa"
+                      value={radio.value}
+                      checked={radioValue === radio.value}
+                      onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    >
+                      {/* {radio.icon} */}
+                      {radio.name}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+              </Col>
+            </Row>
+
             <Row>
               <Col md={4}>
                 <Form.Group className="mb-3">
@@ -189,8 +268,20 @@ const ChickenStockEntry = () => {
                 <Row>
                   {singleProducts.stock_1 !== undefined && singleProducts.stock_1 !== null ? (
                     <Col md={3}>
+                      <div className="d-flex align-items-center justify-content-between px-2">
+                        <h6>Available Stock</h6>
+                        <h6 className={`${singleProducts.stock_1 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_1} Bag</h6>
+                      </div>
                       <Form.Group className="floating-label-group mb-3 ">
-                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Control
+                          name="product-name-bd"
+                          size="sm"
+                          type="number"
+                          placeholder=""
+                          className="floating-input"
+                          value={mutationData.stock_1}
+                          onChange={(e) => handleChange('stock_1', e.target.value)}
+                        />
                         <Form.Label name="product-name-bd" className="floating-label">
                           1KG
                         </Form.Label>
@@ -199,8 +290,20 @@ const ChickenStockEntry = () => {
                   ) : null}
                   {singleProducts.stock_5 !== undefined && singleProducts.stock_5 !== null ? (
                     <Col md={3}>
+                      <div className="d-flex align-items-center justify-content-between px-2">
+                        <h6>Available Stock</h6>
+                        <h6 className={`${singleProducts.stock_5 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_5} Bag</h6>
+                      </div>
                       <Form.Group className="floating-label-group mb-3 ">
-                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Control
+                          name="product-name-bd"
+                          size="sm"
+                          type="number"
+                          placeholder=""
+                          className="floating-input"
+                          value={mutationData.stock_5}
+                          onChange={(e) => handleChange('stock_5', e.target.value)}
+                        />
                         <Form.Label name="product-name-bd" className="floating-label">
                           5KG
                         </Form.Label>
@@ -209,8 +312,20 @@ const ChickenStockEntry = () => {
                   ) : null}
                   {singleProducts.stock_10 !== undefined && singleProducts.stock_10 !== null ? (
                     <Col md={3}>
+                      <div className="d-flex align-items-center justify-content-between px-2">
+                        <h6>Available Stock</h6>
+                        <h6 className={`${singleProducts.stock_10 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_10} Bag</h6>
+                      </div>
                       <Form.Group className="floating-label-group mb-3 ">
-                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Control
+                          name="product-name-bd"
+                          size="sm"
+                          type="number"
+                          placeholder=""
+                          className="floating-input"
+                          value={mutationData.stock_10}
+                          onChange={(e) => handleChange('stock_10', e.target.value)}
+                        />
                         <Form.Label name="product-name-bd" className="floating-label">
                           10KG
                         </Form.Label>
@@ -219,8 +334,20 @@ const ChickenStockEntry = () => {
                   ) : null}
                   {singleProducts.stock_25 !== undefined && singleProducts.stock_25 !== null ? (
                     <Col md={3}>
+                      <div className="d-flex align-items-center justify-content-between px-2">
+                        <h6>Available Stock</h6>
+                        <h6 className={`${singleProducts.stock_25 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_25} Bag</h6>
+                      </div>
                       <Form.Group className="floating-label-group mb-3 ">
-                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Control
+                          name="product-name-bd"
+                          size="sm"
+                          type="number"
+                          placeholder=""
+                          className="floating-input"
+                          value={mutationData.stock_25}
+                          onChange={(e) => handleChange('stock_25', e.target.value)}
+                        />
                         <Form.Label name="product-name-bd" className="floating-label">
                           25KG
                         </Form.Label>
@@ -229,8 +356,20 @@ const ChickenStockEntry = () => {
                   ) : null}
                   {singleProducts.stock_50 !== undefined && singleProducts.stock_50 !== null ? (
                     <Col md={3}>
+                      <div className="d-flex align-items-center justify-content-between px-2">
+                        <h6>Available Stock</h6>
+                        <h6 className={`${singleProducts.stock_50 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_50} Bag</h6>
+                      </div>
                       <Form.Group className="floating-label-group mb-3 ">
-                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Control
+                          name="product-name-bd"
+                          size="sm"
+                          type="number"
+                          placeholder=""
+                          className="floating-input"
+                          value={mutationData.stock_50}
+                          onChange={(e) => handleChange('stock_50', e.target.value)}
+                        />
                         <Form.Label name="product-name-bd" className="floating-label">
                           50KG
                         </Form.Label>
@@ -244,50 +383,48 @@ const ChickenStockEntry = () => {
             <Row>
               <Col md={4}>
                 <Form.Group className="floating-label-group mb-3">
-                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
-                  <Form.Label className="floating-label">Supply Unit QTY </Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="number"
+                    placeholder=""
+                    className="floating-input"
+                    value={mutationData.stock_price}
+                    onChange={(e) => handleChange('stock_price', e.target.value)}
+                  />
+                  <Form.Label className="floating-label">Stock Price (KG) </Form.Label>
                 </Form.Group>
               </Col>
               <Col md={4}>
                 <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
-                  <Form.Label className="floating-label">Unit Price</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="number"
+                    placeholder=""
+                    className="floating-input"
+                    value={mutationData.sell_price}
+                    onChange={(e) => handleChange('sell_price', e.target.value)}
+                  />
+                  <Form.Label className="floating-label">Sell Price (KG)</Form.Label>
                 </Form.Group>
               </Col>
               <Col md={4}>
                 <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
-                  <Form.Label className="floating-label">Unit Price</Form.Label>
-                </Form.Group>
-              </Col>
-
-              <Col md={4}>
-                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
-                  <Form.Label className="floating-label">Sale Unit Price</Form.Label>
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
-                  <Form.Label className="floating-label">Chalan NO</Form.Label>
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
-                  <Form.Label className="floating-label">Transport No</Form.Label>
-                </Form.Group>
-              </Col>
-
-              <Col md={4}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                  <Form.Label>নোট</Form.Label>
-                  <Form.Control as="textarea" rows="3" />
+                  <Form.Control
+                    size="sm"
+                    type="text"
+                    placeholder=""
+                    className="floating-input"
+                    value={mutationData.chalan_no}
+                    onChange={(e) => handleChange('chalan_no', e.target.value)}
+                  />
+                  <Form.Label className="floating-label">Chalan No</Form.Label>
                 </Form.Group>
               </Col>
             </Row>
             <Button variant="primary">সংরক্ষণ</Button>
+            <Button variant="secondary" onClick={clearAll}>
+              clear
+            </Button>
           </Form>
         </Card.Body>
       </Card>

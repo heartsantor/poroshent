@@ -10,7 +10,7 @@ import { toastAlert } from '../../../utils/AppHelpers';
 const ProductEntryForm = ({ onDeleteSuccess }) => {
   const { productId } = useParams();
   const navigate = useNavigate();
-  console.log('🚀 ~ ProductEntryForm ~ productId:', productId);
+
   const { accessToken } = useSelector((state) => state.auth);
   const toastId = useRef(null);
 
@@ -28,7 +28,6 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
     notes: ''
   });
 
-  console.log('🚀 ~ ProductEntryForm ~ mutationData:', mutationData);
   const [createProduct, { isLoading }] = useCreateProductMutation();
   const [editProduct, { isLoading: isEditLoading }] = useEditProductMutation();
   const [getSingleProduct, { isLoading: isSingleProductLoading }] = useGetSingleProductMutation();
@@ -37,7 +36,6 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
     const fetchProduct = async () => {
       try {
         const response = await getSingleProduct({ accessToken, product_id: productId });
-        console.log('🚀 ~ fetchProduct ~ response:', response.data);
         if (response.data.flag === 200) {
           const { data } = response;
           setMutationData({
