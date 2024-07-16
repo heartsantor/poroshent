@@ -41,27 +41,41 @@ const customStyles = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isSelected ? '#66afe9' : state.isFocused ? '#e9ecef' : 'white',
+    backgroundColor: state.isSelected ? '#6c757d' : state.isFocused ? '#e9ecef' : 'white',
     color: state.isSelected ? 'white' : '#495057',
     fontSize: '12px',
     '&:hover': {
-      backgroundColor: state.isSelected ? '#66afe9' : '#e9ecef',
+      backgroundColor: state.isSelected ? '#6c757d' : '#e9ecef',
       color: state.isSelected ? 'white' : '#495057'
     }
   })
 };
 
-const SmallSelect = ({ options, placeholder, ...props }) => {
-  return <Select options={options} styles={customStyles} placeholder={placeholder} classNamePrefix="react-select" {...props} />;
+const SmallSelect = ({ options, placeholder, value, onChange, isLoading, ...props }) => {
+  return (
+    <Select
+      options={options}
+      styles={customStyles}
+      placeholder={placeholder}
+      classNamePrefix="react-select"
+      value={value}
+      onChange={onChange}
+      isLoading={isLoading}
+    />
+  );
 };
 
 SmallSelect.propTypes = {
   options: PropTypes.array.isRequired,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  value: PropTypes.object,
+  onChange: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool // Add PropTypes for isLoading
 };
 
 SmallSelect.defaultProps = {
-  placeholder: 'Select...'
+  placeholder: 'Select...',
+  isLoading: false // Default value for isLoading
 };
 
 export default SmallSelect;

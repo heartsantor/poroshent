@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { size } from 'lodash';
 import { Row, Col, Card, Form, Button, ButtonGroup, ToggleButton, DropdownButton, Dropdown } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-import Select from 'react-select';
+import { useSelector } from 'react-redux';
 import { Chicken } from '../../../assets/icon';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
+import { useGetProductMutation } from '../../../store/features/product/productApi';
+
 const ChickenStockEntry = () => {
+  const { accessToken } = useSelector((state) => state.auth);
+  const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [startDate, setStartDate] = useState(new Date());
 
   const [radioValue, setRadioValue] = useState('1');
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const [products, setProducts] = useState([]);
+  console.log('🚀 ~ ChickenStockEntry ~ products:', products);
+  const selectedProductData = (products || []).map((item) => ({
+    value: item.id,
+    label: item.name
+  }));
+
   const radios = [
     { icon: <Chicken />, name: 'মুরগীর খাবার', value: '1' },
     { icon: <Chicken />, name: 'মাছের খাবার', value: '2' },
@@ -15,11 +29,32 @@ const ChickenStockEntry = () => {
     { icon: <Chicken />, name: 'ঔষধ', value: '4' }
   ];
 
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ];
+  const handleSelectChange = (selected) => {
+    setSelectedOption(selected);
+    console.log('Selected option:', selected);
+  };
+
+  const fetchProductData = async (type) => {
+    const data = {
+      accessToken: accessToken,
+      type: type
+    };
+    try {
+      const res = await getProduct(data).unwrap();
+      if (size(res)) {
+        setProducts(res.product);
+      } else {
+        setProducts([]);
+      }
+    } catch (error) {
+      setProducts([]);
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductData(radioValue);
+  }, [radioValue]);
 
   return (
     <div>
@@ -56,14 +91,14 @@ const ChickenStockEntry = () => {
             </ButtonGroup>
             <Row>
               <Col md={4}>
-                <Form.Group className="mb-3 floating-label-group">
-                  <Form.Control size="sm" as="select" className="floating-select">
-                    <option value="" hidden>
-                      Select One
-                    </option>
-                    <option>ব্রয়লার প্রি-স্টাটার (Broiler pre-starter)</option>
-                    <option>ব্রয়লার প্রি-স্টাটার (Broiler pre-starter2)</option>
-                  </Form.Control>
+                <Form.Group className="mb-3">
+                  <SmallSelect
+                    options={selectedProductData}
+                    placeholder="Select One"
+                    value={selectedOption}
+                    onChange={handleSelectChange}
+                    isLoading={allProductLoading}
+                  />
                 </Form.Group>
               </Col>
               <Col md={8}>
@@ -84,51 +119,51 @@ const ChickenStockEntry = () => {
                       </Form.Label>
                     </Form.Group>
                   </Col>
-                  <Col md={4}>
+                  {/* <Col md={4}>
                     <Form.Group className="mb-3">
-                      <SmallSelect options={options} placeholder="Select One" />
+                      <SmallSelect options={options} placeholder="Select One" value={selectedOption} onChange={handleSelectChange} />
                     </Form.Group>
-                  </Col>
+                  </Col> */}
                 </Row>
               </Col>
             </Row>
             <hr />
             <Row>
               <Col md={4}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Supply Unit QTY </Form.Label>
-                  <Form.Control type="text" placeholder="Supply Unit QTY" />
+                <Form.Group className="floating-label-group mb-3">
+                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
+                  <Form.Label className="floating-label">Supply Unit QTY </Form.Label>
                 </Form.Group>
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Unit Price</Form.Label>
-                  <Form.Control type="text" placeholder="Unit Price" />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
+                  <Form.Label className="floating-label">Unit Price</Form.Label>
                 </Form.Group>
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Unit Price</Form.Label>
-                  <Form.Control type="text" placeholder="Unit Price " />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
+                  <Form.Label className="floating-label">Unit Price</Form.Label>
                 </Form.Group>
               </Col>
 
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Sale Unit Price</Form.Label>
-                  <Form.Control type="text" placeholder="Sale Unit Price " />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
+                  <Form.Label className="floating-label">Sale Unit Price</Form.Label>
                 </Form.Group>
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Chalan NO</Form.Label>
-                  <Form.Control type="text" placeholder="Chalan NO " />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
+                  <Form.Label className="floating-label">Chalan NO</Form.Label>
                 </Form.Group>
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Transport No</Form.Label>
-                  <Form.Control type="text" placeholder="Transport No" />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control size="sm" type="text" placeholder="" className="floating-input" />
+                  <Form.Label className="floating-label">Transport No</Form.Label>
                 </Form.Group>
               </Col>
 
