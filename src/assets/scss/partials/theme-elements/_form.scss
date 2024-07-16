@@ -154,3 +154,70 @@ select.form-control-lg:not([size]):not([multiple]) {
   margin-top: 0;
   padding-top: 0.25em;
 }
+
+
+// floating label 
+
+.floating-label-group {
+  position: relative;
+  // margin-bottom: 1.5rem;
+}
+
+.floating-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.floating-input:focus {
+  border-color: #6c757d;
+  outline: 0;
+  box-shadow: 0 0 8px rgba(183, 186, 187, 0.6);
+}
+
+.floating-label {
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 5px;
+  transition: 0.2s ease all;
+  color: #999;
+}
+
+.floating-input:focus~.floating-label,
+.floating-input:not(:placeholder-shown)~.floating-label {
+  top: -15px;
+  left: 5px;
+  font-size: 10px;
+  color: #fff;
+  background-color: #6c757d;
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+
+// floating-select
+
+.floating-select {
+  width: 100%;
+  padding: 4px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  background: #f4f7fa;
+}
+
+.floating-select:focus {
+  border-color: #6c757d;
+  outline: 0;
+  box-shadow: 0 0 8px rgba(183, 186, 187, 0.6);
+}
+
+
+.react-select__dropdown-indicator{
+  padding: 4px !important;
+}

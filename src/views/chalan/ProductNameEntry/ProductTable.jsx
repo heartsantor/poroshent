@@ -3,6 +3,8 @@ import { size } from 'lodash';
 import { Table, Badge, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import { getItemName } from '../../../utils/getItemName';
 import { useDeleteProductMutation } from '../../../store/features/product/productApi';
 import { toastAlert } from '../../../utils/AppHelpers';
@@ -21,21 +23,24 @@ const getColorForStock = (key) => {
   return stockColorMap[key];
 };
 
-const generateBadges = (item) => {
+const generateBadges = (item, t) => {
   const stockKeys = [
-    { key: 'stock_1', label: '1KG' },
-    { key: 'stock_5', label: '5KG' },
-    { key: 'stock_10', label: '10KG' },
-    { key: 'stock_25', label: '25KG' },
-    { key: 'stock_50', label: '50KG' }
+    { key: 'stock_1', label: '1' },
+    { key: 'stock_5', label: '5' },
+    { key: 'stock_10', label: '10' },
+    { key: 'stock_25', label: '25' },
+    { key: 'stock_50', label: '50' }
   ];
 
   return stockKeys
-    .filter((stock) => item[stock.key] != null)
+    .filter((stock) => item[stock.key] > 0)
     .map((stock, index) => (
-      <h5 key={index}>
-        <Badge bg={getColorForStock(stock.key)}>{stock.label}</Badge>
-      </h5>
+      <h6 key={index} className="badge-wrapper">
+        {item[stock.key]} {t('bag')}
+        <Badge className="bag-badge" bg={getColorForStock(stock.key)}>
+          {stock.label}
+        </Badge>
+      </h6>
     ));
 };
 
@@ -47,6 +52,8 @@ const scrollToTop = () => {
 };
 
 const ProductTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => {
+  const { t } = useTranslation();
+
   const { accessToken } = useSelector((state) => state.auth);
 
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
@@ -130,7 +137,7 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) =>
                 <p className="m-0">{getItemName(item.type)}</p>
               </td>
               <td>
-                <div className="d-flex gap-2">{generateBadges(item)}</div>
+                <div className="d-flex gap-4">{generateBadges(item, t)}</div>
               </td>
               <td>
                 <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>

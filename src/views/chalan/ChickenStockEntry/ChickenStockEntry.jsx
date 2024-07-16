@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
-import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, ButtonGroup, ToggleButton, DropdownButton, Dropdown } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-
+import Select from 'react-select';
+import { Chicken } from '../../../assets/icon';
+import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 const ChickenStockEntry = () => {
   const [startDate, setStartDate] = useState(new Date());
+
+  const [radioValue, setRadioValue] = useState('1');
+  const radios = [
+    { icon: <Chicken />, name: 'মুরগীর খাবার', value: '1' },
+    { icon: <Chicken />, name: 'মাছের খাবার', value: '2' },
+    { icon: <Chicken />, name: 'গরুর খাবার', value: '3' },
+    { icon: <Chicken />, name: 'ঔষধ', value: '4' }
+  ];
+
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ];
+
   return (
     <div>
       <Card>
@@ -15,49 +32,61 @@ const ChickenStockEntry = () => {
             <Row>
               <Col md={4}>
                 <div className="form-group w-100 mb-3">
-                  <label htmlFor="datePicker" className="d-block">
-                    Select Date
-                  </label>
-                  <DatePicker
-                    id="datePicker"
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    className="form-control w-100" // Bootstrap form-control class
-                  />
+                  <DatePicker id="datePicker" selected={startDate} onChange={(date) => setStartDate(date)} className="form-control w-100" />
                 </div>
               </Col>
             </Row>
-
+            <ButtonGroup className="mb-3">
+              {radios.map((radio, idx) => (
+                <ToggleButton
+                  size="sm"
+                  key={idx}
+                  id={`radi-${idx}`}
+                  type="radio"
+                  variant="outline-secondary"
+                  name="aa"
+                  value={radio.value}
+                  checked={radioValue === radio.value}
+                  onChange={(e) => setRadioValue(e.currentTarget.value)}
+                >
+                  {/* {radio.icon} */}
+                  {radio.name}
+                </ToggleButton>
+              ))}
+            </ButtonGroup>
             <Row>
               <Col md={4}>
-                <Form.Group size="sm" className="mb-3">
-                  <Form.Label>প্রোডাক্ট সিলেক্ট</Form.Label>
-                  <Form.Control aria-label="Small" aria-describedby="inputGroup-sizing-sm" as="select">
+                <Form.Group className="mb-3 floating-label-group">
+                  <Form.Control size="sm" as="select" className="floating-select">
+                    <option value="" hidden>
+                      Select One
+                    </option>
                     <option>ব্রয়লার প্রি-স্টাটার (Broiler pre-starter)</option>
+                    <option>ব্রয়লার প্রি-স্টাটার (Broiler pre-starter2)</option>
                   </Form.Control>
                 </Form.Group>
               </Col>
               <Col md={8}>
                 <Row>
                   <Col md={4}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Product name </Form.Label>
-                      <Form.Control type="text" placeholder="Product name" />
+                    <Form.Group className="floating-label-group mb-3">
+                      <Form.Control name="product-name" size="sm" type="text" placeholder="" className="floating-input" />
+                      <Form.Label name="product-name" className="floating-label">
+                        Product name
+                      </Form.Label>
+                    </Form.Group>
+                  </Col>
+                  <Col md={4}>
+                    <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                      <Form.Label name="product-name-bd" className="floating-label">
+                        Product Name (BD)
+                      </Form.Label>
                     </Form.Group>
                   </Col>
                   <Col md={4}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Product Name (BD) </Form.Label>
-                      <Form.Control type="text" placeholder="Product Name (BD)" />
-                    </Form.Group>
-                  </Col>
-                  <Col md={4}>
-                    <Form.Group size="sm" className="mb-3">
-                      <Form.Label>Bag Size</Form.Label>
-                      <Form.Control aria-label="Small" aria-describedby="inputGroup-sizing-sm" as="select">
-                        <option>25KG</option>
-                        <option>50KG</option>
-                      </Form.Control>
+                      <SmallSelect options={options} placeholder="Select One" />
                     </Form.Group>
                   </Col>
                 </Row>
