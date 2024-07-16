@@ -127,7 +127,24 @@ const ChickenStockEntry = () => {
 
     return updatedData;
   };
+
+  const calculateTotal = (data) => {
+    const multipliers = {
+      stock_1: 1,
+      stock_5: 5,
+      stock_10: 10,
+      stock_25: 25,
+      stock_50: 50
+    };
+
+    return Object.keys(multipliers).reduce((sum, key) => {
+      return sum + (data[key] ? data[key] * multipliers[key] : 0);
+    }, 0);
+  };
+
   const updatedData = createUpdatedData(mutationData);
+  const totalSum = calculateTotal(mutationData);
+  console.log('🚀 ~ ChickenStockEntry ~ totalSum:', totalSum);
   console.log('🚀 ~ ChickenStockEntry ~ updatedData:', updatedData);
 
   const handleFocus = (e) => {
@@ -227,6 +244,54 @@ const ChickenStockEntry = () => {
                     isLoading={allProductLoading}
                   />
                 </Form.Group>
+                {size(singleProducts) ? (
+                  <div className="">
+                    <h6> Total KG SUM</h6>
+                    <div className="px-2">
+                      {singleProducts.stock_1 !== undefined && singleProducts.stock_1 !== null && mutationData.stock_1 > 0 ? (
+                        <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
+                          <span>1KG</span>
+                          <span>
+                            1* {mutationData.stock_1} = {mutationData.stock_1 * 1}
+                          </span>
+                        </div>
+                      ) : null}
+                      {singleProducts.stock_5 !== undefined && singleProducts.stock_5 !== null && mutationData.stock_5 > 0 ? (
+                        <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
+                          <span>5KG</span>
+                          <span>
+                            5* {mutationData.stock_5} = {mutationData.stock_5 * 5}
+                          </span>
+                        </div>
+                      ) : null}
+                      {singleProducts.stock_10 !== undefined && singleProducts.stock_10 !== null && mutationData.stock_10 > 0 ? (
+                        <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
+                          <span>10KG</span>
+                          <span>
+                            10* {mutationData.stock_10} = {mutationData.stock_1 * 10}
+                          </span>
+                        </div>
+                      ) : null}
+                      {singleProducts.stock_25 !== undefined && singleProducts.stock_25 !== null && mutationData.stock_25 > 0 ? (
+                        <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
+                          <span>25KG</span>
+                          <span>
+                            25* {mutationData.stock_25} = {mutationData.stock_25 * 25}
+                          </span>
+                        </div>
+                      ) : null}
+                      {singleProducts.stock_50 !== undefined && singleProducts.stock_50 !== null && mutationData.stock_50 > 0 ? (
+                        <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
+                          <span>50KG</span>
+                          <span>
+                            50* {mutationData.stock_50} = {mutationData.stock_50 * 50}
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+                    <h4>total = {totalSum} KG</h4>
+                  </div>
+                ) : null}
               </Col>
               <Col md={8}>
                 <Row>
@@ -294,7 +359,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
-                          onFocus={handleFocus}
+                          // onFocus={handleFocus}
                           value={mutationData.stock_1 === null ? '' : mutationData.stock_1}
                           onChange={(e) => setMutationData({ ...mutationData, stock_1: e.target.value ? Number(e.target.value) : 0 })}
                         />
@@ -319,7 +384,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
-                          onFocus={handleFocus}
+                          // onFocus={handleFocus}
                           value={mutationData.stock_5 === null ? '' : mutationData.stock_5}
                           onChange={(e) => setMutationData({ ...mutationData, stock_5: e.target.value ? Number(e.target.value) : 0 })}
                         />
@@ -344,7 +409,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
-                          onFocus={handleFocus}
+                          // onFocus={handleFocus}
                           value={mutationData.stock_10 === null ? '' : mutationData.stock_10}
                           onChange={(e) => setMutationData({ ...mutationData, stock_10: e.target.value ? Number(e.target.value) : 0 })}
                         />
@@ -369,7 +434,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
-                          onFocus={handleFocus}
+                          // onFocus={handleFocus}
                           value={mutationData.stock_25 === null ? '' : mutationData.stock_25}
                           onChange={(e) => setMutationData({ ...mutationData, stock_25: e.target.value ? Number(e.target.value) : 0 })}
                         />
@@ -394,7 +459,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
-                          onFocus={handleFocus}
+                          // onFocus={handleFocus}
                           value={mutationData.stock_50 === null ? '' : mutationData.stock_50}
                           onChange={(e) => setMutationData({ ...mutationData, stock_50: e.target.value ? Number(e.target.value) : 0 })}
                         />
@@ -422,7 +487,7 @@ const ChickenStockEntry = () => {
                     type="number"
                     placeholder=""
                     className="floating-input"
-                    onFocus={handleFocus}
+                    // onFocus={handleFocus}
                     value={mutationData.stock_price}
                     onChange={(e) => setMutationData({ ...mutationData, stock_price: Number(e.target.value) })}
                   />
@@ -442,7 +507,7 @@ const ChickenStockEntry = () => {
                     type="number"
                     placeholder=""
                     className="floating-input"
-                    onFocus={handleFocus}
+                    // onFocus={handleFocus}
                     value={mutationData.sell_price}
                     onChange={(e) => setMutationData({ ...mutationData, sell_price: Number(e.target.value) })}
                   />
