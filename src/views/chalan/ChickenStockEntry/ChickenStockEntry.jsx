@@ -287,11 +287,7 @@ const ChickenStockEntry = () => {
                 <Row>
                   {singleProducts.stock_1 !== undefined && singleProducts.stock_1 !== null ? (
                     <Col md={3}>
-                      <div className="d-flex align-items-center justify-content-between px-2 mb-2">
-                        <h6>Available Stock</h6>
-                        <h6 className={`${singleProducts.stock_1 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_1} Bag</h6>
-                      </div>
-                      <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Group className="floating-label-group">
                         <Form.Control
                           name="product-name-bd"
                           size="sm"
@@ -306,15 +302,17 @@ const ChickenStockEntry = () => {
                           1KG
                         </Form.Label>
                       </Form.Group>
+                      <div className="d-flex align-items-center ms-2 mb-3">
+                        <p className="m-0 me-2">Available Stock</p>
+                        <span className={`${singleProducts.stock_1 > 0 ? 'text-primary' : 'text-danger'}`}>
+                          ({singleProducts.stock_1} Bag)
+                        </span>
+                      </div>
                     </Col>
                   ) : null}
                   {singleProducts.stock_5 !== undefined && singleProducts.stock_5 !== null ? (
                     <Col md={3}>
-                      <div className="d-flex align-items-center justify-content-between px-2 mb-2">
-                        <h6>Available Stock</h6>
-                        <h6 className={`${singleProducts.stock_5 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_5} Bag</h6>
-                      </div>
-                      <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Group className="floating-label-group">
                         <Form.Control
                           name="product-name-bd"
                           size="sm"
@@ -329,15 +327,17 @@ const ChickenStockEntry = () => {
                           5KG
                         </Form.Label>
                       </Form.Group>
+                      <div className="d-flex align-items-center ms-2 mb-3">
+                        <p className="m-0 me-2">Available Stock</p>
+                        <span className={`${singleProducts.stock_5 > 0 ? 'text-primary' : 'text-danger'}`}>
+                          ({singleProducts.stock_5} Bag)
+                        </span>
+                      </div>
                     </Col>
                   ) : null}
                   {singleProducts.stock_10 !== undefined && singleProducts.stock_10 !== null ? (
                     <Col md={3}>
-                      <div className="d-flex align-items-center justify-content-between px-2 mb-2">
-                        <h6>Available Stock</h6>
-                        <h6 className={`${singleProducts.stock_10 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_10} Bag</h6>
-                      </div>
-                      <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Group className="floating-label-group">
                         <Form.Control
                           name="product-name-bd"
                           size="sm"
@@ -352,15 +352,17 @@ const ChickenStockEntry = () => {
                           10KG
                         </Form.Label>
                       </Form.Group>
+                      <div className="d-flex align-items-center ms-2 mb-3">
+                        <p className="m-0 me-2">Available Stock</p>
+                        <span className={`${singleProducts.stock_10 > 0 ? 'text-primary' : 'text-danger'}`}>
+                          ({singleProducts.stock_10} Bag)
+                        </span>
+                      </div>
                     </Col>
                   ) : null}
                   {singleProducts.stock_25 !== undefined && singleProducts.stock_25 !== null ? (
                     <Col md={3}>
-                      <div className="d-flex align-items-center justify-content-between px-2 mb-2">
-                        <h6>Available Stock</h6>
-                        <h6 className={`${singleProducts.stock_25 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_25} Bag</h6>
-                      </div>
-                      <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Group className="floating-label-group">
                         <Form.Control
                           name="product-name-bd"
                           size="sm"
@@ -375,15 +377,17 @@ const ChickenStockEntry = () => {
                           25KG
                         </Form.Label>
                       </Form.Group>
+                      <div className="d-flex align-items-center ms-2 mb-3">
+                        <p className="m-0 me-2">Available Stock</p>
+                        <span className={`${singleProducts.stock_25 > 0 ? 'text-primary' : 'text-danger'}`}>
+                          ({singleProducts.stock_25} Bag)
+                        </span>
+                      </div>
                     </Col>
                   ) : null}
                   {singleProducts.stock_50 !== undefined && singleProducts.stock_50 !== null ? (
                     <Col md={3}>
-                      <div className="d-flex align-items-center justify-content-between px-2 mb-2">
-                        <h6>Available Stock</h6>
-                        <h6 className={`${singleProducts.stock_50 > 0 ? 'text-primary' : 'text-danger'}`}>{singleProducts.stock_50} Bag</h6>
-                      </div>
-                      <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Group className="floating-label-group">
                         <Form.Control
                           name="product-name-bd"
                           size="sm"
@@ -398,6 +402,12 @@ const ChickenStockEntry = () => {
                           50KG
                         </Form.Label>
                       </Form.Group>
+                      <div className="d-flex align-items-center ms-2 mb-3">
+                        <p className="m-0 me-2">Available Stock</p>
+                        <span className={`${singleProducts.stock_50 > 0 ? 'text-primary' : 'text-danger'}`}>
+                          ({singleProducts.stock_50} Bag)
+                        </span>
+                      </div>
                     </Col>
                   ) : null}
                 </Row>
