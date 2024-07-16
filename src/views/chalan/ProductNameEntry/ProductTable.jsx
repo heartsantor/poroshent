@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { getItemName } from '../../../utils/getItemName';
 import { useDeleteProductMutation } from '../../../store/features/product/productApi';
 import { toastAlert } from '../../../utils/AppHelpers';
-import WarningModal from '../../../components/WarningModal/WarningModal';
+import WarningModal from '../../../components/Modal/WarningModal';
 import SkeletonLoader from '../../../components/Skeleton/SkeletonLoader';
 
 const getColorForStock = (key) => {

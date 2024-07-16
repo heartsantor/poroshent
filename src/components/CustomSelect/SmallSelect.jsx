@@ -51,7 +51,7 @@ const customStyles = {
   })
 };
 
-const SmallSelect = ({ options, placeholder, value, onChange, isLoading, ...props }) => {
+const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange, isLoading = false, ...props }) => {
   return (
     <Select
       options={options}
@@ -70,12 +70,7 @@ SmallSelect.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool // Add PropTypes for isLoading
-};
-
-SmallSelect.defaultProps = {
-  placeholder: 'Select...',
-  isLoading: false // Default value for isLoading
+  isLoading: PropTypes.bool
 };
 
 export default SmallSelect;

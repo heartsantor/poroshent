@@ -5,18 +5,22 @@ import DatePicker from 'react-datepicker';
 import { useSelector } from 'react-redux';
 import { Chicken } from '../../../assets/icon';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
-import { useGetProductMutation } from '../../../store/features/product/productApi';
+import { useGetProductMutation, useGetSingleProductMutation } from '../../../store/features/product/productApi';
 
 const ChickenStockEntry = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
+  const [getSingleProduct, { isLoading: singleProductLoading }] = useGetSingleProductMutation();
+
   const [startDate, setStartDate] = useState(new Date());
 
   const [radioValue, setRadioValue] = useState('1');
   const [selectedOption, setSelectedOption] = useState(null);
 
   const [products, setProducts] = useState([]);
-  console.log('🚀 ~ ChickenStockEntry ~ products:', products);
+  const [singleProducts, setSingleProducts] = useState({});
+  console.log('🚀 ~ ChickenStockEntry ~ singleProducts:', singleProducts);
+
   const selectedProductData = (products || []).map((item) => ({
     value: item.id,
     label: item.name
@@ -31,7 +35,6 @@ const ChickenStockEntry = () => {
 
   const handleSelectChange = (selected) => {
     setSelectedOption(selected);
-    console.log('Selected option:', selected);
   };
 
   const fetchProductData = async (type) => {
@@ -52,9 +55,35 @@ const ChickenStockEntry = () => {
     }
   };
 
+  const fetchSingleProductData = async (type) => {
+    const data = {
+      accessToken: accessToken,
+      product_id: type
+    };
+    try {
+      const res = await getSingleProduct(data).unwrap();
+      if (size(res)) {
+        setSingleProducts(res.product);
+      } else {
+        setSingleProducts([]);
+      }
+    } catch (error) {
+      setSingleProducts([]);
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
     fetchProductData(radioValue);
+    setSelectedOption(null);
+    setSingleProducts({});
   }, [radioValue]);
+
+  useEffect(() => {
+    if (selectedOption !== null) {
+      fetchSingleProductData(selectedOption.value);
+    }
+  }, [selectedOption]);
 
   return (
     <div>
@@ -105,7 +134,15 @@ const ChickenStockEntry = () => {
                 <Row>
                   <Col md={4}>
                     <Form.Group className="floating-label-group mb-3">
-                      <Form.Control name="product-name" size="sm" type="text" placeholder="" className="floating-input" />
+                      <Form.Control
+                        disabled
+                        value={singleProducts.name_en || ''}
+                        name="product-name"
+                        size="sm"
+                        type="text"
+                        placeholder=""
+                        className="floating-input"
+                      />
                       <Form.Label name="product-name" className="floating-label">
                         Product name
                       </Form.Label>
@@ -113,9 +150,33 @@ const ChickenStockEntry = () => {
                   </Col>
                   <Col md={4}>
                     <Form.Group className="floating-label-group mb-3 ">
-                      <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                      <Form.Control
+                        disabled
+                        value={singleProducts.name || ''}
+                        name="product-name-bd"
+                        size="sm"
+                        type="text"
+                        placeholder=""
+                        className="floating-input"
+                      />
                       <Form.Label name="product-name-bd" className="floating-label">
                         Product Name (BD)
+                      </Form.Label>
+                    </Form.Group>
+                  </Col>
+                  <Col md={4}>
+                    <Form.Group className="floating-label-group mb-3 ">
+                      <Form.Control
+                        disabled
+                        value={singleProducts.code || ''}
+                        name="product-name-bd"
+                        size="sm"
+                        type="text"
+                        placeholder=""
+                        className="floating-input"
+                      />
+                      <Form.Label name="product-name-bd" className="floating-label">
+                        Product Code
                       </Form.Label>
                     </Form.Group>
                   </Col>
@@ -124,6 +185,58 @@ const ChickenStockEntry = () => {
                       <SmallSelect options={options} placeholder="Select One" value={selectedOption} onChange={handleSelectChange} />
                     </Form.Group>
                   </Col> */}
+                </Row>
+                <Row>
+                  {singleProducts.stock_1 !== undefined && singleProducts.stock_1 !== null ? (
+                    <Col md={3}>
+                      <Form.Group className="floating-label-group mb-3 ">
+                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Label name="product-name-bd" className="floating-label">
+                          1KG
+                        </Form.Label>
+                      </Form.Group>
+                    </Col>
+                  ) : null}
+                  {singleProducts.stock_5 !== undefined && singleProducts.stock_5 !== null ? (
+                    <Col md={3}>
+                      <Form.Group className="floating-label-group mb-3 ">
+                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Label name="product-name-bd" className="floating-label">
+                          5KG
+                        </Form.Label>
+                      </Form.Group>
+                    </Col>
+                  ) : null}
+                  {singleProducts.stock_10 !== undefined && singleProducts.stock_10 !== null ? (
+                    <Col md={3}>
+                      <Form.Group className="floating-label-group mb-3 ">
+                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Label name="product-name-bd" className="floating-label">
+                          10KG
+                        </Form.Label>
+                      </Form.Group>
+                    </Col>
+                  ) : null}
+                  {singleProducts.stock_25 !== undefined && singleProducts.stock_25 !== null ? (
+                    <Col md={3}>
+                      <Form.Group className="floating-label-group mb-3 ">
+                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Label name="product-name-bd" className="floating-label">
+                          25KG
+                        </Form.Label>
+                      </Form.Group>
+                    </Col>
+                  ) : null}
+                  {singleProducts.stock_50 !== undefined && singleProducts.stock_50 !== null ? (
+                    <Col md={3}>
+                      <Form.Group className="floating-label-group mb-3 ">
+                        <Form.Control name="product-name-bd" size="sm" type="text" placeholder="" className="floating-input" />
+                        <Form.Label name="product-name-bd" className="floating-label">
+                          50KG
+                        </Form.Label>
+                      </Form.Group>
+                    </Col>
+                  ) : null}
                 </Row>
               </Col>
             </Row>

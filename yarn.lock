@@ -4443,6 +4443,7 @@ __metadata:
     react-table: "npm:^7.8.0"
     react-to-print: "npm:^2.15.1"
     react-toastify: "npm:^10.0.5"
+    react-transition-group: "npm:^4.4.5"
     sass: "npm:^1.77.6"
     vite: "npm:^5.3.3"
     vite-jsconfig-paths: "npm:^2.0.1"
