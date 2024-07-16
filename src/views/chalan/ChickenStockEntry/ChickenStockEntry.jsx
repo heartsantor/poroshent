@@ -26,13 +26,14 @@ const ChickenStockEntry = () => {
 
   const [products, setProducts] = useState([]);
   const [singleProducts, setSingleProducts] = useState({});
+  console.log('🚀 ~ ChickenStockEntry ~ singleProducts:', singleProducts);
 
   const [mutationData, setMutationData] = useState({
-    stock_1: 0,
-    stock_5: 0,
-    stock_10: 0,
-    stock_25: 0,
-    stock_50: 0,
+    stock_1: '',
+    stock_5: '',
+    stock_10: '',
+    stock_25: '',
+    stock_50: '',
     chalan_no: '',
     stock_price: 0,
     sell_price: 0
@@ -95,11 +96,11 @@ const ChickenStockEntry = () => {
     setSingleProducts({});
     setRadioValue('1');
     setMutationData({
-      stock_1: 0,
-      stock_5: 0,
-      stock_10: 0,
-      stock_25: 0,
-      stock_50: 0,
+      stock_1: '',
+      stock_5: '',
+      stock_10: '',
+      stock_25: '',
+      stock_50: '',
       chalan_no: '',
       stock_price: 0,
       sell_price: 0
@@ -165,11 +166,11 @@ const ChickenStockEntry = () => {
     if (selectedOption !== null) {
       fetchSingleProductData(selectedOption.value);
       setMutationData({
-        stock_1: 0,
-        stock_5: 0,
-        stock_10: 0,
-        stock_25: 0,
-        stock_50: 0,
+        stock_1: '',
+        stock_5: '',
+        stock_10: '',
+        stock_25: '',
+        stock_50: '',
         chalan_no: '',
         stock_price: 0,
         sell_price: 0
@@ -405,7 +406,7 @@ const ChickenStockEntry = () => {
             <hr />
             <Row>
               <Col md={4}>
-                <Form.Group className="floating-label-group mb-3">
+                <Form.Group className="floating-label-group">
                   <Form.Control
                     size="sm"
                     type="number"
@@ -417,9 +418,15 @@ const ChickenStockEntry = () => {
                   />
                   <Form.Label className="floating-label">Stock Price (KG) </Form.Label>
                 </Form.Group>
+                {singleProducts.stock_price !== undefined && singleProducts.stock_price !== null ? (
+                  <div className="d-flex align-items-center ms-2 mb-3">
+                    <p className="m-0 me-2">previous Price</p>
+                    <span className="text-primary">({singleProducts.stock_price} TK)</span>
+                  </div>
+                ) : null}
               </Col>
               <Col md={4}>
-                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Group className="floating-label-group">
                   <Form.Control
                     size="sm"
                     type="number"
@@ -431,9 +438,15 @@ const ChickenStockEntry = () => {
                   />
                   <Form.Label className="floating-label">Sell Price (KG)</Form.Label>
                 </Form.Group>
+                {singleProducts.sell_price !== undefined && singleProducts.sell_price !== null ? (
+                  <div className="d-flex align-items-center ms-2 mb-3">
+                    <p className="m-0 me-2">previous Price</p>
+                    <span className="text-primary">({singleProducts.sell_price} TK)</span>
+                  </div>
+                ) : null}
               </Col>
               <Col md={4}>
-                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Group className="floating-label-group mb-3">
                   <Form.Control
                     size="sm"
                     type="text"
