@@ -1,0 +1,19 @@
+//make badge
+
+.badge-wrapper {
+ padding: 0;
+ border: 1px solid #6c757d;
+ border-radius: 5px;
+ display: flex;
+ align-items: center;
+
+ .bag-size {
+  background-color: #6c757d;
+  color: #fff;
+  padding: 2px 5px;
+ }
+
+ .has-qty {
+  padding: 2px 5px;
+ }
+}

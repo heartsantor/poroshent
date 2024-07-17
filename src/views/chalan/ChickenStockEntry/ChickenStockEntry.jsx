@@ -312,7 +312,7 @@ const ChickenStockEntry = () => {
                     </Form.Group>
                   </Col>
                   <Col md={4}>
-                    <Form.Group className="floating-label-group mb-3 ">
+                    <Form.Group className="floating-label-group mb-3">
                       <Form.Control
                         disabled
                         value={singleProducts.name || ''}
@@ -328,7 +328,7 @@ const ChickenStockEntry = () => {
                     </Form.Group>
                   </Col>
                   <Col md={4}>
-                    <Form.Group className="floating-label-group mb-3 ">
+                    <Form.Group className="floating-label-group mb-3">
                       <Form.Control
                         disabled
                         value={singleProducts.code || ''}
@@ -481,7 +481,7 @@ const ChickenStockEntry = () => {
             <hr />
             <Row>
               <Col md={4}>
-                <Form.Group className="floating-label-group">
+                <Form.Group className="floating-label-group ">
                   <Form.Control
                     size="sm"
                     type="number"

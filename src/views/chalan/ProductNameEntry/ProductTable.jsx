@@ -11,17 +11,17 @@ import { toastAlert } from '../../../utils/AppHelpers';
 import WarningModal from '../../../components/Modal/WarningModal';
 import SkeletonLoader from '../../../components/Skeleton/SkeletonLoader';
 
-const getColorForStock = (key) => {
-  const stockColorMap = {
-    stock_1: 'dark',
-    stock_5: 'secondary',
-    stock_10: 'success',
-    stock_25: 'danger',
-    stock_50: 'info'
-  };
+// const getColorForStock = (key) => {
+//   const stockColorMap = {
+//     stock_1: 'dark',
+//     stock_5: 'secondary',
+//     stock_10: 'success',
+//     stock_25: 'danger',
+//     stock_50: 'info'
+//   };
 
-  return stockColorMap[key];
-};
+//   return stockColorMap[key];
+// };
 
 const generateBadges = (item, t) => {
   const stockKeys = [
@@ -32,16 +32,22 @@ const generateBadges = (item, t) => {
     { key: 'stock_50', label: '50' }
   ];
 
-  return stockKeys
+  const badges = stockKeys
     .filter((stock) => item[stock.key] > 0)
-    .map((stock, index) => (
-      <h6 key={index} className="badge-wrapper">
-        {item[stock.key]} {t('bag')}
-        <Badge className="bag-badge" bg={getColorForStock(stock.key)}>
-          {stock.label}
-        </Badge>
-      </h6>
+    .map((stock) => (
+      <div key={stock.key} className="badge-wrapper">
+        <div className="bag-size">{stock.label}KG</div>
+        <div className="has-qty">
+          {item[stock.key]} {t('bags')}
+        </div>
+      </div>
     ));
+
+  if (badges.length === 0) {
+    return <div className="text-danger">No Stock</div>;
+  }
+
+  return badges;
 };
 
 const scrollToTop = () => {
@@ -107,7 +113,7 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) =>
             {activeKey === '2' && <th>category</th>}
             <th>আইটেমের কোড</th>
             <th>আইটেম টাইপ</th>
-            <th>ব্যাগ সাইজ</th>
+            <th>স্টক রয়েছে</th>
             <th>stock_price</th>
             <th>sell_price</th>
             {/* <th>নোট</th> */}
