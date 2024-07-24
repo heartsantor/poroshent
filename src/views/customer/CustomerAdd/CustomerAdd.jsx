@@ -1,7 +1,50 @@
-import React, { useState } from 'react';
-import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { size } from 'lodash';
+
+import { Row, Col, Card, Form, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { useAllCustomersMutation } from '../../../store/features/customer/customerApi';
+
+import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import CustomerTable from './CustomerTable';
+
 const CustomerAdd = () => {
+  const { accessToken } = useSelector((state) => state.auth);
+  const [getCustomers, { isLoading, isError }] = useAllCustomersMutation();
+  const [customers, setCustomers] = useState([]);
+  console.log('🚀 ~ CustomerAdd ~ customers:', customers);
+
+  const fetchCustomerData = async () => {
+    const data = {
+      accessToken: accessToken
+    };
+    try {
+      const res = await getCustomers(data).unwrap();
+      if (size(res)) {
+        setCustomers(res.Customers);
+      }
+    } catch (error) {
+      setCustomers([]);
+      console.error('Error:', error);
+    }
+  };
+
+  const handleDeleteSuccess = () => {
+    fetchCustomerData();
+  };
+
+  useEffect(() => {
+    fetchCustomerData();
+  }, []);
+
+  const productTableList = isError ? (
+    <div>No Data/ Error</div>
+  ) : (
+    <>
+      <CustomerTable customerData={customers} onDeleteSuccess={handleDeleteSuccess} isLoading={isLoading} />
+    </>
+  );
+
   return (
     <div>
       <Card>
@@ -12,49 +55,52 @@ const CustomerAdd = () => {
           <Form>
             <Row>
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Area Select</Form.Label>
-                  <Form.Control as="select">
+                <SmallSelect />
+                {/* <Form.Group className="mb-3">
+                  <Form.Control as="select" size="sm">
                     <option>dhaka</option>
                     <option>sherpur</option>
                     <option>nakla</option>
                   </Form.Control>
+                </Form.Group> */}
+              </Col>
+              <Col md={6}>
+                <Form.Group className="floating-label-group mb-3">
+                  <Form.Control type="text" placeholder="" className="floating-input" size="sm" />
+                  <Form.Label className="floating-label">Customer Name </Form.Label>
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Customer Name </Form.Label>
-                  <Form.Control type="text" placeholder="Customer Name" />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control type="text" placeholder="" className="floating-input" size="sm" />
+                  <Form.Label className="floating-label">Customer Address</Form.Label>
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Customer Address</Form.Label>
-                  <Form.Control type="text" placeholder="Customer Address " />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control type="number" placeholder="" className="floating-input" size="sm" />
+                  <Form.Label className="floating-label">Primary Phone Number</Form.Label>
                 </Form.Group>
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Primary Phone Number</Form.Label>
-                  <Form.Control type="text" placeholder="Primary Phone Number" />
+                <Form.Group className="floating-label-group mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Control type="number" placeholder="" className="floating-input" size="sm" />
+                  <Form.Label className="floating-label">Secondary Phone Number</Form.Label>
                 </Form.Group>
               </Col>
+            </Row>
+            <Row>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                  <Form.Label>Secondary Phone Number</Form.Label>
-                  <Form.Control type="text" placeholder="Secondary Phone Number" />
-                </Form.Group>
-              </Col>
-
-              <Col md={6}>
-                <Button variant="primary">সংরক্ষণ</Button>
+                <Button size="sm" variant="primary">
+                  সংরক্ষণ
+                </Button>
               </Col>
             </Row>
           </Form>
         </Card.Body>
       </Card>
-
-      <CustomerTable />
+      {productTableList}
+      {/* <CustomerTable /> */}
     </div>
   );
 };

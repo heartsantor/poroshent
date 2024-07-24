@@ -55,8 +55,13 @@ const routes = [
       },
       {
         exact: 'true',
-        path: '/selling/chicken-selling',
-        element: lazy(() => import('./views/selling/ChickenSelling/ChickenSelling'))
+        path: '/invoice/make-invoice',
+        element: lazy(() => import('./views/invoice/MakeInvoice/MakeInvoice'))
+      },
+      {
+        exact: 'true',
+        path: '/invoice/invoice-list',
+        element: lazy(() => import('./views/invoice/InvoiceList/InvoiceList'))
       },
       {
         exact: 'true',
@@ -70,8 +75,8 @@ const routes = [
       },
       {
         exact: 'true',
-        path: '/customer/customer-list',
-        element: lazy(() => import('./views/customer/CustomerList/CustomerList'))
+        path: '/customer/customer-area',
+        element: lazy(() => import('./views/customer/CustomerArea/CustomerArea'))
       }
     ]
   }

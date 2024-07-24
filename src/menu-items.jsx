@@ -13,34 +13,22 @@ const menuItemsBn = [
         url: '/dashboard'
       },
       {
-        id: 'food-sell',
-        title: 'খাবার বিক্রয়',
+        id: 'invoice',
+        title: 'Bill Invoice',
         type: 'collapse',
         icon: 'feather icon-box',
         children: [
           {
-            id: 'chiken-food',
-            title: 'মুরগীর খাবার ',
+            id: 'make-invoice',
+            title: 'New Invoice',
             type: 'item',
-            url: '/selling/chicken-selling'
+            url: '/invoice/make-invoice'
           },
           {
-            id: 'fish-food',
-            title: 'মাছের খাবার ',
+            id: 'invoice-list',
+            title: 'Invoice List',
             type: 'item',
-            url: '/sell/fish-food'
-          },
-          {
-            id: 'cattle-food',
-            title: 'গরুর খাবার ',
-            type: 'item',
-            url: '/sell/cattle-food'
-          },
-          {
-            id: 'medicine',
-            title: 'ঔষধ',
-            type: 'item',
-            url: '/sell/medicine'
+            url: '/invoice/invoice-list'
           }
         ]
       },
@@ -97,10 +85,10 @@ const menuItemsBn = [
             url: '/customer/customer-add'
           },
           {
-            id: 'customer-list',
-            title: 'কাস্টমার লিস্ট',
+            id: 'customer-area',
+            title: 'কাস্টমার area',
             type: 'item',
-            url: '/customer/customer-list'
+            url: '/customer/customer-area'
           }
         ]
       }
@@ -123,34 +111,22 @@ const menuItemsEn = [
         url: '/dashboard'
       },
       {
-        id: 'food-sell',
-        title: 'Food Sell',
+        id: 'invoice',
+        title: 'Bill Invoice',
         type: 'collapse',
         icon: 'feather icon-box',
         children: [
           {
-            id: 'chicken-food',
-            title: 'Chicken Food',
+            id: 'make-invoice',
+            title: 'New Invoice',
             type: 'item',
-            url: '/selling/chicken-selling'
+            url: '/invoice/make-invoice'
           },
           {
-            id: 'fish-food',
-            title: 'Fish Food',
+            id: 'invoice-list',
+            title: 'Invoice List',
             type: 'item',
-            url: '/sell/fish-food'
-          },
-          {
-            id: 'cattle-food',
-            title: 'Cattle Food',
-            type: 'item',
-            url: '/sell/cattle-food'
-          },
-          {
-            id: 'medicine',
-            title: 'Medicine',
-            type: 'item',
-            url: '/sell/medicine'
+            url: '/invoice/invoice-list'
           }
         ]
       },
@@ -207,10 +183,10 @@ const menuItemsEn = [
             url: '/customer/customer-add'
           },
           {
-            id: 'customer-list',
-            title: 'Customer List',
+            id: 'customer-area',
+            title: 'Customer Area',
             type: 'item',
-            url: '/customer/customer-list'
+            url: '/customer/customer-area'
           }
         ]
       }

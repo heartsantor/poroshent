@@ -8,8 +8,42 @@ export const customerApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: data
       })
+    }),
+    editCustomer: builder.mutation({
+      query: (data) => ({
+        url: '/customer/editCustomer',
+        method: 'POST',
+        body: data
+      })
+    }),
+    allCustomers: builder.mutation({
+      query: (data) => ({
+        url: '/customer/allCustomers',
+        method: 'POST',
+        body: data
+      })
+    }),
+    singleCustomer: builder.mutation({
+      query: (data) => ({
+        url: '/customer/singleCustomer',
+        method: 'POST',
+        body: data
+      })
+    }),
+    deleteCustomer: builder.mutation({
+      query: (data) => ({
+        url: '/customer/singleCustomer',
+        method: 'POST',
+        body: data
+      })
     })
   })
 });
 
-export const { useCreateCustomerMutation } = customerApi;
+export const {
+  useCreateCustomerMutation,
+  useEditCustomerMutation,
+  useAllCustomersMutation,
+  useSingleCustomerMutation,
+  useDeleteCustomerMutation
+} = customerApi;

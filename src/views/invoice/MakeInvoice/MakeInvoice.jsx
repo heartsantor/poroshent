@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 
-const ChickenSelling = () => {
+const MakeInvoice = () => {
   const [startDate, setStartDate] = useState(new Date());
   return (
     <div>
       <Card>
         <Card.Header>
-          <Card.Title as="h5">মুরগীর স্টক এন্ট্রি</Card.Title>
+          <Card.Title as="h5">Make Invoice</Card.Title>
         </Card.Header>
         <Card.Body>
           <Form>
@@ -180,4 +180,4 @@ const ChickenSelling = () => {
   );
 };
 
-export default ChickenSelling;
+export default MakeInvoice;

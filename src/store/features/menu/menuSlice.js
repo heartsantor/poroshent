@@ -100,10 +100,10 @@ const initialState = {
               url: '/customer/customer-add'
             },
             {
-              id: 'customer-list',
-              title: 'কাস্টমার লিস্ট',
+              id: 'customer-area',
+              title: 'কাস্টমার area',
               type: 'item',
-              url: '/customer/customer-list'
+              url: '/customer/customer-area'
             }
           ]
         }
