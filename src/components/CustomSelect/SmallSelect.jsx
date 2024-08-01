@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
 
 const customStyles = {
@@ -51,10 +51,29 @@ const customStyles = {
   })
 };
 
-const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange, isLoading = false, ...props }) => {
-  const filterOption = ({ label, name }, inputValue) =>
-    label.toLowerCase().includes(inputValue.toLowerCase()) || name.toLowerCase().includes(inputValue.toLowerCase());
+const MenuList = (props) => {
+  return (
+    <components.MenuList {...props}>
+      <div style={{ padding: '8px', borderBottom: '1px solid #ced4da', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#f4f7fa' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>Area</span>
+          <span>Note</span>
+        </div>
+      </div>
+      {props.children}
+    </components.MenuList>
+  );
+};
 
+const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange, isLoading = false, header = false, ...props }) => {
+  const formatOptionLabel = ({ label, name, note }) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+      <span style={{ flex: '1 1 auto' }}>
+        {label} {name ? name : ''}
+      </span>
+      <span style={{ flex: '1 1 auto', textAlign: 'right', paddingLeft: '1rem' }}>{note}</span>
+    </div>
+  );
   return (
     <Select
       options={options}
@@ -64,8 +83,10 @@ const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange,
       value={value}
       onChange={onChange}
       isLoading={isLoading}
-      getOptionLabel={(option) => `${option.label} (${option.name})`}
+      formatOptionLabel={formatOptionLabel}
       getOptionValue={(option) => option.value}
+      components={header ? { MenuList } : undefined}
+      {...props}
     />
   );
 };
@@ -75,7 +96,8 @@ SmallSelect.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  header: PropTypes.bool
 };
 
 export default SmallSelect;

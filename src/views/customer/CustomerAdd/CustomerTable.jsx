@@ -97,7 +97,7 @@ const CustomerTable = ({ customerData, onDeleteSuccess, isLoading }) => {
                 <p className="m-0">{item.primary_phone}</p>
               </td>
               <td>
-                <p className="m-0">{item.secondary_phone}</p>
+                <p className="m-0">{item.secondary_phone ? item.secondary_phone : 'null'}</p>
               </td>
               <td>
                 <p className="m-0">{item.credit}</p>

@@ -51,7 +51,8 @@ const CustomerAdd = () => {
   const selectedAreasData = (allAreas || []).map((item) => ({
     value: item.id,
     label: item.area_name_bd,
-    name: item.area_name_en
+    name: item.area_name_en,
+    note: item.note
   }));
 
   useEffect(() => {
@@ -203,7 +204,7 @@ const CustomerAdd = () => {
             <Form className="form-content" onSubmit={handleSubmit}>
               <Row>
                 <Col md={6}>
-                  <SmallSelect value={selectedOption} onChange={handleSelectChange} options={selectedAreasData} />
+                  <SmallSelect value={selectedOption} onChange={handleSelectChange} options={selectedAreasData} header={true} />
                 </Col>
                 <Col md={6}>
                   <Form.Group className="floating-label-group mb-3">
