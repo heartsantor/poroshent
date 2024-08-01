@@ -70,7 +70,7 @@ const routes = [
       },
       {
         exact: 'true',
-        path: '/customer/customer-add',
+        path: '/customer/customer-add/:customerId?',
         element: lazy(() => import('./views/customer/CustomerAdd/CustomerAdd'))
       },
       {

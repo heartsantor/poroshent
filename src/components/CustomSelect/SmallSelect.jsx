@@ -52,6 +52,9 @@ const customStyles = {
 };
 
 const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange, isLoading = false, ...props }) => {
+  const filterOption = ({ label, name }, inputValue) =>
+    label.toLowerCase().includes(inputValue.toLowerCase()) || name.toLowerCase().includes(inputValue.toLowerCase());
+
   return (
     <Select
       options={options}
@@ -61,6 +64,8 @@ const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange,
       value={value}
       onChange={onChange}
       isLoading={isLoading}
+      getOptionLabel={(option) => `${option.label} (${option.name})`}
+      getOptionValue={(option) => option.value}
     />
   );
 };
