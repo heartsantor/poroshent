@@ -8,11 +8,11 @@ import { toast } from 'react-toastify';
 import { toastAlert } from '../../../utils/AppHelpers';
 
 const ProductEntryForm = ({ onDeleteSuccess }) => {
-  const { productId } = useParams();
-  const navigate = useNavigate();
-
   const { accessToken } = useSelector((state) => state.auth);
+
+  const { productId } = useParams();
   const toastId = useRef(null);
+  const navigate = useNavigate();
 
   const [mutationData, setMutationData] = useState({
     type: '',
@@ -241,11 +241,12 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
             </Form.Group>
           </Col>
         </Row>
-        <Button variant="primary" type="submit" disabled={isLoading || isEditLoading}>
+        <Button size="sm" variant="primary" type="submit" disabled={isLoading || isEditLoading}>
           {isLoading || isEditLoading ? 'Saving...' : productId ? 'Update' : 'Submit'}
         </Button>
         {productId ? (
           <Button
+            size="sm"
             variant="secondary"
             disabled={isLoading || isEditLoading}
             onClick={() => {
