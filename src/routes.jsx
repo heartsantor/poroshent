@@ -75,7 +75,7 @@ const routes = [
       },
       {
         exact: 'true',
-        path: '/customer/customer-area',
+        path: '/customer/customer-area/:areaId?',
         element: lazy(() => import('./views/customer/CustomerArea/CustomerArea'))
       }
     ]
