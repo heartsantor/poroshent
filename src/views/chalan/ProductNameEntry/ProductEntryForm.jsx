@@ -20,12 +20,12 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
     name: '',
     name_en: '',
     category: '',
-    stock_1: 0,
-    stock_5: 0,
-    stock_10: 0,
-    stock_25: 0,
-    stock_50: 0,
-    notes: ''
+    check_stock_1: 0,
+    check_stock_5: 0,
+    check_stock_10: 0,
+    check_stock_25: 0,
+    check_stock_50: 0,
+    note: ''
   });
 
   const [createProduct, { isLoading }] = useCreateProductMutation();
@@ -44,12 +44,12 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
             name: data.product.name,
             name_en: data.product.name_en,
             category: data.product.category,
-            stock_1: data.product.stock_1 === null ? 0 : 1,
-            stock_5: data.product.stock_5 === null ? 0 : 1,
-            stock_10: data.product.stock_10 === null ? 0 : 1,
-            stock_25: data.product.stock_25 === null ? 0 : 1,
-            stock_50: data.product.stock_50 === null ? 0 : 1,
-            notes: data.product.notes
+            check_stock_1: data.product.check_stock_1,
+            check_stock_5: data.product.check_stock_5,
+            check_stock_10: data.product.check_stock_10,
+            check_stock_25: data.product.check_stock_25,
+            check_stock_50: data.product.check_stock_50,
+            note: data.product.note
           });
         } else {
           toastAlert('error', response.error);
@@ -79,12 +79,12 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
       name: '',
       name_en: '',
       category: '',
-      stock_1: 0,
-      stock_5: 0,
-      stock_10: 0,
-      stock_25: 0,
-      stock_50: 0,
-      notes: ''
+      check_stock_1: null,
+      check_stock_5: null,
+      check_stock_10: null,
+      check_stock_25: null,
+      check_stock_50: null,
+      note: ''
     });
   };
 
@@ -99,12 +99,12 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
       name: mutationData.name,
       name_en: mutationData.name_en,
       category: mutationData.category,
-      stock_1: mutationData.stock_1 === 1 ? 0 : null,
-      stock_5: mutationData.stock_5 === 1 ? 0 : null,
-      stock_10: mutationData.stock_10 === 1 ? 0 : null,
-      stock_25: mutationData.stock_25 === 1 ? 0 : null,
-      stock_50: mutationData.stock_50 === 1 ? 0 : null,
-      notes: mutationData.notes
+      check_stock_1: mutationData.check_stock_1,
+      check_stock_5: mutationData.check_stock_5,
+      check_stock_10: mutationData.check_stock_10,
+      check_stock_25: mutationData.check_stock_25,
+      check_stock_50: mutationData.check_stock_50,
+      note: mutationData.note
     };
 
     const submitMutation = productId ? editProduct : createProduct;
@@ -204,32 +204,32 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
                 <Form.Check
                   type="checkbox"
                   label="1KG"
-                  checked={mutationData.stock_1 === 1}
-                  onChange={(e) => handleChange('stock_1', e.target.checked ? 1 : 0)}
+                  checked={mutationData.check_stock_1 === 1}
+                  onChange={(e) => handleChange('check_stock_1', e.target.checked ? 1 : 0)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="5KG"
-                  checked={mutationData.stock_5 === 1}
-                  onChange={(e) => handleChange('stock_5', e.target.checked ? 1 : 0)}
+                  checked={mutationData.check_stock_5 === 1}
+                  onChange={(e) => handleChange('check_stock_5', e.target.checked ? 1 : 0)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="10KG"
-                  checked={mutationData.stock_10 === 1}
-                  onChange={(e) => handleChange('stock_10', e.target.checked ? 1 : 0)}
+                  checked={mutationData.check_stock_10 === 1}
+                  onChange={(e) => handleChange('check_stock_10', e.target.checked ? 1 : 0)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="25KG"
-                  checked={mutationData.stock_25 === 1}
-                  onChange={(e) => handleChange('stock_25', e.target.checked ? 1 : 0)}
+                  checked={mutationData.check_stock_25 === 1}
+                  onChange={(e) => handleChange('check_stock_25', e.target.checked ? 1 : 0)}
                 />
                 <Form.Check
                   type="checkbox"
                   label="50KG"
-                  checked={mutationData.stock_50 === 1}
-                  onChange={(e) => handleChange('stock_50', e.target.checked ? 1 : 0)}
+                  checked={mutationData.check_stock_50 === 1}
+                  onChange={(e) => handleChange('check_stock_50', e.target.checked ? 1 : 0)}
                 />
               </div>
             </Form.Group>
@@ -237,7 +237,7 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label>নোট</Form.Label>
-              <Form.Control as="textarea" rows="3" value={mutationData.notes} onChange={(e) => handleChange('notes', e.target.value)} />
+              <Form.Control as="textarea" rows="3" value={mutationData.note} onChange={(e) => handleChange('note', e.target.value)} />
             </Form.Group>
           </Col>
         </Row>

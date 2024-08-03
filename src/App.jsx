@@ -11,28 +11,28 @@ const App = () => {
   const [showNetworkWarning, setShowNetworkWarning] = useState(false);
   console.log('🚀 ~ App ~ showNetworkWarning:', showNetworkWarning);
 
-  useEffect(() => {
-    const handleOnlineStatus = () => {
-      if (!navigator.onLine) {
-        setShowNetworkWarning(true);
-      } else {
-        setShowNetworkWarning(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleOnlineStatus = () => {
+  //     if (!navigator.onLine) {
+  //       setShowNetworkWarning(true);
+  //     } else {
+  //       setShowNetworkWarning(false);
+  //     }
+  //   };
 
-    // Check network status on mount
-    handleOnlineStatus();
+  //   // Check network status on mount
+  //   handleOnlineStatus();
 
-    // Add event listeners for network status changes
-    window.addEventListener('online', handleOnlineStatus);
-    window.addEventListener('offline', handleOnlineStatus);
+  //   // Add event listeners for network status changes
+  //   window.addEventListener('online', handleOnlineStatus);
+  //   window.addEventListener('offline', handleOnlineStatus);
 
-    // Cleanup event listeners on unmount
-    return () => {
-      window.removeEventListener('online', handleOnlineStatus);
-      window.removeEventListener('offline', handleOnlineStatus);
-    };
-  }, []);
+  //   // Cleanup event listeners on unmount
+  //   return () => {
+  //     window.removeEventListener('online', handleOnlineStatus);
+  //     window.removeEventListener('offline', handleOnlineStatus);
+  //   };
+  // }, []);
 
   if (!isAuthChecked) {
     return <LoadingSpinner />;

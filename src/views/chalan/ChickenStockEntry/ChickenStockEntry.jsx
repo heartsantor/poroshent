@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { size } from 'lodash';
-import { Row, Col, Card, Form, Button, ButtonGroup, ToggleButton, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, ButtonGroup, ToggleButton, Tabs, Tab, Spinner } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -26,7 +26,8 @@ const ChickenStockEntry = () => {
 
   const [products, setProducts] = useState([]);
   const [singleProducts, setSingleProducts] = useState({});
-  console.log('🚀 ~ ChickenStockEntry ~ singleProducts:', singleProducts);
+
+  const [activeKey, setActiveKey] = useState('1');
 
   const [mutationData, setMutationData] = useState({
     stock_1: '',
@@ -350,7 +351,7 @@ const ChickenStockEntry = () => {
                   </Col> */}
                 </Row>
                 <Row>
-                  {singleProducts.stock_1 !== undefined && singleProducts.stock_1 !== null ? (
+                  {singleProducts.check_stock_1 === 1 ? (
                     <Col md={3}>
                       <Form.Group className="floating-label-group">
                         <Form.Control
@@ -370,12 +371,12 @@ const ChickenStockEntry = () => {
                       <div className="d-flex align-items-center ms-2 mb-3">
                         <p className="m-0 me-2">Available Stock</p>
                         <span className={`${singleProducts.stock_1 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_1} Bag)
+                          ({singleProducts.stock_1 ?? 0} Bag)
                         </span>
                       </div>
                     </Col>
                   ) : null}
-                  {singleProducts.stock_5 !== undefined && singleProducts.stock_5 !== null ? (
+                  {singleProducts.check_stock_5 === 1 ? (
                     <Col md={3}>
                       <Form.Group className="floating-label-group">
                         <Form.Control
@@ -395,12 +396,12 @@ const ChickenStockEntry = () => {
                       <div className="d-flex align-items-center ms-2 mb-3">
                         <p className="m-0 me-2">Available Stock</p>
                         <span className={`${singleProducts.stock_5 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_5} Bag)
+                          ({singleProducts.stock_5 ?? 0} Bag)
                         </span>
                       </div>
                     </Col>
                   ) : null}
-                  {singleProducts.stock_10 !== undefined && singleProducts.stock_10 !== null ? (
+                  {singleProducts.check_stock_10 === 1 ? (
                     <Col md={3}>
                       <Form.Group className="floating-label-group">
                         <Form.Control
@@ -420,12 +421,12 @@ const ChickenStockEntry = () => {
                       <div className="d-flex align-items-center ms-2 mb-3">
                         <p className="m-0 me-2">Available Stock</p>
                         <span className={`${singleProducts.stock_10 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_10} Bag)
+                          ({singleProducts.stock_10 ?? 0} Bag)
                         </span>
                       </div>
                     </Col>
                   ) : null}
-                  {singleProducts.stock_25 !== undefined && singleProducts.stock_25 !== null ? (
+                  {singleProducts.check_stock_25 === 1 ? (
                     <Col md={3}>
                       <Form.Group className="floating-label-group">
                         <Form.Control
@@ -445,12 +446,12 @@ const ChickenStockEntry = () => {
                       <div className="d-flex align-items-center ms-2 mb-3">
                         <p className="m-0 me-2">Available Stock</p>
                         <span className={`${singleProducts.stock_25 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_25} Bag)
+                          ({singleProducts.stock_25 ?? 0} Bag)
                         </span>
                       </div>
                     </Col>
                   ) : null}
-                  {singleProducts.stock_50 !== undefined && singleProducts.stock_50 !== null ? (
+                  {singleProducts.check_stock_50 === 1 ? (
                     <Col md={3}>
                       <Form.Group className="floating-label-group">
                         <Form.Control
@@ -470,7 +471,7 @@ const ChickenStockEntry = () => {
                       <div className="d-flex align-items-center ms-2 mb-3">
                         <p className="m-0 me-2">Available Stock</p>
                         <span className={`${singleProducts.stock_50 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_50} Bag)
+                          ({singleProducts.stock_50 ?? 0} Bag)
                         </span>
                       </div>
                     </Col>
@@ -543,6 +544,23 @@ const ChickenStockEntry = () => {
           </Form>
         </Card.Body>
       </Card>
+
+      <h5 className="mt-4">প্রোডাক্ট লিস্ট</h5>
+      <hr />
+      <Tabs variant="pills" activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
+        <Tab eventKey="1" title="মুরগীর খাবার" className="custom-tab-content">
+          {/* {productTableList} */}
+        </Tab>
+        <Tab eventKey="2" title="মাছের খাবার" className="custom-tab-content">
+          {/* {productTableList} */}
+        </Tab>
+        <Tab eventKey="3" title="গরুর খাবার" className="custom-tab-content">
+          {/* {productTableList} */}
+        </Tab>
+        <Tab eventKey="4" title="ঔষধ" className="custom-tab-content">
+          {/* {productTableList} */}
+        </Tab>
+      </Tabs>
     </div>
   );
 };

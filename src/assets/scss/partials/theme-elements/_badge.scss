@@ -8,9 +8,29 @@
  align-items: center;
 
  .bag-size {
-  background-color: #6c757d;
+  // background-color: #6c757d;
   color: #fff;
   padding: 2px 5px;
+ }
+
+ .check_stock_1 {
+  background-color: #636e72;
+ }
+
+ .check_stock_5 {
+  background-color: #6c5ce7;
+ }
+
+ .check_stock_10 {
+  background-color: #0984e3;
+ }
+
+ .check_stock_25 {
+  background-color: #00b894;
+ }
+
+ .check_stock_50 {
+  background-color: #e17055;
  }
 
  .has-qty {
