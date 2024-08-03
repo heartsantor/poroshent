@@ -3,6 +3,7 @@ import { size } from 'lodash';
 import { Row, Col, Card, Form, Button, ButtonGroup, ToggleButton, Tabs, Tab, Spinner } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import { toastAlert } from '../../../utils/AppHelpers';
 
@@ -20,6 +21,7 @@ const ChickenStockEntry = () => {
   const [takeSupply, { isLoading: takeSupplyLoading }] = useTakeSupplyMutation();
 
   const [startDate, setStartDate] = useState(new Date());
+  console.log('🚀 ~ ChickenStockEntry ~ startDate:', startDate);
 
   const [radioValue, setRadioValue] = useState('1');
   const [selectedOption, setSelectedOption] = useState(null);
@@ -27,7 +29,7 @@ const ChickenStockEntry = () => {
   const [products, setProducts] = useState([]);
   const [singleProducts, setSingleProducts] = useState({});
 
-  const [activeKey, setActiveKey] = useState('1');
+  const [activeKey, setActiveKey] = useState('all');
 
   const [mutationData, setMutationData] = useState({
     stock_1: '',
@@ -37,7 +39,8 @@ const ChickenStockEntry = () => {
     stock_50: '',
     chalan_no: '',
     stock_price: 0,
-    sell_price: 0
+    sell_price: 0,
+    date: startDate
   });
 
   const selectedProductData = (products || []).map((item) => ({
@@ -104,7 +107,8 @@ const ChickenStockEntry = () => {
       stock_50: '',
       chalan_no: '',
       stock_price: 0,
-      sell_price: 0
+      sell_price: 0,
+      date: startDate
     });
   };
 
@@ -114,7 +118,8 @@ const ChickenStockEntry = () => {
       product_id: selectedOption !== null ? selectedOption.value : '',
       chalan_no: mutationData.chalan_no,
       sell_price: mutationData.sell_price,
-      stock_price: mutationData.stock_price
+      stock_price: mutationData.stock_price,
+      date: startDate
     };
 
     const stockProperties = ['stock_1', 'stock_5', 'stock_10', 'stock_25', 'stock_50'];
@@ -191,7 +196,8 @@ const ChickenStockEntry = () => {
         stock_50: '',
         chalan_no: '',
         stock_price: 0,
-        sell_price: 0
+        sell_price: 0,
+        date: startDate
       });
     }
   }, [selectedOption]);
@@ -207,7 +213,13 @@ const ChickenStockEntry = () => {
             <Row>
               <Col md={4}>
                 <div className="form-group w-100 mb-3">
-                  <DatePicker id="datePicker" selected={startDate} onChange={(date) => setStartDate(date)} className="form-control w-100" />
+                  <DatePicker
+                    dateFormat="yyyy/MM/dd"
+                    id="datePicker"
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    className="form-control w-100"
+                  />
                 </div>
               </Col>
             </Row>
@@ -548,6 +560,9 @@ const ChickenStockEntry = () => {
       <h5 className="mt-4">প্রোডাক্ট লিস্ট</h5>
       <hr />
       <Tabs variant="pills" activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
+        <Tab eventKey="all" title="All" className="custom-tab-content">
+          {/* {productTableList} */}
+        </Tab>
         <Tab eventKey="1" title="মুরগীর খাবার" className="custom-tab-content">
           {/* {productTableList} */}
         </Tab>

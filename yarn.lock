@@ -4394,7 +4394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^3.3.1":
+"date-fns@npm:^3.3.1, date-fns@npm:^3.6.0":
   version: 3.6.0
   resolution: "date-fns@npm:3.6.0"
   checksum: 10c0/0b5fb981590ef2f8e5a3ba6cd6d77faece0ea7f7158948f2eaae7bbb7c80a8f63ae30b01236c2923cf89bb3719c33aeb150c715ea4fe4e86e37dcf06bed42fb6
@@ -4420,6 +4420,7 @@ __metadata:
     bootstrap: "npm:^5.3.3"
     chance: "npm:^1.1.11"
     d3: "npm:^7.9.0"
+    date-fns: "npm:^3.6.0"
     env-cmd: "npm:^10.1.0"
     eslint: "npm:^9.6.0"
     eslint-config-prettier: "npm:^9.1.0"
