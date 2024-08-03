@@ -6,6 +6,8 @@ import avatar1 from '../../assets/images/user/avatar-1.jpg';
 import avatar2 from '../../assets/images/user/avatar-2.jpg';
 import avatar3 from '../../assets/images/user/avatar-3.jpg';
 
+// import Calculator from '../../components/Calculator/Calculator';
+
 const dashSalesData = [
   { title: 'মুরগীর খাবার', amount: '$249.95', icon: 'icon-arrow-up text-c-green', value: 50, class: 'progress-c-theme' },
   { title: 'মাছের খাবার', amount: '$2.942.32', icon: 'icon-arrow-down text-c-red', value: 36, class: 'progress-c-theme2' },
@@ -24,6 +26,7 @@ const DashDefault = () => {
 
   return (
     <React.Fragment>
+      {/* <Calculator /> */}
       <ul className="mb-3 nav nav-pills" role="tablist">
         {tabs.map((tab) => (
           <li className="nav-item" role="presentation" key={tab.key}>
