@@ -37,3 +37,34 @@
   padding: 2px 5px;
  }
 }
+.item-wrapper{
+ .item-size{
+  border-bottom: 1px solid #000;
+  text-align: center;  color: #fff;
+ }
+ .check_stock_1 {
+  background-color: #636e72;
+ }
+
+ .check_stock_5 {
+  background-color: #6c5ce7;
+ }
+
+ .check_stock_10 {
+  background-color: #0984e3;
+ }
+
+ .check_stock_25 {
+  background-color: #00b894;
+ }
+
+ .check_stock_50 {
+  background-color: #e17055;
+ }
+ .item-qty{
+  padding: 0 10px;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+ }
+}

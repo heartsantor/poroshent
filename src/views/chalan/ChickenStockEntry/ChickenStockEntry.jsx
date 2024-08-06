@@ -10,7 +10,9 @@ import { toastAlert } from '../../../utils/AppHelpers';
 import { Chicken } from '../../../assets/icon';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import { useGetProductMutation, useGetSingleProductMutation } from '../../../store/features/product/productApi';
-import { useTakeSupplyMutation } from '../../../store/features/supply/supplyApi';
+import { useTakeSupplyMutation, useAllSupplyMutation } from '../../../store/features/supply/supplyApi';
+
+import SupplyTable from './SupplyTable';
 
 const ChickenStockEntry = () => {
   const { accessToken } = useSelector((state) => state.auth);
@@ -19,6 +21,7 @@ const ChickenStockEntry = () => {
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [getSingleProduct, { isLoading: singleProductLoading }] = useGetSingleProductMutation();
   const [takeSupply, { isLoading: takeSupplyLoading }] = useTakeSupplyMutation();
+  const [allSupply, { isLoading: allSupplyLoading, error: allSupplyErr }] = useAllSupplyMutation();
 
   const [startDate, setStartDate] = useState(new Date());
   console.log('🚀 ~ ChickenStockEntry ~ startDate:', startDate);
@@ -27,6 +30,7 @@ const ChickenStockEntry = () => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const [products, setProducts] = useState([]);
+  const [allSupplyData, setAllSupplyData] = useState([]);
   const [singleProducts, setSingleProducts] = useState({});
 
   const [activeKey, setActiveKey] = useState('all');
@@ -58,6 +62,27 @@ const ChickenStockEntry = () => {
   const handleSelectChange = (selected) => {
     setSelectedOption(selected);
   };
+
+  const fetchAllSupplyData = async () => {
+    const data = {
+      accessToken: accessToken,
+    };
+    try {
+      const res = await allSupply(data).unwrap();
+      if (size(res)) {
+        setAllSupplyData(res.data);
+      } else {
+        setAllSupplyData([]);
+      }
+    } catch (error) {
+      setAllSupplyData([]);
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllSupplyData()
+  }, []);
 
   const fetchProductData = async (type) => {
     const data = {
@@ -166,6 +191,7 @@ const ChickenStockEntry = () => {
       .then((res) => {
         if (size(res)) {
           if (res.flag === 200) {
+            fetchAllSupplyData()
             toastAlert('success', res.message);
             clearAll();
           } else {
@@ -201,6 +227,12 @@ const ChickenStockEntry = () => {
       });
     }
   }, [selectedOption]);
+
+  const productTableList = allSupplyErr ? (
+    <div>No Data/ Error</div>
+  ) : (
+    <SupplyTable productData={allSupplyData} onDeleteSuccess={fetchAllSupplyData} activeKey={true} isLoading={allSupplyLoading} />
+  );
 
   return (
     <div>
@@ -561,7 +593,7 @@ const ChickenStockEntry = () => {
       <hr />
       <Tabs variant="pills" activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
         <Tab eventKey="all" title="All" className="custom-tab-content">
-          {/* {productTableList} */}
+          {productTableList}
         </Tab>
         <Tab eventKey="1" title="মুরগীর খাবার" className="custom-tab-content">
           {/* {productTableList} */}

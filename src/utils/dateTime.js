@@ -1,6 +1,6 @@
-const { format, parseISO } = require('date-fns');
+import { format, parseISO } from 'date-fns';
 
-function formatDateAndTime(dateString) {
+export const formatDateAndTime = (dateString) => {
   const date = parseISO(dateString);
 
   // Format date with custom hours and am/pm uppercase
@@ -8,22 +8,21 @@ function formatDateAndTime(dateString) {
   const [datePart, timePart] = formattedDate.split('(');
   const [time, ampm] = timePart.split(' ');
 
-  return `${datePart.trim()} (${time} ${ampm.toUpperCase()})`;
-}
+  return `${datePart.trim()} (${time} ${ampm.toUpperCase()}`;
+};
 
-function formatDateOnly(dateString) {
+export const formatDateOnly = (dateString) => {
+  console.log('🚀 ~ formatDateOnly ~ dateString:', dateString);
   const date = parseISO(dateString);
-  return format(date, 'd MMMM yyyy');
-}
+  return dateString ?? format(date, 'd MMMM yyyy');
+};
 
-function formatTimeOnly(dateString) {
+export const formatTimeOnly = (dateString) => {
   const date = parseISO(dateString);
   return format(date, 'hh:mm a').toUpperCase();
-}
+};
 
-function formatDayOnly(dateString) {
+export const formatDayOnly = (dateString) => {
   const date = parseISO(dateString);
   return format(date, 'EEEE');
-}
-
-export { formatDateAndTime, formatDateOnly, formatTimeOnly, formatDayOnly };
+};

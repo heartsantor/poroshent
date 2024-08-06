@@ -11,6 +11,8 @@ import { toastAlert } from '../../../utils/AppHelpers';
 import WarningModal from '../../../components/Modal/WarningModal';
 import SkeletonLoader from '../../../components/Skeleton/SkeletonLoader';
 
+import { formatDateAndTime } from '../../../utils/dateTime';
+
 // const getColorForStock = (key) => {
 //   const stockColorMap = {
 //     stock_1: 'dark',
@@ -36,9 +38,9 @@ const generateBadges = (item, t) => {
   const badges = stockKeys
     .filter((stock) => item[stock.key] > 0)
     .map((stock) => (
-      <div key={stock.key} className="badge-wrapper">
-        <div className={`bag-size ${stock.key}`}>{stock.label}KG</div>
-        <div className="has-qty">
+      <div key={stock.key} className="item-wrapper">
+        <div className={`item-size ${stock.key}`}>{stock.label}KG</div>
+        <div className="item-qty">
           {item[stock.bag] ?? 0} {t('bags')}
         </div>
       </div>
@@ -108,16 +110,14 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
       <Table responsive hover className="recent-users">
         <thead>
           <tr>
-            <th>#</th>
+            <th>#</th>  
+            <th>DATE</th>
             <th>আইটেমের নাম (English)</th>
             <th>আইটেমের নাম (বাংলা)</th>
             {activeKey === '2' && <th>category</th>}
-            <th>আইটেমের কোড</th>
-            <th>আইটেম টাইপ</th>
-            <th>স্টক রয়েছে</th>
+            <th>chalan qty</th>
             <th>stock_price</th>
             <th>sell_price</th>
-            {/* <th>নোট</th> */}
             <th>অ্যাকশন </th>
           </tr>
         </thead>
@@ -125,6 +125,9 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
           {productData?.map((item, i) => (
             <tr className="unread" key={i}>
               <td>{i + 1}</td>
+              <td>
+                <p className="m-0">{formatDateAndTime(item.date)}</p>
+              </td>
               <td>
                 <p className="m-0">{item.name_en}</p>
               </td>
@@ -138,13 +141,7 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
               )}
 
               <td>
-                <p className="m-0">{item.code}</p>
-              </td>
-              <td>
-                <p className="m-0">{getItemName(item.type)}</p>
-              </td>
-              <td>
-                <div className="d-flex gap-4">{generateBadges(item, t)}</div>
+                <div className="d-flex">{generateBadges(item, t)}</div>
               </td>
               <td>
                 <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>
