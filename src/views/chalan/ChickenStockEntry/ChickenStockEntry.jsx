@@ -24,6 +24,19 @@ const ChickenStockEntry = () => {
   const [allSupply, { isLoading: allSupplyLoading, error: allSupplyErr }] = useAllSupplyMutation();
 
   const [startDate, setStartDate] = useState(new Date());
+
+  // useEffect(() => {
+  //   const getBangladeshDate = () => {
+  //     const now = new Date();
+  //     const utcNow = now.getTime() + now.getTimezoneOffset() * 60000;
+  //     const bangladeshOffset = 6 * 60 * 60000; // Bangladesh is UTC+6
+  //     const bangladeshDate = new Date(utcNow + bangladeshOffset);
+  //     return bangladeshDate;
+  //   };
+
+  //   setStartDate(getBangladeshDate());
+  // }, []);
+  
   console.log('🚀 ~ ChickenStockEntry ~ startDate:', startDate);
 
   const [radioValue, setRadioValue] = useState('1');
@@ -63,14 +76,18 @@ const ChickenStockEntry = () => {
     setSelectedOption(selected);
   };
 
+
+
   const fetchAllSupplyData = async () => {
     const data = {
       accessToken: accessToken,
     };
     try {
       const res = await allSupply(data).unwrap();
-      if (size(res)) {
-        setAllSupplyData(res.data);
+      if (res && res.data && Array.isArray(res.data)) {
+        // Create a copy of the array before sorting
+        const sortedData = [...res.data].sort((a, b) => b.id - a.id); // Adjust 'value' to the key you want to sort by
+        setAllSupplyData(sortedData);
       } else {
         setAllSupplyData([]);
       }
