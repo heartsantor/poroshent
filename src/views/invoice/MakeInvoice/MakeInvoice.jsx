@@ -1,41 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { size } from 'lodash';
-import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
-
 import { useAllCustomersMutation, useSingleCustomerMutation } from '../../../store/features/customer/customerApi';
 import { useGetProductMutation } from '../../../store/features/product/productApi';
+import { useMakeTradeMutation } from '../../../store/features/trade/tradeApi';
 
 const MakeInvoice = () => {
   const { accessToken } = useSelector((state) => state.auth);
-
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [allCustomers, { isLoading: allCustomersLoading }] = useAllCustomersMutation();
   const [singleCustomers, { isLoading: singleCustomersLoading }] = useSingleCustomerMutation();
+  const [makeTrade, { isLoading: makeTradeLoading }] = useMakeTradeMutation();
 
   const [startDate, setStartDate] = useState(new Date());
-
   const [products, setProducts] = useState([]);
-  console.log('🚀 ~ MakeInvoice ~ products:', products);
   const [customersDate, setCustomersDate] = useState([]);
   const [singleCustomersDate, setSingleCustomersDate] = useState({});
-
-  // from singleCustomersDate get data
-  //   {
-  //     "id": 7,
-  //     "name": "Molla BD",
-  //     "name_en": "Molla",
-  //     "address": "ashulia",
-  //     "area": "চন্দ্রকোনা",
-  //     "primary_phone": "01799111111",
-  //     "secondary_phone": "",
-  //     "credit": -5693
-  // }
-
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedProductOption, setSelectedProductOption] = useState(null);
+  const [tradeProducts, setTradeProducts] = useState([]);
+  console.log('🚀 ~ MakeInvoice ~ tradeProducts:', tradeProducts);
+  const [discount, setDiscount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
 
   const selectedCustomerData = (customersDate || []).map((item) => ({
     value: item.id,
@@ -48,26 +37,43 @@ const MakeInvoice = () => {
     value: item.id,
     label: item.name_en,
     name: item.name,
-    note: `Total: ${item.stock_1 + item.stock_5 + item.stock_10 + item.stock_25 + item.stock_50} bag`
+    check_stock_1: item.check_stock_1,
+    check_stock_5: item.check_stock_5,
+    check_stock_10: item.check_stock_10,
+    check_stock_25: item.check_stock_25,
+    check_stock_50: item.check_stock_50,
+    note: `${item.stock_1 > 0 ? `(1KG x ${item.stock_1})` : ''} 
+    ${item.stock_5 > 0 ? `(5KG x ${item.stock_5})` : ''}
+    ${item.stock_10 > 0 ? `(10KG x ${item.stock_10})` : ''}
+    ${item.stock_25 > 0 ? `(25KG x ${item.stock_25})` : ''}
+    ${item.stock_50 > 0 ? `(50KG x ${item.stock_50})` : ''} = ${item.stock_1 + item.stock_5 + item.stock_10 + item.stock_25 + item.stock_50} bag
+    `
   }));
+
   const handleSelectChange = (selected) => {
     setSelectedOption(selected);
   };
+
   const handleProductSelectChange = (selected) => {
-    setSelectedProductOption(selected);
+    if (selected) {
+      setTradeProducts([
+        ...tradeProducts,
+        {
+          ...selected,
+          quantity: 1,
+          price: 0,
+          totalPrice: 0,
+          bagSize: '1KG'
+        }
+      ]);
+      setSelectedProductOption(null); // Reset product selection
+    }
   };
 
   const fetchProductData = async () => {
-    const data = {
-      accessToken: accessToken
-    };
     try {
-      const res = await getProduct(data).unwrap();
-      if (size(res)) {
-        setProducts(res.product);
-      } else {
-        setProducts([]);
-      }
+      const res = await getProduct({ accessToken }).unwrap();
+      setProducts(size(res) ? res.product : []);
     } catch (error) {
       setProducts([]);
       console.error('Error:', error);
@@ -79,16 +85,9 @@ const MakeInvoice = () => {
   }, []);
 
   const fetchCustomersData = async () => {
-    const data = {
-      accessToken: accessToken
-    };
     try {
-      const res = await allCustomers(data).unwrap();
-      if (size(res)) {
-        setCustomersDate(res.Customers);
-      } else {
-        setCustomersDate([]);
-      }
+      const res = await allCustomers({ accessToken }).unwrap();
+      setCustomersDate(size(res) ? res.Customers : []);
     } catch (error) {
       setCustomersDate([]);
       console.error('Error:', error);
@@ -100,28 +99,73 @@ const MakeInvoice = () => {
   }, []);
 
   const fetchSingleCustomersData = async (id) => {
-    const data = {
-      accessToken: accessToken,
-      customer_id: id
-    };
     try {
-      const res = await singleCustomers(data).unwrap();
-      if (size(res)) {
-        setSingleCustomersDate(res.customer);
-      } else {
-        setSingleCustomersDate([]);
-      }
+      const res = await singleCustomers({ accessToken, customer_id: id }).unwrap();
+      setSingleCustomersDate(size(res) ? res.customer : {});
     } catch (error) {
-      setSingleCustomersDate([]);
+      setSingleCustomersDate({});
       console.error('Error:', error);
     }
   };
 
   useEffect(() => {
-    if (selectedOption !== null) {
+    if (selectedOption) {
       fetchSingleCustomersData(selectedOption.value);
     }
   }, [selectedOption]);
+
+  const handleQuantityChange = (index, value) => {
+    const updatedProducts = [...tradeProducts];
+    updatedProducts[index].quantity = value;
+    updatedProducts[index].totalPrice = value * updatedProducts[index].price;
+    setTradeProducts(updatedProducts);
+  };
+
+  const handlePriceChange = (index, value) => {
+    const updatedProducts = [...tradeProducts];
+    updatedProducts[index].price = value;
+    updatedProducts[index].totalPrice = value * updatedProducts[index].quantity;
+    setTradeProducts(updatedProducts);
+  };
+
+  const handleBagSizeChange = (index, value) => {
+    const updatedProducts = [...tradeProducts];
+    updatedProducts[index].bagSize = value;
+    setTradeProducts(updatedProducts);
+  };
+
+  const totalAmount = tradeProducts.reduce((sum, product) => sum + product.totalPrice, 0);
+  const discountedAmount = totalAmount - discount;
+  const dueAmount = discountedAmount - paidAmount;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const tradeData = {
+      accessToken,
+      customer_id: selectedOption.value,
+      given_discount: discount,
+      paid_amount: paidAmount,
+      tranjection_type: 1,
+      products: tradeProducts.map((product) => ({
+        product_id: product.value,
+        stock_1: product.bagSize === '1KG' ? product.quantity : 0,
+        stock_5: product.bagSize === '5KG' ? product.quantity : 0,
+        stock_10: product.bagSize === '10KG' ? product.quantity : 0,
+        stock_25: product.bagSize === '25KG' ? product.quantity : 0,
+        stock_50: product.bagSize === '50KG' ? product.quantity : 0
+      }))
+    };
+    try {
+      await makeTrade(tradeData).unwrap();
+      setTradeProducts([]);
+      setDiscount(0);
+      setPaidAmount(0);
+      setSelectedOption(null);
+      // Reset form or show success message
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div>
@@ -130,21 +174,12 @@ const MakeInvoice = () => {
           <Card.Title as="h5">Make Invoice</Card.Title>
         </Card.Header>
         <Card.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={4}>
                 <div className="form-group w-100 mb-3">
-                  {/* <label htmlFor="datePicker" className="d-block">
-                    Select Date
-                  </label> */}
-                  <DatePicker
-                    id="datePicker"
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    className="form-control w-100" // Bootstrap form-control class
-                  />
+                  <DatePicker id="datePicker" selected={startDate} onChange={(date) => setStartDate(date)} className="form-control w-100" />
                 </div>
-
                 <Form.Group className="mb-3">
                   <SmallSelect
                     options={selectedCustomerData}
@@ -166,7 +201,6 @@ const MakeInvoice = () => {
                 </Row>
               </Col>
             </Row>
-
             <hr />
             <Row>
               <Col md={4}>
@@ -181,39 +215,13 @@ const MakeInvoice = () => {
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
-              <Col md={3}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Product Name </Form.Label>
-                  <Form.Control type="text" placeholder="Product Name" />
-                </Form.Group>
-              </Col>
-              <Col md={3}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Available QTY </Form.Label>
-                  <Form.Control type="text" placeholder="Product QTY" />
-                </Form.Group>
-              </Col>
-              <Col md={3}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Available Unit </Form.Label>
-                  <Form.Control type="text" placeholder="Product Unit" />
-                </Form.Group>
-              </Col>
-              <Col md={3}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Product Selling Price </Form.Label>
-                  <Form.Control type="text" placeholder="Product Price" />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Button variant="primary">ADD</Button>
             <hr />
-            <table>
+            <table className="table">
               <thead>
                 <tr>
                   <th>SL</th>
                   <th>Product Name</th>
+                  <th>Bag size</th>
                   <th>Product QTY</th>
                   <th>Product Unit</th>
                   <th>Product price</th>
@@ -222,67 +230,80 @@ const MakeInvoice = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Chicken</td>
-                  <td>10</td>
-                  <td>50KG</td>
-                  <td>150</td>
-                  <td>1500</td>
-                  <td>X remove</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Chicken</td>
-                  <td>10</td>
-                  <td>50KG</td>
-                  <td>150</td>
-                  <td>1500</td>
-                  <td>X remove</td>
-                </tr>
+                {tradeProducts.map((product, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{product.name}</td>
+                    <td>
+                      <Form.Control as="select" value={product.bagSize} onChange={(e) => handleBagSizeChange(index, e.target.value)}>
+                        {product.check_stock_1 && <option value="1KG">1KG</option>}
+                        {product.check_stock_5 && <option value="5KG">5KG</option>}
+                        {product.check_stock_10 && <option value="10KG">10KG</option>}
+                        {product.check_stock_25 && <option value="25KG">25KG</option>}
+                        {product.check_stock_50 && <option value="50KG">50KG</option>}
+                      </Form.Control>
+                    </td>
+
+                    <td>
+                      <Form.Control type="number" value={product.quantity} onChange={(e) => handleQuantityChange(index, e.target.value)} />
+                    </td>
+                    <td>Bag</td>
+                    <td>
+                      <Form.Control type="number" value={product.price} onChange={(e) => handlePriceChange(index, e.target.value)} />
+                    </td>
+                    <td>{product.totalPrice}</td>
+                    <td>
+                      <Button variant="danger" onClick={() => setTradeProducts(tradeProducts.filter((_, i) => i !== index))}>
+                        Remove
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <div>
               <Row>
                 <Col md={6}>
-                  <Row>
-                    <Col md={12}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Discount</Form.Label>
-                        <Form.Control type="text" placeholder="Discount" />
-                      </Form.Group>
-                    </Col>
-                  </Row>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Discount</Form.Label>
+                    <Form.Control type="number" value={discount} onChange={(e) => setDiscount(Number(e.target.value))} />
+                  </Form.Group>
                 </Col>
                 <Col md={6}>
-                  <table>
+                  <table className="table">
                     <tbody>
                       <tr>
                         <td>Total price</td>
-                        <td>3000</td>
+                        <td>{totalAmount}</td>
                       </tr>
                       <tr>
                         <td>Total discount</td>
-                        <td>100</td>
+                        <td>{discount}</td>
                       </tr>
                       <tr>
-                        <td>after total</td>
-                        <td>2900</td>
+                        <td>After discount</td>
+                        <td>{discountedAmount}</td>
                       </tr>
                       <tr>
-                        <td>given</td>
-                        <td>2000</td>
+                        <td>Paid amount</td>
+                        <td>
+                          <Form.Control type="number" value={paidAmount} onChange={(e) => setPaidAmount(Number(e.target.value))} />
+                        </td>
                       </tr>
                       <tr>
-                        <td>due</td>
-                        <td>900</td>
+                        <td>Due amount</td>
+                        <td>{dueAmount}</td>
                       </tr>
                     </tbody>
                   </table>
                 </Col>
               </Row>
-              <Button variant="primary">Submit</Button>
-              <Button variant="secondary">Reset</Button>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+              <Button variant="secondary" type="button" onClick={() => setTradeProducts([])}>
+                Reset
+              </Button>
             </div>
           </Form>
         </Card.Body>
