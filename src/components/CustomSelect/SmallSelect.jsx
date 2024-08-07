@@ -56,8 +56,8 @@ const MenuList = (props) => {
     <components.MenuList {...props}>
       <div style={{ padding: '8px', borderBottom: '1px solid #ced4da', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#f4f7fa' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Area</span>
-          <span>Note</span>
+          <span>info</span>
+          <span>Address</span>
         </div>
       </div>
       {props.children}
@@ -69,11 +69,18 @@ const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange,
   const formatOptionLabel = ({ label, name, note }) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
       <span style={{ flex: '1 1 auto' }}>
-        {label} {name ? name : ''}
+        {label} {name ? `(${name})` : ''}
       </span>
       <span style={{ flex: '1 1 auto', textAlign: 'right', paddingLeft: '1rem' }}>{note}</span>
     </div>
   );
+
+  const filterOption = (option, inputValue) => {
+    const { label, name, note } = option.data;
+    const searchStr = `${label} ${name} ${note}`.toLowerCase();
+    return searchStr.includes(inputValue.toLowerCase());
+  };
+
   return (
     <Select
       options={options}
@@ -83,9 +90,11 @@ const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange,
       value={value}
       onChange={onChange}
       isLoading={isLoading}
+      isDisabled={isLoading}
       formatOptionLabel={formatOptionLabel}
       getOptionValue={(option) => option.value}
       components={header ? { MenuList } : undefined}
+      filterOption={filterOption}
       {...props}
     />
   );
