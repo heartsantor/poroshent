@@ -22,7 +22,6 @@ const MakeInvoice = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
-  console.log('🚀 ~ MakeInvoice ~ tradeProducts:', tradeProducts);
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
 
@@ -42,6 +41,7 @@ const MakeInvoice = () => {
     check_stock_10: item.check_stock_10,
     check_stock_25: item.check_stock_25,
     check_stock_50: item.check_stock_50,
+    sell_price: item.sell_price,
     note: `${item.stock_1 > 0 ? `(1KG x ${item.stock_1})` : ''} 
     ${item.stock_5 > 0 ? `(5KG x ${item.stock_5})` : ''}
     ${item.stock_10 > 0 ? `(10KG x ${item.stock_10})` : ''}
@@ -56,16 +56,36 @@ const MakeInvoice = () => {
 
   const handleProductSelectChange = (selected) => {
     if (selected) {
-      setTradeProducts([
-        ...tradeProducts,
-        {
-          ...selected,
-          quantity: 1,
-          price: 0,
-          totalPrice: 0,
-          bagSize: '1KG'
-        }
-      ]);
+      let initialBagSize = '1KG';
+      if (selected.check_stock_50) {
+        initialBagSize = '50KG';
+      } else if (selected.check_stock_25) {
+        initialBagSize = '25KG';
+      } else if (selected.check_stock_10) {
+        initialBagSize = '10KG';
+      } else if (selected.check_stock_5) {
+        initialBagSize = '5KG';
+      }
+
+      const initialTotalPrice = selected.sell_price * getBagSizeMultiplier(initialBagSize);
+
+      const newProduct = {
+        ...selected,
+        quantity: 1,
+        price: selected.sell_price,
+        totalPrice: initialTotalPrice,
+        bagSize: initialBagSize
+      };
+
+      setTradeProducts((prevTradeProducts) => {
+        const updatedTradeProducts = [...prevTradeProducts, newProduct];
+        return updatedTradeProducts;
+      });
+
+      setTimeout(() => {
+        handleBagSizeChange(tradeProducts.length, initialBagSize); // Trigger handleBagSizeChange initially
+      }, 0);
+
       setSelectedProductOption(null); // Reset product selection
     }
   };
@@ -73,7 +93,7 @@ const MakeInvoice = () => {
   const fetchProductData = async () => {
     try {
       const res = await getProduct({ accessToken }).unwrap();
-      setProducts(size(res) ? res.product : []);
+      setProducts(res?.product || []);
     } catch (error) {
       setProducts([]);
       console.error('Error:', error);
@@ -87,7 +107,7 @@ const MakeInvoice = () => {
   const fetchCustomersData = async () => {
     try {
       const res = await allCustomers({ accessToken }).unwrap();
-      setCustomersDate(size(res) ? res.Customers : []);
+      setCustomersDate(res?.Customers || []);
     } catch (error) {
       setCustomersDate([]);
       console.error('Error:', error);
@@ -101,7 +121,7 @@ const MakeInvoice = () => {
   const fetchSingleCustomersData = async (id) => {
     try {
       const res = await singleCustomers({ accessToken, customer_id: id }).unwrap();
-      setSingleCustomersDate(size(res) ? res.customer : {});
+      setSingleCustomersDate(res?.customer || {});
     } catch (error) {
       setSingleCustomersDate({});
       console.error('Error:', error);
@@ -117,21 +137,31 @@ const MakeInvoice = () => {
   const handleQuantityChange = (index, value) => {
     const updatedProducts = [...tradeProducts];
     updatedProducts[index].quantity = value;
-    updatedProducts[index].totalPrice = value * updatedProducts[index].price;
+    const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
+    updatedProducts[index].totalPrice = value * updatedProducts[index].price * bagSizeMultiplier;
     setTradeProducts(updatedProducts);
   };
 
   const handlePriceChange = (index, value) => {
     const updatedProducts = [...tradeProducts];
     updatedProducts[index].price = value;
-    updatedProducts[index].totalPrice = value * updatedProducts[index].quantity;
+    const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
+    updatedProducts[index].totalPrice = value * updatedProducts[index].quantity * bagSizeMultiplier;
     setTradeProducts(updatedProducts);
   };
 
   const handleBagSizeChange = (index, value) => {
     const updatedProducts = [...tradeProducts];
-    updatedProducts[index].bagSize = value;
-    setTradeProducts(updatedProducts);
+    if (updatedProducts[index]) {
+      updatedProducts[index].bagSize = value;
+      const bagSizeMultiplier = getBagSizeMultiplier(value);
+      updatedProducts[index].totalPrice = updatedProducts[index].quantity * updatedProducts[index].price * bagSizeMultiplier;
+      setTradeProducts(updatedProducts);
+    }
+  };
+
+  const getBagSizeMultiplier = (bagSize) => {
+    return bagSize === '1KG' ? 1 : bagSize === '5KG' ? 5 : bagSize === '10KG' ? 10 : bagSize === '25KG' ? 25 : 50;
   };
 
   const totalAmount = tradeProducts.reduce((sum, product) => sum + product.totalPrice, 0);
@@ -139,6 +169,7 @@ const MakeInvoice = () => {
   const dueAmount = discountedAmount - paidAmount;
 
   const handleSubmit = async (e) => {
+    console.log("🚀 ~ handleSubmit ~ e:", e)
     e.preventDefault();
     const tradeData = {
       accessToken,
@@ -174,7 +205,7 @@ const MakeInvoice = () => {
           <Card.Title as="h5">Make Invoice</Card.Title>
         </Card.Header>
         <Card.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form>
             <Row>
               <Col md={4}>
                 <div className="form-group w-100 mb-3">
@@ -298,7 +329,7 @@ const MakeInvoice = () => {
                   </table>
                 </Col>
               </Row>
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="submit" onClick={handleSubmit}>
                 Submit
               </Button>
               <Button variant="secondary" type="button" onClick={() => setTradeProducts([])}>
