@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { size } from 'lodash';
+import { toast } from 'react-toastify';
 import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
+import { toastAlert } from '../../../utils/AppHelpers';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import { useAllCustomersMutation, useSingleCustomerMutation } from '../../../store/features/customer/customerApi';
 import { useGetProductMutation } from '../../../store/features/product/productApi';
@@ -168,9 +170,9 @@ const MakeInvoice = () => {
   const discountedAmount = totalAmount - discount;
   const dueAmount = discountedAmount - paidAmount;
 
-  const handleSubmit = async (e) => {
-    console.log("🚀 ~ handleSubmit ~ e:", e)
+  const handleSubmit = (e) => {
     e.preventDefault();
+    // toast.dismiss(toastId.current);
     const tradeData = {
       accessToken,
       customer_id: selectedOption.value,
@@ -186,16 +188,32 @@ const MakeInvoice = () => {
         stock_50: product.bagSize === '50KG' ? product.quantity : 0
       }))
     };
-    try {
-      await makeTrade(tradeData).unwrap();
-      setTradeProducts([]);
-      setDiscount(0);
-      setPaidAmount(0);
-      setSelectedOption(null);
-      // Reset form or show success message
-    } catch (error) {
-      console.error('Error:', error);
-    }
+
+    makeTrade(tradeData)
+      .unwrap()
+      .then((res) => {
+        if (size(res)) {
+          if (res.flag === 200) {
+            setTradeProducts([]);
+            setDiscount(0);
+            setPaidAmount(0);
+            setSelectedOption(null);
+            toastAlert('success', res.message);
+          } else {
+            toastAlert('error', res.error);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        toastAlert('error', 'Something is wrong');
+      });
+  };
+
+  const clearAll = () => {
+    setTradeProducts([]);
+    setDiscount(0);
+    setPaidAmount(0);
   };
 
   return (
@@ -278,7 +296,13 @@ const MakeInvoice = () => {
                     <td>
                       <Form.Control type="number" value={product.quantity} onChange={(e) => handleQuantityChange(index, e.target.value)} />
                     </td>
-                    <td>Bag</td>
+                    <td>
+                      {product.bagSize === '1KG' ? `1KG x ${product.quantity} = ${1 * product.quantity} KG` : ''}
+                      {product.bagSize === '5KG' ? `5KG x ${product.quantity} = ${5 * product.quantity} KG` : ''}
+                      {product.bagSize === '10KG' ? `10KG x ${product.quantity} = ${10 * product.quantity} KG` : ''}
+                      {product.bagSize === '25KG' ? `25KG x ${product.quantity} = ${25 * product.quantity} KG` : ''}
+                      {product.bagSize === '50KG' ? `50KG x ${product.quantity} = ${50 * product.quantity} KG` : ''}
+                    </td>
                     <td>
                       <Form.Control type="number" value={product.price} onChange={(e) => handlePriceChange(index, e.target.value)} />
                     </td>
@@ -299,6 +323,10 @@ const MakeInvoice = () => {
                     <Form.Label>Discount</Form.Label>
                     <Form.Control type="number" value={discount} onChange={(e) => setDiscount(Number(e.target.value))} />
                   </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>paid</Form.Label>
+                    <Form.Control type="number" value={paidAmount} onChange={(e) => setPaidAmount(Number(e.target.value))} />
+                  </Form.Group>
                 </Col>
                 <Col md={6}>
                   <table className="table">
@@ -317,9 +345,7 @@ const MakeInvoice = () => {
                       </tr>
                       <tr>
                         <td>Paid amount</td>
-                        <td>
-                          <Form.Control type="number" value={paidAmount} onChange={(e) => setPaidAmount(Number(e.target.value))} />
-                        </td>
+                        <td>{paidAmount}</td>
                       </tr>
                       <tr>
                         <td>Due amount</td>
@@ -332,7 +358,7 @@ const MakeInvoice = () => {
               <Button variant="primary" type="submit" onClick={handleSubmit}>
                 Submit
               </Button>
-              <Button variant="secondary" type="button" onClick={() => setTradeProducts([])}>
+              <Button variant="secondary" type="button" onClick={clearAll}>
                 Reset
               </Button>
             </div>
