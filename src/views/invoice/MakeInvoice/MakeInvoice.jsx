@@ -260,6 +260,8 @@ const MakeInvoice = () => {
 
   const clearAll = () => {
     setTradeProducts([]);
+    setSingleCustomersDate({})
+    setSingleCustomersDueDate({})
     setDiscount(0);
     setPaidAmount(0);
     setLaborCost(0);
@@ -435,10 +437,10 @@ const MakeInvoice = () => {
                           <Form.Control
                             className="floating-input"
                             size="sm"
-                            type="number"
+                            type="text"
                             placeholder=""
                             value={trxId}
-                            onChange={(e) => setTrxId(Number(e.target.value))}
+                            onChange={(e) => setTrxId(e.target.value)}
                             onFocus={() => setTrxId('')}
                           />
                           <Form.Label className="floating-label">Transaction Id</Form.Label>
