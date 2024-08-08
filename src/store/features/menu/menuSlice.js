@@ -4,64 +4,58 @@ const initialState = {
   menuData: [
     {
       id: 'sell',
-      title: 'ন্যাভিগেশন',
+      title: 'navvv',
       type: 'group',
       icon: 'icon-navigation',
       children: [
         {
           id: 'dashboard',
-          title: 'ড্যাশবোর্ড',
+          title: 'Dashboard',
           type: 'item',
           icon: 'feather icon-home',
           url: '/dashboard'
         },
         {
-          id: 'food-sell',
-          title: 'খাবার বিক্রয়',
+          id: 'invoice',
+          title: 'Bill Invoice',
           type: 'collapse',
           icon: 'feather icon-box',
           children: [
             {
-              id: 'chiken-food',
-              title: 'মুরগীর খাবার ',
+              id: 'make-invoice',
+              title: 'New Invoice',
               type: 'item',
-              url: '/selling/chicken-selling'
+              url: '/invoice/make-invoice'
             },
             {
-              id: 'fish-food',
-              title: 'মাছের খাবার ',
+              id: 'invoice-list',
+              title: 'Invoice List',
               type: 'item',
-              url: '/sell/fish-food'
+              url: '/invoice/invoice-list'
             },
             {
-              id: 'cattle-food',
-              title: 'গরুর খাবার ',
+              id: 'draft-invoice',
+              title: 'Draft Invoice',
               type: 'item',
-              url: '/sell/cattle-food'
-            },
-            {
-              id: 'medicine',
-              title: 'ঔষধ',
-              type: 'item',
-              url: '/sell/medicine'
+              url: '/invoice/draft-invoice'
             }
           ]
         },
         {
           id: 'chalan-entry',
-          title: 'চালান এন্ট্রি ',
+          title: 'Chalan Entry',
           type: 'collapse',
           icon: 'feather icon-box',
           children: [
             {
               id: 'product-name-entry',
-              title: 'প্রোডাক্টের নাম এন্ট্রি',
+              title: 'Product Name Entry',
               type: 'item',
               url: '/chalan/product-name-entry'
             },
             {
               id: 'product-stock-entry',
-              title: 'স্টক এন্ট্রি',
+              title: 'Stock Entry',
               type: 'item',
               url: '/chalan/product-stock-entry'
             }
@@ -69,19 +63,19 @@ const initialState = {
         },
         {
           id: 'all-report',
-          title: 'সকল রিপোর্ট',
+          title: 'All Reports',
           type: 'collapse',
           icon: 'feather icon-box',
           children: [
             {
               id: 'due-report',
-              title: 'বাকির রিপোর্ট',
+              title: 'Due Report',
               type: 'item',
               url: '/all-report/due-report'
             },
             {
               id: 'customer-statement',
-              title: 'কাস্টমার স্টেটমেন্ট',
+              title: 'Customer Statement',
               type: 'item',
               url: '/all-report/customer-statement'
             }
@@ -89,19 +83,19 @@ const initialState = {
         },
         {
           id: 'customers',
-          title: 'কাস্টমার',
+          title: 'Customers',
           type: 'collapse',
           icon: 'feather icon-box',
           children: [
             {
               id: 'customer-add',
-              title: 'কাস্টমার তৈরি',
+              title: 'Add Customer',
               type: 'item',
               url: '/customer/customer-add'
             },
             {
               id: 'customer-area',
-              title: 'কাস্টমার area',
+              title: 'Customer Area',
               type: 'item',
               url: '/customer/customer-area'
             }

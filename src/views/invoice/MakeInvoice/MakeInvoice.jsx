@@ -45,7 +45,7 @@ const MakeInvoice = () => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [products, setProducts] = useState([]);
-  const [customersDate, setCustomersDate] = useState([]);
+  const [customersData, setCustomersData] = useState([]);
   const [singleCustomersDate, setSingleCustomersDate] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -55,7 +55,7 @@ const MakeInvoice = () => {
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
 
-  const selectedCustomerData = (customersDate || []).map((item) => ({
+  const selectedCustomerData = (customersData || []).map((item) => ({
     value: item.id,
     label: item.primary_phone,
     name: item.name_en,
@@ -137,9 +137,9 @@ const MakeInvoice = () => {
   const fetchCustomersData = async () => {
     try {
       const res = await allCustomers({ accessToken }).unwrap();
-      setCustomersDate(res?.Customers || []);
+      setCustomersData(res?.Customers || []);
     } catch (error) {
-      setCustomersDate([]);
+      setCustomersData([]);
       console.error('Error:', error);
     }
   };
@@ -354,6 +354,7 @@ const MakeInvoice = () => {
                       className="floating-input"
                       type="number"
                       size="sm"
+                      placeholder=""
                       value={discount}
                       onChange={(e) => setDiscount(Number(e.target.value))}
                       onFocus={() => setDiscount('')}
@@ -365,6 +366,7 @@ const MakeInvoice = () => {
                       className="floating-input"
                       size="sm"
                       type="number"
+                      placeholder=""
                       value={paidAmount}
                       onChange={(e) => setPaidAmount(Number(e.target.value))}
                       onFocus={() => setPaidAmount('')}
@@ -374,13 +376,13 @@ const MakeInvoice = () => {
                   <Row>
                     <Col md={6}>
                       <Form.Group className="floating-label-group mb-3 mt-3">
-                        <Form.Control className="floating-input" type="number" size="sm" />
+                        <Form.Control placeholder="" className="floating-input" type="number" size="sm" />
                         <Form.Label className="floating-label">Transport Fee</Form.Label>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group className="floating-label-group mb-3 mt-3">
-                        <Form.Control className="floating-input" type="number" size="sm" />
+                        <Form.Control placeholder="" className="floating-input" type="number" size="sm" />
                         <Form.Label className="floating-label">Labour Cost</Form.Label>
                       </Form.Group>
                     </Col>

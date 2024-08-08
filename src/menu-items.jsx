@@ -29,6 +29,12 @@ const menuItemsBn = [
             title: 'Invoice List',
             type: 'item',
             url: '/invoice/invoice-list'
+          },
+          {
+            id: 'draft-invoice',
+            title: 'Draft Invoice',
+            type: 'item',
+            url: '/invoice/draft-invoice'
           }
         ]
       },
@@ -127,6 +133,12 @@ const menuItemsEn = [
             title: 'Invoice List',
             type: 'item',
             url: '/invoice/invoice-list'
+          },
+          {
+            id: 'draft-invoice',
+            title: 'Draft Invoice',
+            type: 'item',
+            url: '/invoice/draft-invoice'
           }
         ]
       },
