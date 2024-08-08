@@ -6,7 +6,11 @@ import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { toastAlert } from '../../../utils/AppHelpers';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
-import { useAllCustomersMutation, useSingleCustomerMutation } from '../../../store/features/customer/customerApi';
+import {
+  useAllCustomersMutation,
+  useSingleCustomerMutation,
+  useGetSingleCustomerDuesMutation
+} from '../../../store/features/customer/customerApi';
 import { useGetProductMutation } from '../../../store/features/product/productApi';
 import { useMakeTradeMutation } from '../../../store/features/trade/tradeApi';
 
@@ -42,19 +46,26 @@ const MakeInvoice = () => {
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [allCustomers, { isLoading: allCustomersLoading }] = useAllCustomersMutation();
   const [singleCustomers, { isLoading: singleCustomersLoading }] = useSingleCustomerMutation();
+  const [getSingleCustomerDues, { isLoading: customerDuesLoading }] = useGetSingleCustomerDuesMutation();
   const [makeTrade, { isLoading: makeTradeLoading }] = useMakeTradeMutation();
 
   const [startDate, setStartDate] = useState(new Date());
   const [products, setProducts] = useState([]);
   const [customersData, setCustomersData] = useState([]);
   const [singleCustomersDate, setSingleCustomersDate] = useState({});
+  const [singleCustomersDueDate, setSingleCustomersDueDate] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedPayment, setSelectedPayment] = useState(null);
-  console.log('🚀 ~ MakeInvoice ~ selectedPayment:', selectedPayment);
+  const [selectedPayment, setSelectedPayment] = useState({
+    value: 1,
+    label: 'Cash'
+  });
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
+  const [laborCost, setLaborCost] = useState(0);
+  const [transportCost, setTransportCost] = useState(0);
+  const [trxId, setTrxId] = useState(null);
 
   const selectedCustomerData = (customersData || []).map((item) => ({
     value: item.id,
@@ -152,9 +163,13 @@ const MakeInvoice = () => {
   const fetchSingleCustomersData = async (id) => {
     try {
       const res = await singleCustomers({ accessToken, customer_id: id }).unwrap();
+      const customerDuesRes = await getSingleCustomerDues({ accessToken, customer_id: id }).unwrap();
+
       setSingleCustomersDate(res?.customer || {});
+      setSingleCustomersDueDate(customerDuesRes || {});
     } catch (error) {
       setSingleCustomersDate({});
+      setSingleCustomersDueDate({});
       console.error('Error:', error);
     }
   };
@@ -196,7 +211,10 @@ const MakeInvoice = () => {
   };
 
   const totalAmount = tradeProducts.reduce((sum, product) => sum + product.totalPrice, 0);
-  const discountedAmount = totalAmount - discount;
+  const finalLaborCost = laborCost != '' ? laborCost : 0;
+  const finalTransportCost = transportCost != '' ? transportCost : 0;
+  const totalAmountIncludingCosts = totalAmount + finalLaborCost + finalTransportCost;
+  const discountedAmount = totalAmountIncludingCosts - discount;
   const dueAmount = discountedAmount - paidAmount;
 
   const handleSubmit = (e) => {
@@ -208,6 +226,9 @@ const MakeInvoice = () => {
       given_discount: discount,
       paid_amount: paidAmount,
       tranjection_type: selectedPayment.value,
+      trx_id: trxId,
+      labor_cost: laborCost,
+      transport_cost: transportCost,
       products: tradeProducts.map((product) => ({
         product_id: product.value,
         stock_1: product.bagSize === '1KG' ? Number(product.quantity) : 0,
@@ -224,10 +245,7 @@ const MakeInvoice = () => {
         if (size(res)) {
           if (res.flag === 200) {
             fetchProductData();
-            setTradeProducts([]);
-            setDiscount(0);
-            setPaidAmount(0);
-            setSelectedOption(null);
+            clearAll();
             toastAlert('success', res.message);
           } else {
             toastAlert('error', res.error);
@@ -244,6 +262,10 @@ const MakeInvoice = () => {
     setTradeProducts([]);
     setDiscount(0);
     setPaidAmount(0);
+    setLaborCost(0);
+    setTrxId(null);
+    setTransportCost(0);
+    setSelectedOption(null);
   };
 
   return (
@@ -272,7 +294,7 @@ const MakeInvoice = () => {
                 </Form.Group>
               </Col>
               <Col md={8}>
-                <CustomerInfo />
+                <CustomerInfo customersDate={singleCustomersDate} customersDueDate={singleCustomersDueDate} />
                 {/* <Row>
                   <Col md={6}>
                     name: {singleCustomersDate.name}
@@ -363,6 +385,68 @@ const MakeInvoice = () => {
                     />
                     <Form.Label className="floating-label">Discount</Form.Label>
                   </Form.Group>
+
+                  <Row>
+                    <Col md={6}>
+                      <Form.Group className="floating-label-group mb-3 mt-3">
+                        <Form.Control
+                          placeholder=""
+                          className="floating-input"
+                          type="number"
+                          size="sm"
+                          value={transportCost}
+                          onChange={(e) => setTransportCost(Number(e.target.value))}
+                          onFocus={() => setTransportCost('')}
+                        />
+                        <Form.Label className="floating-label">Transport Fee</Form.Label>
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group className="floating-label-group mb-3 mt-3">
+                        <Form.Control
+                          placeholder=""
+                          className="floating-input"
+                          type="number"
+                          size="sm"
+                          value={laborCost}
+                          onChange={(e) => setLaborCost(Number(e.target.value))}
+                          onFocus={() => setLaborCost('')}
+                        />
+                        <Form.Label className="floating-label">Labour Cost</Form.Label>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <hr />
+                  <Row>
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        {/* <Form.Label>Select Method</Form.Label> */}
+                        <SmallSelect
+                          required={true}
+                          options={cashOption}
+                          placeholder="Select Method"
+                          onChange={(selected) => setSelectedPayment(selected)}
+                        />
+                      </Form.Group>
+                    </Col>
+                    {selectedPayment && selectedPayment.value === 1 ? null : (
+                      <Col md={6}>
+                        <Form.Group className="floating-label-group mb-3">
+                          <Form.Control
+                            className="floating-input"
+                            size="sm"
+                            type="number"
+                            placeholder=""
+                            value={trxId}
+                            onChange={(e) => setTrxId(Number(e.target.value))}
+                            onFocus={() => setTrxId('')}
+                          />
+                          <Form.Label className="floating-label">Transaction Id</Form.Label>
+                        </Form.Group>
+                      </Col>
+                    )}
+                  </Row>
+
                   <Form.Group className="floating-label-group mb-3">
                     <Form.Control
                       className="floating-input"
@@ -375,44 +459,29 @@ const MakeInvoice = () => {
                     />
                     <Form.Label className="floating-label">paid</Form.Label>
                   </Form.Group>
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group className="floating-label-group mb-3 mt-3">
-                        <Form.Control placeholder="" className="floating-input" type="number" size="sm" />
-                        <Form.Label className="floating-label">Transport Fee</Form.Label>
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group className="floating-label-group mb-3 mt-3">
-                        <Form.Control placeholder="" className="floating-input" type="number" size="sm" />
-                        <Form.Label className="floating-label">Labour Cost</Form.Label>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Form.Group className="mb-3">
-                    {/* <Form.Label>Select Method</Form.Label> */}
-                    <SmallSelect
-                      required={true}
-                      options={cashOption}
-                      placeholder="Select Method"
-                      onChange={(selected) => setSelectedPayment(selected)}
-                    />
-                  </Form.Group>
                 </Col>
                 <Col md={6}>
                   <table className="overview-table">
                     <tbody>
                       <tr>
-                        <td>Total price</td>
-                        <td className="text-bold">{totalAmount ? totalAmount : 0}</td>
+                        <td className="text-bold">Total price</td>
+                        <td className="text-bold color-beguni">{totalAmount ? totalAmount : 0}</td>
                       </tr>
                       <tr>
                         <td>discount</td>
-                        <td className="text-bold color-beguni">{discount ? discount : 0}</td>
+                        <td className="">{discount ? discount : 0}</td>
                       </tr>
                       <tr>
-                        <td>After discount</td>
-                        <td className="text-bold color-yellow">{discountedAmount ? discountedAmount : 0}</td>
+                        <td>Labor cost</td>
+                        <td className="">{finalLaborCost}</td>
+                      </tr>
+                      <tr>
+                        <td>Transport cost</td>
+                        <td className="">{finalTransportCost}</td>
+                      </tr>
+                      <tr>
+                        <td className="text-bold">After discount</td>
+                        <td className="text-bold">{discountedAmount ? discountedAmount : 0}</td>
                       </tr>
                       <tr>
                         <td>Paid amount</td>

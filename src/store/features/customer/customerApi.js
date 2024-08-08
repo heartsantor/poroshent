@@ -23,6 +23,13 @@ export const customerApi = apiSlice.injectEndpoints({
         body: data
       })
     }),
+    getSingleCustomerDues: builder.mutation({
+      query: (data) => ({
+        url: '/customer/getSingleCustomerDues',
+        method: 'POST',
+        body: data
+      })
+    }),
     singleCustomer: builder.mutation({
       query: (data) => ({
         url: '/customer/singleCustomer',
@@ -44,6 +51,7 @@ export const {
   useCreateCustomerMutation,
   useEditCustomerMutation,
   useAllCustomersMutation,
+  useGetSingleCustomerDuesMutation,
   useSingleCustomerMutation,
   useDeleteCustomerMutation
 } = customerApi;
