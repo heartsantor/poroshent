@@ -56,7 +56,7 @@ const DraftInvoice = () => {
    name: item.name_en,
    note: item.area_en
  }));
- 
+
   const fetchCustomersData = async () => {
     try {
       const res = await allCustomers({ accessToken }).unwrap();
@@ -91,7 +91,7 @@ const DraftInvoice = () => {
     <div>
       <Card>
         <Card.Header>
-          <Card.Title as="h5">Make Invoice</Card.Title>
+          <Card.Title as="h5">Draft Invoice</Card.Title>
         </Card.Header>
         <Card.Body>
           <Form>

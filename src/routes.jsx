@@ -70,6 +70,11 @@ const routes = [
       },
       {
         exact: 'true',
+        path: '/invoice/draft-invoice-list',
+        element: lazy(() => import('./views/invoice/DraftInvoiceList/DraftInvoiceList'))
+      },
+      {
+        exact: 'true',
         path: '/all-report/due-report',
         element: lazy(() => import('./views/report/DueList/DueList'))
       },
