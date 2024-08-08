@@ -10,6 +10,7 @@ import { useAllCustomersMutation, useSingleCustomerMutation } from '../../../sto
 import { useGetProductMutation } from '../../../store/features/product/productApi';
 import { useMakeTradeMutation } from '../../../store/features/trade/tradeApi';
 
+import CustomerInfo from '../../../components/CutomerInfo/CustomerInfo';
 const cashOption = [
   {
     value: 1,
@@ -209,11 +210,11 @@ const MakeInvoice = () => {
       tranjection_type: selectedPayment.value,
       products: tradeProducts.map((product) => ({
         product_id: product.value,
-        stock_1: product.bagSize === '1KG' ? product.quantity : 0,
-        stock_5: product.bagSize === '5KG' ? product.quantity : 0,
-        stock_10: product.bagSize === '10KG' ? product.quantity : 0,
-        stock_25: product.bagSize === '25KG' ? product.quantity : 0,
-        stock_50: product.bagSize === '50KG' ? product.quantity : 0
+        stock_1: product.bagSize === '1KG' ? Number(product.quantity) : 0,
+        stock_5: product.bagSize === '5KG' ? Number(product.quantity) : 0,
+        stock_10: product.bagSize === '10KG' ? Number(product.quantity) : 0,
+        stock_25: product.bagSize === '25KG' ? Number(product.quantity) : 0,
+        stock_50: product.bagSize === '50KG' ? Number(product.quantity) : 0
       }))
     };
 
@@ -271,13 +272,14 @@ const MakeInvoice = () => {
                 </Form.Group>
               </Col>
               <Col md={8}>
-                <Row>
+                <CustomerInfo />
+                {/* <Row>
                   <Col md={6}>
                     name: {singleCustomersDate.name}
                     <h6>due: {singleCustomersDate.credit}</h6>
                   </Col>
                   <Col md={6}>address: {singleCustomersDate.address}</Col>
-                </Row>
+                </Row> */}
               </Col>
             </Row>
             <hr />

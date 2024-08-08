@@ -1,0 +1,106 @@
+.card-container {
+ background: #fff;
+ border-radius: 10px;
+ // box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.1);
+ border: 1px solid #e0e0e0;
+ display: flex;
+ align-items: flex-start;
+ justify-content: space-between;
+
+ .left-section {
+  flex: 1;
+  border-right: 1px solid #e0e0e0;
+  padding: 20px;
+
+  .header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 10px;
+
+   .user-info {
+    display: flex;
+    flex-direction: column;
+
+    h5 {
+     margin: 0;
+     font-weight: bold;
+    }
+
+    span {
+     font-size: 14px;
+     color: #8c8c8c;
+    }
+   }
+
+   .action-buttons {
+    display: flex;
+    gap: 10px;
+
+    button {
+     border: none;
+     background-color: #f1f1f1;
+     padding: 5px 10px;
+     border-radius: 5px;
+     font-size: 14px;
+    }
+   }
+  }
+
+
+
+  .skills-list {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+
+   li {
+    display: flex;
+    // justify-content: space-between;
+    padding: 5px 0;
+    font-size: 14px;
+
+    &:not(:last-child) {
+     border-bottom: 1px solid #f0f0f0;
+    }
+
+    span {
+     text-align: start;
+     width: 50%;
+
+     &:nth-last-child(odd) {
+      font-weight: bold;
+      color: #000000c5;
+     }
+    }
+   }
+  }
+
+ }
+
+ .right-section {
+  flex: 1;
+  padding: 20px;
+
+  .total-due-card {
+   background-color: #ffd7c9;
+   padding: 10px 20px;
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+justify-content: flex-start;
+   h5 {
+    font-size: 15px;
+    margin: 0;
+    width: 50%;
+    color: #8c8c8c;
+   }
+
+   span {
+    font-size: 15px;
+    margin: 0;
+    color: #000;
+   }
+  }
+ }
+}

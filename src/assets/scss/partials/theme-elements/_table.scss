@@ -34,13 +34,13 @@
  border-collapse: collapse;
  border: 1px solid #dee2e6; // Add a border to the entire table
 
- td {
-  padding: 5px 10px;
-  border: 1px solid #dee2e6;
+ th{
+  background-color: #f8f9fa;
  }
 
- th {
-  background-color: #fff;
+ td,th {
+  padding: 5px 10px;
+  border: 1px solid #dee2e6;
  }
 
  td {
