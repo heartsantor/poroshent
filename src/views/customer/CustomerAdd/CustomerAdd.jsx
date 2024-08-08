@@ -40,6 +40,7 @@ const CustomerAdd = () => {
     name_en: '',
     address: '',
     area: '',
+    area_en: '',
     primary_phone: '',
     secondary_phone: ''
   });
@@ -67,6 +68,7 @@ const CustomerAdd = () => {
             name_en: data.customer.name_en,
             address: data.customer.address,
             area: data.customer.area,
+            area_en: data.customer.area_en,
             primary_phone: data.customer.primary_phone,
             secondary_phone: data.customer.secondary_phone
           });
@@ -99,6 +101,7 @@ const CustomerAdd = () => {
       name_en: '',
       address: '',
       area: '',
+      area_en: '',
       primary_phone: '',
       secondary_phone: ''
     });
@@ -156,8 +159,9 @@ const CustomerAdd = () => {
       name_en: mutationData.name_en,
       address: mutationData.address,
       area: selectedOption.label,
+      area_en: selectedOption.name,
       primary_phone: mutationData.primary_phone,
-      secondary_phone: mutationData.secondary_phone
+      secondary_phone: mutationData.secondary_phone ? mutationData.secondary_phone : null
     };
     const submitMutation = customerId ? editCustomer : createCustomer;
     submitMutation({ ...updatedData, customer_id: customerId })

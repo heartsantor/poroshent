@@ -241,6 +241,14 @@ td {
   vertical-align: middle;
 }
 
+.table {
+  tbody {
+    tr {
+      font-size: 14px;
+    }
+  }
+}
+
 .cover-img-block {
   overflow: hidden;
   z-index: 1;
@@ -501,5 +509,3 @@ table {
     width: 100%;
   }
 }
-
-

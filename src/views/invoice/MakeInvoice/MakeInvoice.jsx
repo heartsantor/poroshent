@@ -10,6 +10,32 @@ import { useAllCustomersMutation, useSingleCustomerMutation } from '../../../sto
 import { useGetProductMutation } from '../../../store/features/product/productApi';
 import { useMakeTradeMutation } from '../../../store/features/trade/tradeApi';
 
+const cashOption = [
+  {
+    value: 1,
+    label: 'Cash'
+  },
+  {
+    value: 2,
+    label: 'Bkash'
+  },
+  {
+    value: 3,
+    label: 'Nagad'
+  },
+  {
+    value: 4,
+    label: 'Rocket'
+  },
+  {
+    value: 5,
+    label: 'Bank'
+  },
+  {
+    value: 6,
+    label: 'Check'
+  }
+];
 const MakeInvoice = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
@@ -22,6 +48,8 @@ const MakeInvoice = () => {
   const [customersDate, setCustomersDate] = useState([]);
   const [singleCustomersDate, setSingleCustomersDate] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  console.log('🚀 ~ MakeInvoice ~ selectedPayment:', selectedPayment);
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
   const [discount, setDiscount] = useState(0);
@@ -31,7 +59,7 @@ const MakeInvoice = () => {
     value: item.id,
     label: item.primary_phone,
     name: item.name_en,
-    note: item.area
+    note: item.area_en
   }));
 
   const selectedProductData = (products || []).map((item) => ({
@@ -44,11 +72,11 @@ const MakeInvoice = () => {
     check_stock_25: item.check_stock_25,
     check_stock_50: item.check_stock_50,
     sell_price: item.sell_price,
-    note: `${item.stock_1 > 0 ? `(1KG x ${item.stock_1})` : ''} 
-    ${item.stock_5 > 0 ? `(5KG x ${item.stock_5})` : ''}
-    ${item.stock_10 > 0 ? `(10KG x ${item.stock_10})` : ''}
-    ${item.stock_25 > 0 ? `(25KG x ${item.stock_25})` : ''}
-    ${item.stock_50 > 0 ? `(50KG x ${item.stock_50})` : ''} = ${item.stock_1 + item.stock_5 + item.stock_10 + item.stock_25 + item.stock_50} bag
+    note: `${item.stock_1 > 0 ? `(1KG x ${item.stock_1}) = ` : ''} 
+    ${item.stock_5 > 0 ? `(5KG x ${item.stock_5}) = ` : ''}
+    ${item.stock_10 > 0 ? `(10KG x ${item.stock_10}) = ` : ''}
+    ${item.stock_25 > 0 ? `(25KG x ${item.stock_25}) = ` : ''}
+    ${item.stock_50 > 0 ? `(50KG x ${item.stock_50}) = ` : ''}  ${item.stock_1 + item.stock_5 + item.stock_10 + item.stock_25 + item.stock_50} bag
     `
   }));
 
@@ -178,7 +206,7 @@ const MakeInvoice = () => {
       customer_id: selectedOption.value,
       given_discount: discount,
       paid_amount: paidAmount,
-      tranjection_type: 1,
+      tranjection_type: selectedPayment.value,
       products: tradeProducts.map((product) => ({
         product_id: product.value,
         stock_1: product.bagSize === '1KG' ? product.quantity : 0,
@@ -194,6 +222,7 @@ const MakeInvoice = () => {
       .then((res) => {
         if (size(res)) {
           if (res.flag === 200) {
+            fetchProductData();
             setTradeProducts([]);
             setDiscount(0);
             setPaidAmount(0);
@@ -223,7 +252,7 @@ const MakeInvoice = () => {
           <Card.Title as="h5">Make Invoice</Card.Title>
         </Card.Header>
         <Card.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={4}>
                 <div className="form-group w-100 mb-3">
@@ -237,6 +266,7 @@ const MakeInvoice = () => {
                     onChange={handleSelectChange}
                     isLoading={allCustomersLoading}
                     header={true}
+                    required={true}
                   />
                 </Form.Group>
               </Col>
@@ -308,8 +338,8 @@ const MakeInvoice = () => {
                     </td>
                     <td>{product.totalPrice}</td>
                     <td>
-                      <Button variant="danger" onClick={() => setTradeProducts(tradeProducts.filter((_, i) => i !== index))}>
-                        Remove
+                      <Button size="sm" variant="danger" onClick={() => setTradeProducts(tradeProducts.filter((_, i) => i !== index))}>
+                        x
                       </Button>
                     </td>
                   </tr>
@@ -319,46 +349,83 @@ const MakeInvoice = () => {
             <div>
               <Row>
                 <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Discount</Form.Label>
-                    <Form.Control type="number" value={discount} onChange={(e) => setDiscount(Number(e.target.value))} />
+                  <Form.Group className="floating-label-group mb-3 mt-3">
+                    <Form.Control
+                      className="floating-input"
+                      type="number"
+                      size="sm"
+                      value={discount}
+                      onChange={(e) => setDiscount(Number(e.target.value))}
+                      onFocus={() => setDiscount('')}
+                    />
+                    <Form.Label className="floating-label">Discount</Form.Label>
                   </Form.Group>
+                  <Form.Group className="floating-label-group mb-3">
+                    <Form.Control
+                      className="floating-input"
+                      size="sm"
+                      type="number"
+                      value={paidAmount}
+                      onChange={(e) => setPaidAmount(Number(e.target.value))}
+                      onFocus={() => setPaidAmount('')}
+                    />
+                    <Form.Label className="floating-label">paid</Form.Label>
+                  </Form.Group>
+                  <Row>
+                    <Col md={6}>
+                      <Form.Group className="floating-label-group mb-3 mt-3">
+                        <Form.Control className="floating-input" type="number" size="sm" />
+                        <Form.Label className="floating-label">Transport Fee</Form.Label>
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group className="floating-label-group mb-3 mt-3">
+                        <Form.Control className="floating-input" type="number" size="sm" />
+                        <Form.Label className="floating-label">Labour Cost</Form.Label>
+                      </Form.Group>
+                    </Col>
+                  </Row>
                   <Form.Group className="mb-3">
-                    <Form.Label>paid</Form.Label>
-                    <Form.Control type="number" value={paidAmount} onChange={(e) => setPaidAmount(Number(e.target.value))} />
+                    {/* <Form.Label>Select Method</Form.Label> */}
+                    <SmallSelect
+                      required={true}
+                      options={cashOption}
+                      placeholder="Select Method"
+                      onChange={(selected) => setSelectedPayment(selected)}
+                    />
                   </Form.Group>
                 </Col>
                 <Col md={6}>
-                  <table className="table">
+                  <table className="overview-table">
                     <tbody>
                       <tr>
                         <td>Total price</td>
-                        <td>{totalAmount}</td>
+                        <td className="text-bold">{totalAmount ? totalAmount : 0}</td>
                       </tr>
                       <tr>
-                        <td>Total discount</td>
-                        <td>{discount}</td>
+                        <td>discount</td>
+                        <td className="text-bold color-beguni">{discount ? discount : 0}</td>
                       </tr>
                       <tr>
                         <td>After discount</td>
-                        <td>{discountedAmount}</td>
+                        <td className="text-bold color-yellow">{discountedAmount ? discountedAmount : 0}</td>
                       </tr>
                       <tr>
                         <td>Paid amount</td>
-                        <td>{paidAmount}</td>
+                        <td className="text-bold color-green">{paidAmount ? paidAmount : 0}</td>
                       </tr>
                       <tr>
                         <td>Due amount</td>
-                        <td>{dueAmount}</td>
+                        <td className="text-bold color-red">{dueAmount ? dueAmount : 0}</td>
                       </tr>
                     </tbody>
                   </table>
                 </Col>
               </Row>
-              <Button variant="primary" type="submit" onClick={handleSubmit}>
+              <Button variant="primary" type="submit" size="sm">
                 Submit
               </Button>
-              <Button variant="secondary" type="button" onClick={clearAll}>
+              <Button variant="secondary" type="button" onClick={clearAll} size="sm">
                 Reset
               </Button>
             </div>

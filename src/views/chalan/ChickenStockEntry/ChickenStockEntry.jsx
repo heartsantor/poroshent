@@ -36,7 +36,7 @@ const ChickenStockEntry = () => {
 
   //   setStartDate(getBangladeshDate());
   // }, []);
-  
+
   console.log('🚀 ~ ChickenStockEntry ~ startDate:', startDate);
 
   const [radioValue, setRadioValue] = useState('1');
@@ -62,7 +62,8 @@ const ChickenStockEntry = () => {
 
   const selectedProductData = (products || []).map((item) => ({
     value: item.id,
-    label: item.name
+    label: item.name_en,
+    name: item.name
   }));
 
   const radios = [
@@ -76,11 +77,9 @@ const ChickenStockEntry = () => {
     setSelectedOption(selected);
   };
 
-
-
   const fetchAllSupplyData = async () => {
     const data = {
-      accessToken: accessToken,
+      accessToken: accessToken
     };
     try {
       const res = await allSupply(data).unwrap();
@@ -98,7 +97,7 @@ const ChickenStockEntry = () => {
   };
 
   useEffect(() => {
-    fetchAllSupplyData()
+    fetchAllSupplyData();
   }, []);
 
   const fetchProductData = async (type) => {
@@ -208,7 +207,7 @@ const ChickenStockEntry = () => {
       .then((res) => {
         if (size(res)) {
           if (res.flag === 200) {
-            fetchAllSupplyData()
+            fetchAllSupplyData();
             toastAlert('success', res.message);
             clearAll();
           } else {

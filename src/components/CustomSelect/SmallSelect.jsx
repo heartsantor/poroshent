@@ -65,7 +65,16 @@ const MenuList = (props) => {
   );
 };
 
-const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange, isLoading = false, header = false, ...props }) => {
+const SmallSelect = ({
+  options = [],
+  placeholder = 'Select...',
+  value,
+  onChange,
+  isLoading = false,
+  header = false,
+  required = false,
+  ...props
+}) => {
   const formatOptionLabel = ({ label, name, note }) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
       <span style={{ flex: '1 1 auto' }}>
@@ -95,6 +104,7 @@ const SmallSelect = ({ options = [], placeholder = 'Select...', value, onChange,
       getOptionValue={(option) => option.value}
       components={header ? { MenuList } : undefined}
       filterOption={filterOption}
+      required={required}
       {...props}
     />
   );
@@ -106,7 +116,8 @@ SmallSelect.propTypes = {
   value: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  header: PropTypes.bool
+  header: PropTypes.bool,
+  required: PropTypes.bool
 };
 
 export default SmallSelect;

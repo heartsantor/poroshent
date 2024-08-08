@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { getItemName } from '../../../utils/getItemName';
+import { getBagToKg, getStockTotalAmount, getSellTotalAmount } from '../../../utils/getStocks';
 import { useDeleteProductMutation } from '../../../store/features/product/productApi';
 import { toastAlert } from '../../../utils/AppHelpers';
 import WarningModal from '../../../components/Modal/WarningModal';
@@ -110,14 +110,18 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
       <Table responsive hover className="recent-users">
         <thead>
           <tr>
-            <th>#</th>  
+            <th>#</th>
             <th>DATE</th>
             <th>আইটেমের নাম (English)</th>
             <th>আইটেমের নাম (বাংলা)</th>
             {activeKey === '2' && <th>category</th>}
-            <th>chalan qty</th>
-            <th>stock_price</th>
-            <th>sell_price</th>
+            <th>Bag</th>
+            <th>Total KG</th>
+            <th>Price/KG</th>
+            <th>Total Price</th>
+            <th>Sell Price/KG</th>
+            <th>Total Sell Price</th>
+            <th>Chalan No</th>
             <th>অ্যাকশন </th>
           </tr>
         </thead>
@@ -144,10 +148,23 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
                 <div className="d-flex">{generateBadges(item, t)}</div>
               </td>
               <td>
+                <div className="d-flex">{getBagToKg(item)} KG</div>
+              </td>
+              <td>
                 <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>
               </td>
               <td>
+                <div className="d-flex">{item.total_cost.toFixed(2)} টাকা</div>
+              </td>
+
+              <td>
                 <p className="m-0">{item.sell_price === null ? 0 : item.sell_price} টাকা</p>
+              </td>
+              <td>
+                <div className="d-flex">{getSellTotalAmount(item)} টাকা</div>
+              </td>
+              <td>
+                <div className="d-flex">{item.chalan_no ? item.chalan_no : null}</div>
               </td>
               {/* <td>
                 <p className="m-0">none</p>
