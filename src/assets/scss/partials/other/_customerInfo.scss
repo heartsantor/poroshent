@@ -10,13 +10,19 @@
    .left-section {
       flex: 1;
       border-right: 1px solid #e0e0e0;
-      padding: 10px;
+
 
       .header {
+         max-height: 60px;
+         min-height: 60px;
+         background-color: #ecebeb;
+         border-top-left-radius: 10px;
+         padding: 10px 20px;
          display: flex;
          align-items: center;
          justify-content: space-between;
          margin-bottom: 10px;
+         border-bottom: 1px solid #e0e0e0;
 
          .user-info {
             display: flex;
@@ -51,7 +57,7 @@
 
       .skills-list {
          list-style: none;
-         padding: 0;
+         padding: 0 10px 10px 10px;
          margin: 0;
 
          li {
@@ -80,28 +86,31 @@
 
    .right-section {
       flex: 1;
-      padding: 10px;
+      // padding: 10px;
 
       .total-due-card {
-         background-color: #ffd7c9;
+         max-height: 60px;
+         min-height: 60px;
+         background-color: #ecebeb;
          padding: 10px 20px;
-         border-radius: 10px;
+         // border-radius: 10px;
+         border-top-right-radius: 10px;
          display: flex;
          align-items: center;
          justify-content: flex-start;
 
-         h5 {
-            font-size: 15px;
-            margin: 0;
-            width: 50%;
-            color: #8c8c8c;
+         .card-due-info {
+            h5 {
+               margin: 0;
+               font-weight: bold;
+            }
+
+            span {
+               font-size: 14px;
+               color: #8c8c8c;
+            }
          }
 
-         span {
-            font-size: 15px;
-            margin: 0;
-            color: #000;
-         }
       }
    }
 }
@@ -122,7 +131,7 @@
 }
 
 .custom-table-container {
-   max-height: 150px; // Adjust height as needed
+   max-height: 175px; // Adjust height as needed
    overflow-y: auto;
    position: relative;
 
@@ -138,7 +147,7 @@
    }
 
    &::-webkit-scrollbar-thumb {
-      background-color: #000000;
+      background-color: #a09d9d;
       border-radius: 5px;
    }
 

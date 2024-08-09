@@ -11,8 +11,9 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
             <h5>{customersDate?.name_en ? customersDate?.name_en : '_ _ _ _ _ _ _ _ _ _'}</h5>
             <span>{customersDate?.primary_phone ? customersDate?.primary_phone : '_ _ _ _ _ _ _ _ _ _'}</span>
           </div>
+          <h6 className="m-0">ID: {customersDate.id ? customersDate.id : '_ _ _'}</h6>
           <div className="action-buttons">
-            <Button variant="light">Write</Button>
+            <Button variant="light">Add</Button>
           </div>
         </div>
         <ul className="skills-list">
@@ -46,11 +47,13 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
       </div>
       <div className="right-section">
         <div className="total-due-card">
-          <h5>Total Due</h5>
-          <span>: {customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'} taka</span>
+          <div className="card-due-info">
+            <h5>Total Due</h5>
+            <span>{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'} taka</span>
+          </div>
         </div>
         {customersDueDate?.trades?.length > 0 ? (
-          <div className="custom-table-container mt-3">
+          <div className="custom-table-container">
             <table className="overview-table">
               <thead>
                 <tr>
@@ -66,9 +69,9 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
                     <td>{item.id}</td>
                     <td>{item.total_price} Taka</td>
                     <td>{item.paid} Taka</td>
-                    <td >
-                    <span className="text-bold color-red">{item.due}</span> {" "}
-                     Taka</td>
+                    <td>
+                      <span className="text-bold color-red">{item.due}</span> Taka
+                    </td>
                   </tr>
                 ))}
               </tbody>

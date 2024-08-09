@@ -61,6 +61,7 @@ const MakeInvoice = () => {
   });
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
+  console.log("🚀 ~ MakeInvoice ~ tradeProducts:", tradeProducts)
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
@@ -185,6 +186,7 @@ const MakeInvoice = () => {
     updatedProducts[index].quantity = value;
     const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
     updatedProducts[index].totalPrice = value * updatedProducts[index].price * bagSizeMultiplier;
+    console.log("🚀 ~ handleQuantityChange ~ bagSizeMultiplier:", bagSizeMultiplier)
     setTradeProducts(updatedProducts);
   };
 
@@ -260,8 +262,8 @@ const MakeInvoice = () => {
 
   const clearAll = () => {
     setTradeProducts([]);
-    setSingleCustomersDate({})
-    setSingleCustomersDueDate({})
+    setSingleCustomersDate({});
+    setSingleCustomersDueDate({});
     setDiscount(0);
     setPaidAmount(0);
     setLaborCost(0);
@@ -327,6 +329,7 @@ const MakeInvoice = () => {
                   <th>SL</th>
                   <th>Product Name</th>
                   <th>Bag size</th>
+                  <th>Available QTY</th>
                   <th>Product QTY</th>
                   <th>Product Unit</th>
                   <th>Product price</th>
@@ -348,9 +351,10 @@ const MakeInvoice = () => {
                         {product.check_stock_50 && <option value="50KG">50KG</option>}
                       </Form.Control>
                     </td>
-
+                    <td>10</td>
                     <td>
-                      <Form.Control type="number" value={product.quantity} onChange={(e) => handleQuantityChange(index, e.target.value)} />
+                      <Form.Control className='invoice-input' type="number" value={product.quantity} onChange={(e) => handleQuantityChange(index, e.target.value)} />
+                     <span> Bag</span>
                     </td>
                     <td>
                       {product.bagSize === '1KG' ? `1KG x ${product.quantity} = ${1 * product.quantity} KG` : ''}

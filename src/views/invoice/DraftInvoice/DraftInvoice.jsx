@@ -5,10 +5,12 @@ import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
+
+
+import { useAllCustomersMutation, useSingleCustomerMutation,useGetSingleCustomerDuesMutation } from '../../../store/features/customer/customerApi';
 import { toastAlert } from '../../../utils/AppHelpers';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
-
-import { useAllCustomersMutation, useSingleCustomerMutation } from '../../../store/features/customer/customerApi';
+import CustomerInfo from '../../../components/CutomerInfo/CustomerInfo';
 
 const cashOption = [
   {
@@ -43,10 +45,12 @@ const DraftInvoice = () => {
 
   const [allCustomers, { isLoading: allCustomersLoading }] = useAllCustomersMutation();
   const [singleCustomers, { isLoading: singleCustomersLoading }] = useSingleCustomerMutation();
+  const [getSingleCustomerDues, { isLoading: customerDuesLoading }] = useGetSingleCustomerDuesMutation();
 
   const [startDate, setStartDate] = useState(new Date());
   const [customersData, setCustomersData] = useState([]);
   const [singleCustomersDate, setSingleCustomersDate] = useState({});
+  const [singleCustomersDueDate, setSingleCustomersDueDate] = useState({});
 
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -74,9 +78,13 @@ const DraftInvoice = () => {
   const fetchSingleCustomersData = async (id) => {
     try {
       const res = await singleCustomers({ accessToken, customer_id: id }).unwrap();
+      const customerDuesRes = await getSingleCustomerDues({ accessToken, customer_id: id }).unwrap();
+
       setSingleCustomersDate(res?.customer || {});
+      setSingleCustomersDueDate(customerDuesRes || {});
     } catch (error) {
       setSingleCustomersDate({});
+      setSingleCustomersDueDate({});
       console.error('Error:', error);
     }
   };
@@ -113,13 +121,7 @@ const DraftInvoice = () => {
                 </Form.Group>
               </Col>
               <Col md={8}>
-                <Row>
-                  <Col md={6}>
-                    name: {singleCustomersDate.name}
-                    <h6>due: {singleCustomersDate.credit}</h6>
-                  </Col>
-                  <Col md={6}>address: {singleCustomersDate.address}</Col>
-                </Row>
+              <CustomerInfo customersDate={singleCustomersDate} customersDueDate={singleCustomersDueDate} />
               </Col>
             </Row>
             <hr />
