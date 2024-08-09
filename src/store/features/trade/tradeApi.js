@@ -8,8 +8,22 @@ export const tradeApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: data
       })
+    }),
+    getTradeDetails: builder.mutation({
+      query: (data) => ({
+        url: '/trade/getTradeDetails',
+        method: 'POST',
+        body: data
+      })
+    }),
+    getAllTrades: builder.mutation({
+      query: (data) => ({
+        url: '/trade/getAllTrades',
+        method: 'POST',
+        body: data
+      })
     })
   })
 });
 
-export const { useMakeTradeMutation } = tradeApi;
+export const { useMakeTradeMutation, useGetTradeDetailsMutation, useGetAllTradesMutation } = tradeApi;
