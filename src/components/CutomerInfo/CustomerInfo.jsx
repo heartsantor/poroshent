@@ -11,7 +11,7 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
             <h5>{customersDate?.name_en ? customersDate?.name_en : '_ _ _ _ _ _ _ _ _ _'}</h5>
             <span>{customersDate?.primary_phone ? customersDate?.primary_phone : '_ _ _ _ _ _ _ _ _ _'}</span>
           </div>
-          <h6 className="m-0">ID: {customersDate.id ? customersDate.id : '_ _ _'}</h6>
+          <h6 className="m-0">ID: <span className='custom-text-1'>{customersDate.id ? customersDate.id : '_ _ _'}</span></h6>
           <div className="action-buttons">
             <Button variant="light">Add</Button>
           </div>

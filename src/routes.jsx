@@ -35,6 +35,16 @@ const routes = [
     element: lazy(() => import('./views/signin/SignIn'))
   },
   {
+    exact: 'true',
+    path: '/receipts/trade/:tradeId?',
+    element: lazy(() => import('./views/receipts/TradeReceipts/TradeReceipts'))
+  },
+  {
+    exact: 'true',
+    path: '/receipts/transaction/:transactionId?',
+    element: lazy(() => import('./views/receipts/TransactionReceipts/TransactionReceipts'))
+  },
+  {
     path: '*',
     layout: AdminLayout,
     routes: [
