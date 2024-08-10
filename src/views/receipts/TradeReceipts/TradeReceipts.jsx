@@ -9,6 +9,9 @@ import { formatDateBangla } from '../../../utils/dateTime';
 import { convertToBanglaNumber } from '../../../utils/convertToBanglaNumber';
 import { toBengaliWords } from '../../../utils/toBengaliWords';
 
+import paidIcon from '../../../assets/icon/paid.png';
+import unpaidIcon from '../../../assets/icon/unpaid.png';
+import partialIcon from '../../../assets/icon/partial_paid.png';
 import './tradeStyle.scss';
 
 const TradeReceipts = () => {
@@ -195,7 +198,7 @@ const TradeReceipts = () => {
               <div className="invoice-kothay">
                 <div className="invoice-kothay-text">
                   <p>কথায় :</p>
-                  <span>{toBengaliWords(singleTrade?.paid_amount)} টাকা মাত্র</span>
+                  <span>{toBengaliWords(singleTrade?.paid_amount ? singleTrade?.paid_amount : 0)} টাকা মাত্র</span>
                 </div>
 
                 <div className="invoice-kothay-image">
@@ -221,7 +224,9 @@ const TradeReceipts = () => {
                   </tr>
                   <tr>
                     <td>ডিসকাউন্ট =</td>
-                    <td>-{convertToBanglaNumber(singleTrade.given_discount)} টাকা</td>
+                    <td>
+                      {singleTrade.given_discount === 0 ? '' : '-'} {convertToBanglaNumber(singleTrade.given_discount)} টাকা
+                    </td>
                   </tr>
                   <tr>
                     <td>সর্বমোট =</td>
@@ -254,6 +259,23 @@ const TradeReceipts = () => {
                 <span>বিক্রেতার স্বাক্ষর </span>
               </div>
             </div>
+            <div className="seal-mohor">
+              {singleTrade?.due_amount === 0 ? (
+                <div className="image-wrapper">
+                  <img alt="payment-status" src={paidIcon} />
+                </div>
+              ) : null}
+              {singleTrade?.paid_amount === 0 ? (
+                <div className="image-wrapper">
+                  <img alt="payment-status" src={unpaidIcon} />
+                </div>
+              ) : null}
+              {singleTrade?.paid_amount > 0 && singleTrade?.due_amount > 0 ? (
+                <div className="image-wrapper">
+                  <img alt="payment-status" src={partialIcon} />
+                </div>
+              ) : null}
+            </div>
           </div>
           <div className="divider"></div>
           <div className="invoice-copy">
@@ -263,28 +285,28 @@ const TradeReceipts = () => {
               </div>
               <div className="invoice-header-company">
                 <div className="invoice-header-company-name">
-                  <h1>মেসার্স পরশ এন্টারপ্রাইজ</h1>
+                  <h1>{tradeInvoiceData.invoiceName}</h1>
                 </div>
                 <div className="invoice-header-company-contact">
                   <div className="invoice-header-company-number">
                     <p>ওয়েবসাইট:</p>
-                    <span>www.poroshent.com</span>
+                    <span>{tradeInvoiceData.Website}</span>
                   </div>
                   <div className="invoice-header-company-number">
                     <p>ইমেইল: </p>
-                    <span>support@poroshent.com</span>
+                    <span>{tradeInvoiceData.email}</span>
                   </div>
                   <div className="invoice-header-company-number">
                     <p>মোবাইল :</p>
-                    <span>০১৭৯৯-৩৪৫৪৯৯</span>
+                    <span>{tradeInvoiceData.mobile1}</span>
                   </div>
                 </div>
               </div>
 
               <div className="invoice-header-provider">
                 <div className="invoice-header-provider-name">
-                  <h1>প্রো: মোঃ নূরে আলম সিদ্দিক (রুবেল)</h1>
-                  <p>উত্তর বাজার, নকলা, শেরপুর। </p>
+                  <h1>{tradeInvoiceData.providerName}</h1>
+                  <p>{tradeInvoiceData.providerAddress} </p>
                 </div>
                 <div className="invoice-header-provider-copy">গ্রাহক কপি</div>
               </div>
@@ -295,25 +317,25 @@ const TradeReceipts = () => {
                 <div className="invoice-header-client-date">
                   <div className="invoice-no">
                     <p>ক্রমিক নং: </p>
-                    <span>240703001</span>
+                    <span>{singleTrade.trade_id}</span>
                   </div>
                   <div className="invoice-date">
-                    <p>তারিখ:</p> <span>০৩ জুলাই ২০২৪</span>
+                    <p>তারিখ:</p> <span>{formatDateBangla(singleTrade?.date)}</span>
                   </div>
                 </div>
                 <div className="invoice-header-client-information">
                   <div className="invoice-name">
                     <p>নাম:</p>
-                    <span>শফিউল আলাম</span>
+                    <span>{singleTrade?.customer?.name}</span>
                   </div>
                   <div className="invoice-mobile">
                     <p>মোবাইল:</p>
-                    <span>০১৭৯৯৩৪৫৪৯৯</span>
+                    <span>{convertToBanglaNumber(singleTrade?.customer?.primary_phone)}</span>
                   </div>
                 </div>
                 <div className="invoice-header-client-address">
                   <p>ঠিকানা :</p>
-                  <span>নকলা, শেরপুর</span>
+                  <span>{singleTrade?.customer?.address}</span>
                 </div>
               </div>
             </div>
@@ -329,19 +351,37 @@ const TradeReceipts = () => {
                 </tr>
               </thead>
               <tbody>
-                {invoiceItems.map((item, index) => (
+                {singleTrade?.products?.map((item, index) => (
                   <tr key={index}>
                     <td>{convertToBanglaNumber(index + 1)}</td>
-                    <td>{item.description}</td>
-                    <td>{convertToBanglaNumber(item.quantity)} বস্তা</td>
-                    <td>{convertToBanglaNumber(item.weight)} KG</td>
-                    <td>{convertToBanglaNumber(item.price)} টাকা</td>
-                    <td>{convertToBanglaNumber(item.total)} টাকা</td>
+                    <td>{item.name}</td>
+                    <td>
+                      {`${item.stock_1 ? `${convertToBanglaNumber(1)}কেজি × ${convertToBanglaNumber(item.stock_1)} বস্তা` : ''}`}
+                      {`${item.stock_5 ? `${convertToBanglaNumber(5)}কেজি × ${convertToBanglaNumber(item.stock_5)} বস্তা` : ''}`}
+                      {`${item.stock_10 ? `${convertToBanglaNumber(10)}কেজি × ${convertToBanglaNumber(item.stock_10)} বস্তা` : ''}`}
+                      {`${item.stock_25 ? `${convertToBanglaNumber(25)}কেজি × ${convertToBanglaNumber(item.stock_25)} বস্তা` : ''}`}
+                      {`${item.stock_50 ? `${convertToBanglaNumber(50)}কেজি × ${convertToBanglaNumber(item.stock_50)} বস্তা` : ''}`}
+                    </td>
+                    <td>
+                      {`${item.stock_1 ? `${convertToBanglaNumber(item.stock_1 * 1)} কেজি` : ''}`}
+                      {`${item.stock_5 ? `${convertToBanglaNumber(item.stock_5 * 5)} কেজি` : ''}`}
+                      {`${item.stock_10 ? `${convertToBanglaNumber(item.stock_10 * 10)} কেজি` : ''}`}
+                      {`${item.stock_25 ? `${convertToBanglaNumber(item.stock_25 * 25)} কেজি` : ''}`}
+                      {`${item.stock_50 ? `${convertToBanglaNumber(item.stock_50 * 50)} কেজি` : ''}`}
+                    </td>
+                    <td>{convertToBanglaNumber(item.sell_price)} টাকা</td>
+                    <td>
+                      {`${item.stock_1 ? `${convertToBanglaNumber(item.sell_price * item.stock_1 * 1)} টাকা` : ''}`}
+                      {`${item.stock_5 ? `${convertToBanglaNumber(item.sell_price * item.stock_5 * 5)} টাকা` : ''}`}
+                      {`${item.stock_10 ? `${convertToBanglaNumber(item.sell_price * item.stock_10 * 10)} টাকা` : ''}`}
+                      {`${item.stock_25 ? `${convertToBanglaNumber(item.sell_price * item.stock_25 * 25)} টাকা` : ''}`}
+                      {`${item.stock_50 ? `${convertToBanglaNumber(item.sell_price * item.stock_50 * 50)} টাকা` : ''}`}
+                    </td>
                   </tr>
                 ))}
                 {Array.from({ length: emptyRows }).map((_, index) => (
                   <tr key={`empty-${index}`}>
-                    <td>{convertToBanglaNumber(invoiceItems.length + index + 1)}</td>
+                    <td>{convertToBanglaNumber(singleTrade?.products?.length + index + 1)}</td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
@@ -355,7 +395,7 @@ const TradeReceipts = () => {
               <div className="invoice-kothay">
                 <div className="invoice-kothay-text">
                   <p>কথায় :</p>
-                  <span>পাঁচ হাজার টাকা মাত্র </span>
+                  <span>{toBengaliWords(singleTrade?.paid_amount ? singleTrade?.paid_amount : 0)} টাকা মাত্র</span>
                 </div>
 
                 <div className="invoice-kothay-image">
@@ -369,23 +409,38 @@ const TradeReceipts = () => {
                 <tbody>
                   <tr>
                     <td>মোট = </td>
-                    <td>৫০০০ টাকা</td>
+                    <td>{convertToBanglaNumber(singleTrade.total_cost)} টাকা</td>
+                  </tr>
+                  <tr>
+                    <td>ট্রান্সপোর্ট =</td>
+                    <td>{convertToBanglaNumber(singleTrade.transport_cost)} টাকা</td>
+                  </tr>
+                  <tr>
+                    <td>লেবার =</td>
+                    <td>{convertToBanglaNumber(singleTrade.labor_cost)} টাকা</td>
                   </tr>
                   <tr>
                     <td>ডিসকাউন্ট =</td>
-                    <td>১০০ টাকা</td>
+                    <td>
+                      {singleTrade.given_discount === 0 ? '' : '-'} {convertToBanglaNumber(singleTrade.given_discount)} টাকা
+                    </td>
                   </tr>
                   <tr>
                     <td>সর্বমোট =</td>
-                    <td>৪৯০০ টাকা</td>
+                    <td>
+                      {convertToBanglaNumber(
+                        singleTrade.total_cost + singleTrade.transport_cost + singleTrade.labor_cost - singleTrade.given_discount
+                      )}{' '}
+                      টাকা
+                    </td>
                   </tr>
                   <tr>
                     <td>জমা =</td>
-                    <td>৪৯০০ টাকা</td>
+                    <td>{convertToBanglaNumber(singleTrade.paid_amount)} টাকা</td>
                   </tr>
                   <tr>
                     <td>বাকী =</td>
-                    <td>0 টাকা</td>
+                    <td>{convertToBanglaNumber(singleTrade.due_amount)} টাকা</td>
                   </tr>
                 </tbody>
               </table>
@@ -400,6 +455,23 @@ const TradeReceipts = () => {
               <div className="invoice-footer-office">
                 <span>বিক্রেতার স্বাক্ষর </span>
               </div>
+            </div>
+            <div className="seal-mohor">
+              {singleTrade?.due_amount === 0 ? (
+                <div className="image-wrapper">
+                  <img alt="payment-status" src={paidIcon} />
+                </div>
+              ) : null}
+              {singleTrade?.paid_amount === 0 ? (
+                <div className="image-wrapper">
+                  <img alt="payment-status" src={unpaidIcon} />
+                </div>
+              ) : null}
+              {singleTrade?.paid_amount > 0 && singleTrade?.due_amount > 0 ? (
+                <div className="image-wrapper">
+                  <img alt="payment-status" src={partialIcon} />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
