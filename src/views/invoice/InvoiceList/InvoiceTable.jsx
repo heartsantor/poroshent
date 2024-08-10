@@ -17,18 +17,22 @@ import { getPaymentType } from '../../../utils/getPaymentType';
 const tableHeaders = [
   '#',
   'DATE',
-  'Receipt No',
-  'Invoice No',
+  'Voucher No',
   'Client',
-  'Payment Type',
-  'Description',
-  'Amount',
-  'Money Receipt',
+  'Product',
+  'Bag',
+  'QTY',
+  'Price/KG',
+  'Discount',
+  'Transport',
+  'Labour cost',
+  'Total Price',
+  'Due',
+  'Received',
   'Action'
 ];
 
 const generateBadges = (item, t) => {
-  console.log('🚀 ~ generateBadges ~ item:', item);
   const stockKeys = [
     { key: 'check_stock_1', bag: 'stock_1', label: '1' },
     { key: 'check_stock_5', bag: 'stock_5', label: '5' },
@@ -62,7 +66,7 @@ const scrollToTop = () => {
   });
 };
 
-const DraftTable = ({ productData = [], isLoading }) => {
+const InvoiceTable = ({ productData = [], isLoading }) => {
   const { t } = useTranslation();
 
   const { accessToken } = useSelector((state) => state.auth);
@@ -103,7 +107,7 @@ const DraftTable = ({ productData = [], isLoading }) => {
   };
 
   if (isLoading) {
-    return <SkeletonLoader rows={5} cols={10} headerItem={tableHeaders} />;
+    return <SkeletonLoader rows={5} cols={15} headerItem={tableHeaders} />;
   }
 
   return (
@@ -123,30 +127,84 @@ const DraftTable = ({ productData = [], isLoading }) => {
             <tr className="unread" key={i}>
               <td>{i + 1}</td>
               <td className="text-center">
-                <p className="m-0">{formatDateAndTime(item.created_at)}</p>
+                <p className="m-0">{formatDateAndTime(item.date)}</p>
               </td>
               <td className="text-center">
                 <p className="m-0">{item.trade_id}</p>
               </td>
               <td className="text-center">
-                <p className="m-0">Not Yet</p>
+                <span>Name: {`${item.customer.name_en} (${item.customer.name})`}</span>
+                <br />
+                <span>Number: {item.customer.primary_phone}</span>
               </td>
               <td className="text-center">
-                <span>Name: {`${item.name_en} (${item.name})`}</span>
-                <br />
-                <span>Number: {item.primary_phone}</span>
+                {item.products.map((product, index) => (
+                  <span key={product.product_id} className="table-nested-item">
+                    <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>
+                      {product.name_en} ({product.product_id})
+                    </span>
+                    <br />
+                  </span>
+                ))}
               </td>
-              <td className="text-center">{getPaymentType(item.type)}</td>
-              <td className="text-center">{item.trx_description ? item.trx_description : 'null'}</td>
-              <td className="text-center">{item.amount} Taka</td>
+              <td className="text-center">
+                {item.products.map((product, index) => (
+                  <span key={product.product_id} className="table-nested-item">
+                    <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>
+                      {product.stock_1 ? <span>1KG</span> : null}
+                      {product.stock_5 ? <span>5KG</span> : null}
+                      {product.stock_10 ? <span>10KG</span> : null}
+                      {product.stock_25 ? <span>25KG</span> : null}
+                      {product.stock_50 ? <span>50KG</span> : null}
+                    </span>
+                    <br />
+                  </span>
+                ))}
+              </td>
+              <td className="text-center">
+                {item.products.map((product, index) => (
+                  <span key={product.product_id} className="table-nested-item">
+                    <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>
+                      {product.stock_1 ? <span>{product.stock_1}</span> : null}
+                      {product.stock_5 ? <span>{product.stock_5}</span> : null}
+                      {product.stock_10 ? <span>{product.stock_10}</span> : null}
+                      {product.stock_25 ? <span>{product.stock_25}</span> : null}
+                      {product.stock_50 ? <span>{product.stock_50}</span> : null}
+                    </span>
+                    <br />
+                  </span>
+                ))}
+              </td>
+              <td className="text-center">
+                {item.products.map((product, index) => (
+                  <span key={product.product_id} className="table-nested-item">
+                    <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>{product.sell_price}</span>
+
+                    <br />
+                  </span>
+                ))}
+              </td>
+              <td className="text-center">
+                <p className="m-0">{item.given_discount}</p>
+              </td>
+              <td className="text-center">
+                <p className="m-0">{item.transport_cost}</p>
+              </td>
+              <td className="text-center">
+                <p className="m-0">{item.labor_cost}</p>
+              </td>
+              <td className="text-center">
+                <p className="m-0">{item.total_cost}</p>
+              </td>
+              <td className="text-center">
+                <p className="m-0">{item.due_amount}</p>
+              </td>
+              <td className="text-center">
+                <p className="m-0">{item.paid_amount}</p>
+              </td>
               <td className="text-center">
                 <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
                   Print
-                </Link>
-              </td>
-              <td className="text-center">
-                <Link to="#" className="label theme-bg2 text-white f-12" onClick={() => handleShow(item)}>
-                  ডিলিট
                 </Link>
               </td>
             </tr>
@@ -166,4 +224,4 @@ const DraftTable = ({ productData = [], isLoading }) => {
   );
 };
 
-export default DraftTable;
+export default InvoiceTable;

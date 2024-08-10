@@ -218,6 +218,13 @@ select.form-control-lg:not([size]):not([multiple]) {
 }
 
 
-.react-select__dropdown-indicator{
+.react-select__dropdown-indicator {
   padding: 4px !important;
+}
+
+.table-nested-item {
+  margin: 0;
+  .custom-border-bottom {
+    border-bottom: 1px solid #e28181;
+  }
 }

@@ -9,6 +9,9 @@ import { toastAlert } from '../../../utils/AppHelpers';
 import { useGetAllTranjectionsMutation } from '../../../store/features/transaction/transactionApi';
 
 import DraftTable from './DraftTable';
+
+
+
 const DraftInvoiceList = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const toastId = useRef(null);

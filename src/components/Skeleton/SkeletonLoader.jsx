@@ -1,7 +1,21 @@
 import React from 'react';
 import { Table, Placeholder } from 'react-bootstrap';
 
-const SkeletonLoader = ({ rows = 5, cols = 5 }) => {
+const SkeletonLoader = ({
+  rows = 9,
+  cols = 5,
+  headerItem = [
+    '#',
+    'আইটেমের নাম (English)',
+    'আইটেমের নাম (বাংলা)',
+    'আইটেমের কোড',
+    'আইটেম টাইপ',
+    'ব্যাগ সাইজ',
+    'স্টক মূল্য',
+    'বিক্রয়  মূল্য',
+    'অ্যাকশন'
+  ]
+}) => {
   const placeholders = Array.from({ length: rows }).map((_, rowIndex) => (
     <tr key={rowIndex}>
       {Array.from({ length: cols }).map((_, colIndex) => (
@@ -16,29 +30,11 @@ const SkeletonLoader = ({ rows = 5, cols = 5 }) => {
 
   return (
     <Table responsive hover>
-      {/* <thead>
-        <tr>
-          {Array.from({ length: cols }).map((_, index) => (
-            <th key={index}>
-              <Placeholder as="p" animation="glow" className="custom-placeholder">
-                <Placeholder xs={12} />
-              </Placeholder>
-            </th>
-          ))}
-        </tr>
-      </thead> */}
       <thead>
         <tr>
-          <th>#</th>
-          <th>আইটেমের নাম (English)</th>
-          <th>আইটেমের নাম (বাংলা)</th>
-          <th>আইটেমের কোড</th>
-          <th>আইটেম টাইপ</th>
-          <th>ব্যাগ সাইজ</th>
-          <th>stock_price</th>
-          <th>sell_price</th>
-          {/* <th>নোট</th> */}
-          <th>অ্যাকশন </th>
+          {headerItem.map((item, i) => (
+            <th key={i}>{item}</th>
+          ))}
         </tr>
       </thead>
       <tbody>{placeholders}</tbody>

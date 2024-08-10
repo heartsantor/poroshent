@@ -1,8 +1,8 @@
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZWFsZXJOYW1lIjoic2hhZml1bCBhbGFtIiwiZGVhbGVySWQiOjIsImRlYWxlcnBob25lIjoiMDE3OTkzNDU0OTkiLCJoaWdoZXN0X2Rpc2NvdW50IjoxMCwiZGVmYXVsdF9kaXNjb3VudCI6NSwiaWF0IjoxNzIyOTY4ODg5LCJleHAiOjE3MjMxNDE2ODl9.y8cggPa2nESwWp3eW-0OkrWeueRoSahAZmkKay8Vye4",
-  "customer_id": 6,
-  "given_discount": 20,
-  "paid_amount": 500,
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZWFsZXJOYW1lIjoiUG9yYXNoIEVudGVycHJpc2UiLCJkZWFsZXJJZCI6MywiZGVhbGVycGhvbmUiOiIwMTcxMjg0NDAwNyIsImhpZ2hlc3RfZGlzY291bnQiOjEwLCJkZWZhdWx0X2Rpc2NvdW50Ijo1LCJpYXQiOjE3MjMyMTQ3NjMsImV4cCI6MTcyMzM4NzU2M30.sVcBtOqlvGJK-YfvUDd8aBE0SOiSfUks_RedbCSYTE8",
+  "trade_id": 67,
+  "amount": 220,
   "tranjection_type": 1,
-  "products": [{ "product_id": 26, "stock_1": 0, "stock_5": 0, "stock_10": 0, "stock_25": 0, "stock_50": 1 }]
+  "trx_id": null,
+  "trx_description": null
 }
