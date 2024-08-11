@@ -29,6 +29,7 @@ const tableHeaders = [
   'Total Price',
   'Due',
   'Received',
+  'print',
   'Action'
 ];
 
@@ -107,7 +108,7 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
   };
 
   if (isLoading) {
-    return <SkeletonLoader rows={5} cols={15} headerItem={tableHeaders} />;
+    return <SkeletonLoader rows={5} cols={16} headerItem={tableHeaders} />;
   }
 
   return (
@@ -203,8 +204,13 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
                 <p className="m-0">{item.paid_amount}</p>
               </td>
               <td className="text-center">
-                <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
+                <Link to={`/receipts/trade/${item.trade_id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
                   Print
+                </Link>
+              </td>
+              <td className="text-center">
+                <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
+                  Edit
                 </Link>
               </td>
             </tr>
