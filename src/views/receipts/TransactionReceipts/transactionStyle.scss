@@ -49,7 +49,7 @@ $color_2: white;
 .money-print {
  font-family: $font-family_1;
  padding: 20px 80px;
- 
+
  .print-button {
   margin-bottom: 20px;
   padding: 10px 20px;
@@ -77,14 +77,23 @@ $color_2: white;
 }
 
 .moneyReceiptBody {
+ position: relative;
+ overflow: hidden;
+ background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%230fb465" fill-opacity="0.07" d="M0,128L30,112C60,96,120,64,180,69.3C240,75,300,117,360,144C420,171,480,181,540,192C600,203,660,213,720,186.7C780,160,840,96,900,106.7C960,117,1020,203,1080,224C1140,245,1200,203,1260,192C1320,181,1380,203,1410,213.3L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"%3E%3C/path%3E%3C/svg%3E') repeat;
+ background-size: cover;
+ background-position: center;
+
  .money-receipt-card {
+  position: relative;
+  z-index: 1; // Ensure the content stays above the wave background
   border: 2px solid $color-primary !important;
   border-radius: 5px;
   margin-bottom: 0;
+  background: transparent;
  }
 
  .money-receipt-header {
-  background: rgba($color-primary, 0.03) !important;
+  background: rgba(#0fb465, 0.1) !important;
   border-bottom: 2px solid $color-primary;
   padding: 10px 25px;
 
