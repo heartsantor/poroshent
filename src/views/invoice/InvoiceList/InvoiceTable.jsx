@@ -16,6 +16,8 @@ import { tradeInvoiceData } from '../../../data/trade-invoice';
 import { formatDateAndTime } from '../../../utils/dateTime';
 import { getPaymentType } from '../../../utils/getPaymentType';
 
+import { IconPrint, IconFile } from '../../../assets/icon';
+
 const tableHeaders = [
   '#',
   'DATE',
@@ -31,8 +33,7 @@ const tableHeaders = [
   'Total Price',
   'Due',
   'Received',
-  'View',
-  'print'
+  'Invoices'
 ];
 
 const generateBadges = (item, t) => {
@@ -110,7 +111,7 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
   };
 
   if (isLoading) {
-    return <SkeletonLoader rows={5} cols={16} headerItem={tableHeaders} />;
+    return <SkeletonLoader rows={5} cols={15} headerItem={tableHeaders} />;
   }
 
   return (
@@ -206,11 +207,11 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
                 <p className="m-0">{item.paid_amount}</p>
               </td>
               <td className="text-center">
-                <Link className="label theme-bg text-white f-12">View</Link>
-              </td>
-              <td className="text-center">
+                <Link className="label theme-bg text-white f-12">
+                  <IconFile />
+                </Link>
                 <Link to={`/receipts/trade/${item.trade_id}`} className="label theme-bg text-white f-12">
-                  Print
+                  <IconPrint />
                 </Link>
               </td>
               {/* <td className="text-center">

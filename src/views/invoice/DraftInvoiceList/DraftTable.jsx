@@ -14,6 +14,8 @@ import SkeletonLoader from '../../../components/Skeleton/SkeletonLoader';
 import { formatDateAndTime } from '../../../utils/dateTime';
 import { getPaymentType } from '../../../utils/getPaymentType';
 
+import { IconPrint, IconFile } from '../../../assets/icon';
+
 const tableHeaders = [
   '#',
   'DATE',
@@ -23,8 +25,7 @@ const tableHeaders = [
   'Payment Type',
   'Description',
   'Amount',
-  'View',
-  'Print',
+  'Money Receipt',
   'Action'
 ];
 
@@ -104,7 +105,7 @@ const DraftTable = ({ productData = [], isLoading }) => {
   };
 
   if (isLoading) {
-    return <SkeletonLoader rows={5} cols={11} headerItem={tableHeaders} />;
+    return <SkeletonLoader rows={5} cols={10} headerItem={tableHeaders} />;
   }
 
   return (
@@ -145,11 +146,11 @@ const DraftTable = ({ productData = [], isLoading }) => {
               <td className="text-center">{item.trx_description ? item.trx_description : 'null'}</td>
               <td className="text-center">{item.amount} Taka</td>
               <td className="text-center">
-                <Link className="label theme-bg text-white f-12">View</Link>
-              </td>
-              <td className="text-center">
+                <Link className="label theme-bg text-white f-12">
+                  <IconFile />
+                </Link>
                 <Link to={`/receipts/transaction/${item.transection_id}`} className="label theme-bg text-white f-12">
-                  Print
+                  <IconPrint />
                 </Link>
               </td>
               <td className="text-center">
