@@ -23,7 +23,8 @@ const tableHeaders = [
   'Payment Type',
   'Description',
   'Amount',
-  'Money Receipt',
+  'View',
+  'Print',
   'Action'
 ];
 
@@ -103,7 +104,7 @@ const DraftTable = ({ productData = [], isLoading }) => {
   };
 
   if (isLoading) {
-    return <SkeletonLoader rows={5} cols={10} headerItem={tableHeaders} />;
+    return <SkeletonLoader rows={5} cols={11} headerItem={tableHeaders} />;
   }
 
   return (
@@ -126,21 +127,28 @@ const DraftTable = ({ productData = [], isLoading }) => {
                 <p className="m-0">{formatDateAndTime(item.created_at)}</p>
               </td>
               <td className="text-center">
+                <p className="m-0">{item.transection_id}</p>
+              </td>
+              <td className="text-center">
                 <p className="m-0">{item.trade_id}</p>
               </td>
-              <td className="text-center">
-                <p className="m-0">Not Yet</p>
-              </td>
-              <td className="text-center">
-                <span>Name: {`${item.name_en} (${item.name})`}</span>
+              <td>
+                <span>
+                  <span className="custom-text-1">Name:</span> {`${item.name_en} (${item.name})`}
+                </span>
                 <br />
-                <span>Number: {item.primary_phone}</span>
+                <span>
+                  <span className="custom-text-1">Number:</span> {item.primary_phone}
+                </span>
               </td>
               <td className="text-center">{getPaymentType(item.type)}</td>
               <td className="text-center">{item.trx_description ? item.trx_description : 'null'}</td>
               <td className="text-center">{item.amount} Taka</td>
               <td className="text-center">
-                <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
+                <Link className="label theme-bg text-white f-12">View</Link>
+              </td>
+              <td className="text-center">
+                <Link to={`/receipts/transaction/${item.transection_id}`} className="label theme-bg text-white f-12">
                   Print
                 </Link>
               </td>

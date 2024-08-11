@@ -224,7 +224,12 @@ select.form-control-lg:not([size]):not([multiple]) {
 
 .table-nested-item {
   margin: 0;
+
   .custom-border-bottom {
     border-bottom: 1px solid #e28181;
   }
 }
+
+// .table-padding{
+//   padding: 0;
+// }

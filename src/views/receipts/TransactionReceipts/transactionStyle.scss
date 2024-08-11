@@ -1,0 +1,254 @@
+@import "https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap";
+
+
+
+$font-family_1: "Hind Siliguri", sans-serif;
+// Font Sizes
+$font-size-small: 12px;
+$font-size-medium: 14px;
+$font-size-large: 18px;
+$font-size-xlarge: 24px;
+
+// Colors
+$color-primary: #0fb465;
+$color-secondary: #252525;
+$color-light: #fff;
+$color-dark: #333;
+$color-accent: #008000;
+$background-color_4: #007bff;
+
+$color_2: white;
+
+
+.hind-siliguri-light {
+ font-family: $font-family_1;
+ font-weight: 300;
+}
+
+.hind-siliguri-regular {
+ font-family: $font-family_1;
+ font-weight: 400;
+}
+
+.hind-siliguri-medium {
+ font-family: $font-family_1;
+ font-weight: 500;
+}
+
+.hind-siliguri-semibold {
+ font-family: $font-family_1;
+ font-weight: 600;
+}
+
+.hind-siliguri-bold {
+ font-family: $font-family_1;
+ font-weight: 700;
+}
+
+
+.money-print {
+ font-family: $font-family_1;
+ padding: 20px 80px;
+ 
+ .print-button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: $background-color_4;
+  color: $color_2;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+ }
+
+ .divider {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0px;
+
+  &::before {
+   content: "";
+   border-bottom: 2px dotted $color-dark;
+   width: 100%;
+   height: 2px;
+  }
+ }
+}
+
+.moneyReceiptBody {
+ .money-receipt-card {
+  border: 2px solid $color-primary !important;
+  border-radius: 5px;
+  margin-bottom: 0;
+ }
+
+ .money-receipt-header {
+  background: rgba($color-primary, 0.03) !important;
+  border-bottom: 2px solid $color-primary;
+  padding: 10px 25px;
+
+  .receipt-name {
+   margin-bottom: 1px;
+   font-size: $font-size-xlarge;
+   color: $color-accent;
+   text-transform: uppercase;
+   font-weight: 600;
+   letter-spacing: 1px;
+  }
+
+  .receipt-address,
+  .receipt-email {
+   font-size: $font-size-small;
+   color: $color-secondary;
+   text-transform: capitalize;
+   font-weight: 500;
+   margin: 4px 0 3px 0;
+  }
+
+  .receipt-data {
+   .receipt-phone {
+    margin: 0;
+    font-size: $font-size-small;
+
+    span {
+     margin-right: 4px;
+     font-size: $font-size-small;
+     font-weight: bold;
+    }
+   }
+  }
+
+  .receipt-info-wrapper {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+
+   .copy-of {
+    margin-right: 20px;
+    border-radius: 20px;
+    padding: 4px 10px;
+    background-color: $color-primary;
+    color: #fff;
+   }
+
+   .receipt-info {
+    max-width: 200px;
+
+    td {
+     padding: 5px 10px !important;
+     font-size: $font-size-medium;
+     font-weight: 600;
+     letter-spacing: 1px;
+     border: 1px solid $color-primary;
+
+     &.receipt-no {
+      background: $color-primary;
+      color: $color-light;
+     }
+
+     &.receipt-date {
+      background: $color-light;
+      color: $color-dark;
+     }
+    }
+   }
+  }
+
+
+  .receipt-title {
+   font-size: $font-size-xlarge;
+   margin: 0;
+   font-weight: 700;
+   color: $color-primary;
+   letter-spacing: 1.5px;
+   text-transform: uppercase;
+  }
+ }
+
+ .money-receipt-body {
+  background: rgba($color-primary, 0.03) !important;
+  padding: 10px 25px;
+
+  .client-info {
+   h2 {
+    margin-bottom: 10px;
+    font-size: $font-size-medium;
+    border-bottom: 1px dashed $color-primary;
+    padding-bottom: 2px;
+
+    &.client-amount {
+     text-transform: capitalize;
+    }
+   }
+
+   h3 {
+    font-size: $font-size-medium;
+   }
+
+   .amount-box {
+    border: 1px solid $color-primary;
+    padding: 0px 50px;
+    font-size: 16px;
+    font-weight: 600;
+    padding-left: 10px;
+   }
+  }
+
+  .client-signatures {
+   margin-top: 40px;
+
+   .signature-box {
+    width: 70%;
+    padding-top: 5px;
+    border-top: 1px solid $color-primary;
+    margin: auto;
+    font-size: $font-size-medium;
+   }
+  }
+ }
+
+ strong {
+  font-weight: 600;
+ }
+}
+
+@media print {
+ .print-button {
+  display: none;
+ }
+
+ @page {
+  size: A4 landscape;
+  margin: 0;
+ }
+
+ body {
+  margin: 0;
+  padding: 0;
+  -webkit-print-color-adjust: exact;
+ }
+
+ header {
+  display: none;
+ }
+
+ footer {
+  display: none;
+ }
+
+ .invoice-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+ }
+
+ .invoice-copy {
+  width: 48%;
+ }
+
+ .divider {
+  width: 4%;
+ }
+}

@@ -11,6 +11,8 @@ import { toastAlert } from '../../../utils/AppHelpers';
 import WarningModal from '../../../components/Modal/WarningModal';
 import SkeletonLoader from '../../../components/Skeleton/SkeletonLoader';
 
+import { tradeInvoiceData } from '../../../data/trade-invoice';
+
 import { formatDateAndTime } from '../../../utils/dateTime';
 import { getPaymentType } from '../../../utils/getPaymentType';
 
@@ -29,8 +31,8 @@ const tableHeaders = [
   'Total Price',
   'Due',
   'Received',
-  'print',
-  'Action'
+  'View',
+  'print'
 ];
 
 const generateBadges = (item, t) => {
@@ -138,17 +140,17 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
                 <br />
                 <span>Number: {item.customer.primary_phone}</span>
               </td>
-              <td className="text-center">
+              <td className="text-left">
                 {item.products.map((product, index) => (
                   <span key={product.product_id} className="table-nested-item">
                     <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>
-                      {product.name_en} ({product.product_id})
+                      {product.product_id}| {product.name_en}
                     </span>
                     <br />
                   </span>
                 ))}
               </td>
-              <td className="text-center">
+              <td className="text-left table-padding">
                 {item.products.map((product, index) => (
                   <span key={product.product_id} className="table-nested-item">
                     <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>
@@ -162,7 +164,7 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
                   </span>
                 ))}
               </td>
-              <td className="text-center">
+              <td className="text-left">
                 {item.products.map((product, index) => (
                   <span key={product.product_id} className="table-nested-item">
                     <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>
@@ -176,7 +178,7 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
                   </span>
                 ))}
               </td>
-              <td className="text-center">
+              <td className="text-left">
                 {item.products.map((product, index) => (
                   <span key={product.product_id} className="table-nested-item">
                     <span className={index !== item.products.length - 1 ? `custom-border-bottom` : ''}>{product.sell_price}</span>
@@ -204,15 +206,18 @@ const InvoiceTable = ({ productData = [], isLoading }) => {
                 <p className="m-0">{item.paid_amount}</p>
               </td>
               <td className="text-center">
-                <Link to={`/receipts/trade/${item.trade_id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
+                <Link className="label theme-bg text-white f-12">View</Link>
+              </td>
+              <td className="text-center">
+                <Link to={`/receipts/trade/${item.trade_id}`} className="label theme-bg text-white f-12">
                   Print
                 </Link>
               </td>
-              <td className="text-center">
+              {/* <td className="text-center">
                 <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
                   Edit
                 </Link>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
