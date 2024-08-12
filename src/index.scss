@@ -366,16 +366,6 @@ table {
   }
 }
 
-// .print-button {
-//   background-color: #28a745;
-//   color: #fff;
-//   border: none;
-//   padding: 10px 20px;
-//   border-radius: 4px;
-//   cursor: pointer;
-//   margin-top: 10px;
-// }
-
 
 // print header
 .invoice-header {
@@ -507,5 +497,22 @@ table {
 
   .placeholder-xs-12 {
     width: 100%;
+  }
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; // Firefox
+  -webkit-appearance: none;   // Chrome, Safari, Opera
+  appearance: none;           // Standard
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &::-moz-inner-spin-button {
+    -moz-appearance: none;
+    margin: 0;
   }
 }

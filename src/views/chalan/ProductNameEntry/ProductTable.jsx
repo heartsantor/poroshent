@@ -111,13 +111,13 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) =>
             <th>#</th>
             <th>আইটেমের নাম (English)</th>
             <th>আইটেমের নাম (বাংলা)</th>
-            {activeKey === '2' && <th>category</th>}
+            {activeKey === '2' && <th>ক্যাটাগরি</th>}
             <th>আইটেমের কোড</th>
             <th>আইটেম টাইপ</th>
-            <th>স্টক রয়েছে</th>
-            <th>stock_price</th>
-            <th>sell_price</th>
-            {/* <th>নোট</th> */}
+            {/* <th>স্টক রয়েছে</th> */}
+            <th>ক্রয় মূল্য</th>
+            <th>বিক্রয় মূল্য</th>
+            <th>নোট</th>
             <th>অ্যাকশন </th>
           </tr>
         </thead>
@@ -143,18 +143,18 @@ const ProductTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) =>
               <td>
                 <p className="m-0">{getItemName(item.type)}</p>
               </td>
-              <td>
+              {/* <td>
                 <div className="d-flex gap-4">{generateBadges(item, t)}</div>
-              </td>
+              </td> */}
               <td>
                 <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>
               </td>
               <td>
                 <p className="m-0">{item.sell_price === null ? 0 : item.sell_price} টাকা</p>
               </td>
-              {/* <td>
-                <p className="m-0">none</p>
-              </td> */}
+              <td>
+                <p className="m-0">{item.note ? item.note : 'নাই'}</p>
+              </td>
               <td>
                 <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
                   এডিট

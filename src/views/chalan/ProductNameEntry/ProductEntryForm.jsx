@@ -143,7 +143,7 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
           <Col md={6}>
             <Form.Group className="mb-3">
               <Form.Label>আইটেম সিলেক্ট</Form.Label>
-              <Form.Control as="select" value={mutationData.type} onChange={(e) => handleChange('type', e.target.value)}>
+              <Form.Control required as="select" value={mutationData.type} onChange={(e) => handleChange('type', e.target.value)}>
                 <option value="">Select One</option>
                 <option value="1">মুরগীর খাবার</option>
                 <option value="2">মাছের খাবার</option>
@@ -172,6 +172,8 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
                 placeholder="আইটেমের কোড"
                 value={mutationData.code}
                 onChange={(e) => handleChange('code', e.target.value)}
+                onWheel={(e) => e.target.blur()} // Disable scroll to change value
+                inputMode="none" // Disable increment/decrement buttons on mobile devices
               />
             </Form.Group>
           </Col>
@@ -183,6 +185,7 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
                 placeholder="আইটেমের নাম"
                 value={mutationData.name_en}
                 onChange={(e) => handleChange('name_en', e.target.value)}
+                required
               />
             </Form.Group>
           </Col>
