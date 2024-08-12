@@ -45,6 +45,7 @@ const ChickenStockEntry = () => {
   const [products, setProducts] = useState([]);
   const [allSupplyData, setAllSupplyData] = useState([]);
   const [singleProducts, setSingleProducts] = useState({});
+  console.log('🚀 ~ ChickenStockEntry ~ singleProducts:', singleProducts);
 
   const [activeKey, setActiveKey] = useState('all');
 
@@ -244,6 +245,19 @@ const ChickenStockEntry = () => {
     }
   }, [selectedOption]);
 
+  useEffect(() => {
+    setMutationData({
+      stock_1: '',
+      stock_5: '',
+      stock_10: '',
+      stock_25: '',
+      stock_50: '',
+      chalan_no: '',
+      stock_price: singleProducts?.stock_price ?? 0,
+      sell_price: singleProducts?.sell_price ?? 0
+    });
+  }, [selectedOption, singleProducts]);
+
   const productTableList = allSupplyErr ? (
     <div>No Data/ Error</div>
   ) : (
@@ -351,7 +365,7 @@ const ChickenStockEntry = () => {
                       ) : null}
                     </div>
                     <div className="text-end mt-2">
-                      <h6 className='me-3 fw-bold text-primary'>total = {totalSum} KG</h6>
+                      <h6 className="me-3 fw-bold text-primary">total = {totalSum} KG</h6>
                     </div>
                   </div>
                 ) : null}
@@ -553,6 +567,7 @@ const ChickenStockEntry = () => {
                     // onFocus={handleFocus}
                     value={mutationData.stock_price}
                     onChange={(e) => setMutationData({ ...mutationData, stock_price: Number(e.target.value) })}
+                    onFocus={() => setMutationData({ ...mutationData, stock_price: '' })}
                   />
                   <Form.Label className="floating-label">Stock Price (KG) </Form.Label>
                 </Form.Group>
@@ -573,6 +588,7 @@ const ChickenStockEntry = () => {
                     // onFocus={handleFocus}
                     value={mutationData.sell_price}
                     onChange={(e) => setMutationData({ ...mutationData, sell_price: Number(e.target.value) })}
+                    onFocus={() => setMutationData({ ...mutationData, sell_price: '' })}
                   />
                   <Form.Label className="floating-label">Sell Price (KG)</Form.Label>
                 </Form.Group>
