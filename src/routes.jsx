@@ -90,6 +90,16 @@ const routes = [
       },
       {
         exact: 'true',
+        path: '/all-report/customer-report',
+        element: lazy(() => import('./views/report/CustomerReport/CustomerReport'))
+      },
+      {
+        exact: 'true',
+        path: '/all-report/sales-report',
+        element: lazy(() => import('./views/report/SalesReport/SalesReport'))
+      },
+      {
+        exact: 'true',
         path: '/customer/customer-add/:customerId?',
         element: lazy(() => import('./views/customer/CustomerAdd/CustomerAdd'))
       },
@@ -97,7 +107,27 @@ const routes = [
         exact: 'true',
         path: '/customer/customer-area/:areaId?',
         element: lazy(() => import('./views/customer/CustomerArea/CustomerArea'))
-      }
+      },
+      {
+        exact: 'true',
+        path: '/sms/sms-dashboard',
+        element: lazy(() => import('./views/sms/SmsDashboard/SmsDashboard'))
+      },
+      {
+        exact: 'true',
+        path: '/sms/customer-sms',
+        element: lazy(() => import('./views/sms/AccordingCustomer/AccordingCustomer'))
+      },
+      {
+        exact: 'true',
+        path: '/sms/due-sms',
+        element: lazy(() => import('./views/sms/AccordingDue/AccordingDue'))
+      },
+      {
+        exact: 'true',
+        path: '/sms/sms-history',
+        element: lazy(() => import('./views/sms/SmsHistory/SmsHistory'))
+      },
     ]
   }
 ];

@@ -4,7 +4,7 @@ const initialState = {
   menuData: [
     {
       id: 'sell',
-      title: 'navvv',
+      // title: 'navvv',
       type: 'group',
       icon: 'icon-navigation',
       children: [
@@ -80,10 +80,16 @@ const initialState = {
               url: '/all-report/due-report'
             },
             {
-              id: 'customer-statement',
-              title: 'Customer Statement',
+              id: 'sales-report',
+              title: 'Sales Report',
               type: 'item',
-              url: '/all-report/customer-statement'
+              url: '/all-report/sales-report'
+            },
+            {
+              id: 'customer-report',
+              title: 'Customer Report',
+              type: 'item',
+              url: '/all-report/customer-report'
             }
           ]
         },
@@ -104,6 +110,38 @@ const initialState = {
               title: 'Customer Area',
               type: 'item',
               url: '/customer/customer-area'
+            }
+          ]
+        },
+        {
+          id: 'sms',
+          title: 'SMS',
+          type: 'collapse',
+          icon: 'feather icon-box',
+          children: [
+            {
+              id: 'sms-dashboard',
+              title: 'Dashboard',
+              type: 'item',
+              url: '/sms/sms-dashboard'
+            },
+            {
+              id: 'customer-sms',
+              title: 'According Customer',
+              type: 'item',
+              url: '/sms/customer-sms'
+            },
+            {
+              id: 'due-sms',
+              title: 'According Due',
+              type: 'item',
+              url: '/sms/due-sms'
+            },
+            {
+              id: 'sms-report',
+              title: 'Report List',
+              type: 'item',
+              url: '/sms/sms-report'
             }
           ]
         }
