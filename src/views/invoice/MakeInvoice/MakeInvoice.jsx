@@ -41,6 +41,7 @@ const cashOption = [
     label: 'Check'
   }
 ];
+
 const MakeInvoice = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
@@ -61,7 +62,6 @@ const MakeInvoice = () => {
   });
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
-  console.log("🚀 ~ MakeInvoice ~ tradeProducts:", tradeProducts)
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
@@ -89,7 +89,7 @@ const MakeInvoice = () => {
     ${item.stock_5 > 0 ? `(5KG x ${item.stock_5}) = ` : ''}
     ${item.stock_10 > 0 ? `(10KG x ${item.stock_10}) = ` : ''}
     ${item.stock_25 > 0 ? `(25KG x ${item.stock_25}) = ` : ''}
-    ${item.stock_50 > 0 ? `(50KG x ${item.stock_50}) = ` : ''}  ${item.stock_1 + item.stock_5 + item.stock_10 + item.stock_25 + item.stock_50} bag
+    ${item.stock_50 > 0 ? `(50KG x ${item.stock_50}) = ` : ''}  ${item.stock_1 + item.stock_5 + item.stock_10 + item.stock_25 + item.stock_50} ব্যাগ
     `
   }));
 
@@ -186,7 +186,6 @@ const MakeInvoice = () => {
     updatedProducts[index].quantity = value;
     const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
     updatedProducts[index].totalPrice = value * updatedProducts[index].price * bagSizeMultiplier;
-    console.log("🚀 ~ handleQuantityChange ~ bagSizeMultiplier:", bagSizeMultiplier)
     setTradeProducts(updatedProducts);
   };
 
@@ -276,7 +275,7 @@ const MakeInvoice = () => {
     <div>
       <Card>
         <Card.Header>
-          <Card.Title as="h5">Make Invoice</Card.Title>
+          <Card.Title as="h5">ইনভয়েস তৈরী</Card.Title>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={handleSubmit}>
@@ -288,12 +287,14 @@ const MakeInvoice = () => {
                 <Form.Group className="mb-3">
                   <SmallSelect
                     options={selectedCustomerData}
-                    placeholder="Select One"
+                    placeholder="কাস্টমার সিলেক্ট"
                     value={selectedOption}
                     onChange={handleSelectChange}
                     isLoading={allCustomersLoading}
                     header={true}
                     required={true}
+                    headerLeftText="কাস্টমার নাম"
+                    headerRightText="এরিয়া"
                   />
                 </Form.Group>
               </Col>
@@ -314,7 +315,7 @@ const MakeInvoice = () => {
                 <Form.Group className="mb-3">
                   <SmallSelect
                     options={selectedProductData}
-                    placeholder="Select One"
+                    placeholder="প্রোডাক্ট সিলেক্ট"
                     value={selectedProductOption}
                     onChange={handleProductSelectChange}
                     isLoading={allProductLoading}
@@ -325,7 +326,7 @@ const MakeInvoice = () => {
             <hr />
             <table className="table">
               <thead>
-                <tr>
+                <tr className="text-uppercase">
                   <th>SL</th>
                   <th>Product Name</th>
                   <th>Bag size</th>
@@ -343,18 +344,33 @@ const MakeInvoice = () => {
                     <td>{index + 1}</td>
                     <td>{product.name}</td>
                     <td>
-                      <Form.Control as="select" value={product.bagSize} onChange={(e) => handleBagSizeChange(index, e.target.value)}>
-                        {product.check_stock_1 && <option value="1KG">1KG</option>}
-                        {product.check_stock_5 && <option value="5KG">5KG</option>}
-                        {product.check_stock_10 && <option value="10KG">10KG</option>}
-                        {product.check_stock_25 && <option value="25KG">25KG</option>}
-                        {product.check_stock_50 && <option value="50KG">50KG</option>}
+                      <Form.Control
+                        className="parches-control-form"
+                        id='mySelect'
+                        as="select"
+                        value={product.bagSize}
+                        onChange={(e) => handleBagSizeChange(index, e.target.value)}
+                      >
+                        {product.check_stock_1 ? <option value="1KG">1KG</option> : null}
+                        {product.check_stock_5 ? <option value="5KG">5KG</option> : null}
+                        {product.check_stock_10 ? <option value="10KG">10KG</option> : null}
+                        {product.check_stock_25 ? <option value="25KG">25KG</option> : null}
+                        {product.check_stock_50 ? <option value="50KG">50KG</option> : null}
                       </Form.Control>
                     </td>
                     <td>10</td>
                     <td>
-                      <Form.Control className='invoice-input' type="number" value={product.quantity} onChange={(e) => handleQuantityChange(index, e.target.value)} />
-                     <span> Bag</span>
+                      <div className="d-flex align-items-center">
+                        <Form.Control
+                          className="invoice-input parches-control-form"
+                          type="number"
+                          value={product.quantity}
+                          onChange={(e) => handleQuantityChange(index, e.target.value)}
+                          onWheel={(e) => e.target.blur()}
+                          inputMode="none"
+                        />
+                        <span className="ms-2"> Bag</span>
+                      </div>
                     </td>
                     <td>
                       {product.bagSize === '1KG' ? `1KG x ${product.quantity} = ${1 * product.quantity} KG` : ''}
@@ -364,7 +380,14 @@ const MakeInvoice = () => {
                       {product.bagSize === '50KG' ? `50KG x ${product.quantity} = ${50 * product.quantity} KG` : ''}
                     </td>
                     <td>
-                      <Form.Control type="number" value={product.price} onChange={(e) => handlePriceChange(index, e.target.value)} />
+                      <Form.Control
+                        className="parches-control-form"
+                        type="number"
+                        value={product.price}
+                        onChange={(e) => handlePriceChange(index, e.target.value)}
+                        onWheel={(e) => e.target.blur()}
+                        inputMode="none"
+                      />
                     </td>
                     <td>{product.totalPrice}</td>
                     <td>
@@ -388,6 +411,8 @@ const MakeInvoice = () => {
                       value={discount}
                       onChange={(e) => setDiscount(Number(e.target.value))}
                       onFocus={() => setDiscount('')}
+                        onWheel={(e) => e.target.blur()}
+                          inputMode="none"
                     />
                     <Form.Label className="floating-label">Discount</Form.Label>
                   </Form.Group>
@@ -403,6 +428,8 @@ const MakeInvoice = () => {
                           value={transportCost}
                           onChange={(e) => setTransportCost(Number(e.target.value))}
                           onFocus={() => setTransportCost('')}
+                            onWheel={(e) => e.target.blur()}
+                          inputMode="none"
                         />
                         <Form.Label className="floating-label">Transport Fee</Form.Label>
                       </Form.Group>
@@ -417,6 +444,8 @@ const MakeInvoice = () => {
                           value={laborCost}
                           onChange={(e) => setLaborCost(Number(e.target.value))}
                           onFocus={() => setLaborCost('')}
+                            onWheel={(e) => e.target.blur()}
+                          inputMode="none"F
                         />
                         <Form.Label className="floating-label">Labour Cost</Form.Label>
                       </Form.Group>

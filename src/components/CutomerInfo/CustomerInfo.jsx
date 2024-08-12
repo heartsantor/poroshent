@@ -11,34 +11,34 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
             <h5>{customersDate?.name_en ? customersDate?.name_en : '_ _ _ _ _ _ _ _ _ _'}</h5>
             <span>{customersDate?.primary_phone ? customersDate?.primary_phone : '_ _ _ _ _ _ _ _ _ _'}</span>
           </div>
-          <h6 className="m-0">ID: <span className='custom-text-1'>{customersDate.id ? customersDate.id : '_ _ _'}</span></h6>
+          <h6 className="m-0">আইডি: <span className='custom-text-1'>{customersDate.id ? customersDate.id : '_ _ _'}</span></h6>
           <div className="action-buttons">
-            <Button variant="light">Add</Button>
+            <Button variant="light">নিউ কাস্টমার</Button>
           </div>
         </div>
         <ul className="skills-list">
           <li>
-            <span>Name</span>
+            <span>কাস্টমার নাম</span>
             <span>{customersDate?.name ? `${customersDate?.name} (${customersDate?.name_en})` : '_ _ _ _ _ _ _ _ _ _'}</span>
           </li>
           <li>
-            <span>primary Number</span>
+            <span>প্রাইমারি নম্বর</span>
             <span>
               <span>{customersDate?.primary_phone ? customersDate?.primary_phone : '_ _ _ _ _ _ _ _ _ _'}</span>
             </span>
           </li>
           <li>
-            <span>Secondary Number</span>
+            <span>অপশনাল নম্বর</span>
             <span>
               <span>{customersDate?.secondary_phone ? customersDate?.secondary_phone : '_ _ _ _ _ _ _ _ _ _'}</span>
             </span>
           </li>
           <li>
-            <span>Area</span>
+            <span>এরিয়া</span>
             <span>{customersDate?.area ? `${customersDate?.area} (${customersDate?.area_en})` : '_ _ _ _ _ _ _ _ _ _'}</span>
           </li>
           <li>
-            <span>Address</span>
+            <span>ঠিকানা</span>
             <span>
               <span>{customersDate?.address ? customersDate?.address : '_ _ _ _ _ _ _ _ _ _'}</span>
             </span>
@@ -48,8 +48,8 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
       <div className="right-section">
         <div className="total-due-card">
           <div className="card-due-info">
-            <h5>Total Due</h5>
-            <span>{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'} taka</span>
+            <h5>মোট বাকী</h5>
+            <span>{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'} টাকা</span>
           </div>
         </div>
         {customersDueDate?.trades?.length > 0 ? (

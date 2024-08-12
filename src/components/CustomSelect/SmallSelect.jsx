@@ -51,20 +51,6 @@ const customStyles = {
   })
 };
 
-const MenuList = (props) => {
-  return (
-    <components.MenuList {...props}>
-      <div style={{ padding: '8px', borderBottom: '1px solid #ced4da', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#f4f7fa' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>info</span>
-          <span>Address</span>
-        </div>
-      </div>
-      {props.children}
-    </components.MenuList>
-  );
-};
-
 const SmallSelect = ({
   options = [],
   placeholder = 'Select...',
@@ -72,9 +58,27 @@ const SmallSelect = ({
   onChange,
   isLoading = false,
   header = false,
+  headerLeftText = 'Info',
+  headerRightText = 'Address',
   required = false,
   ...props
 }) => {
+  const MenuList = (props) => {
+    return (
+      <components.MenuList {...props}>
+        <div
+          style={{ padding: '8px', borderBottom: '1px solid #ced4da', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#f4f7fa' }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>{headerLeftText}</span>
+            <span>{headerRightText}</span>
+          </div>
+        </div>
+        {props.children}
+      </components.MenuList>
+    );
+  };
+
   const formatOptionLabel = ({ label, name, note }) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
       <span style={{ flex: '1 1 auto' }}>
@@ -113,6 +117,8 @@ const SmallSelect = ({
 SmallSelect.propTypes = {
   options: PropTypes.array.isRequired,
   placeholder: PropTypes.string,
+  headerLeftText: PropTypes.string,
+  headerRightText: PropTypes.string,
   value: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,

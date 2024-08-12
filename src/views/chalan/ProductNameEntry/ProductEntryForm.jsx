@@ -172,8 +172,8 @@ const ProductEntryForm = ({ onDeleteSuccess }) => {
                 placeholder="আইটেমের কোড"
                 value={mutationData.code}
                 onChange={(e) => handleChange('code', e.target.value)}
-                onWheel={(e) => e.target.blur()} // Disable scroll to change value
-                inputMode="none" // Disable increment/decrement buttons on mobile devices
+                onWheel={(e) => e.target.blur()} 
+                inputMode="none"
               />
             </Form.Group>
           </Col>

@@ -14,7 +14,7 @@ const menuItemsBn = [
       },
       {
         id: 'invoice',
-        title: 'Bill Invoice',
+        title: 'বিল ইনভয়েস',
         type: 'collapse',
         icon: 'feather icon-box',
         children: [
