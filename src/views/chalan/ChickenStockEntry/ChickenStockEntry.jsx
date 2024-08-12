@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import { toastAlert } from '../../../utils/AppHelpers';
-
+import { useTranslation } from 'react-i18next';
 import { Chicken } from '../../../assets/icon';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import { useGetProductMutation, useGetSingleProductMutation } from '../../../store/features/product/productApi';
@@ -16,7 +16,9 @@ import SupplyTable from './SupplyTable';
 
 const ChickenStockEntry = () => {
   const { accessToken } = useSelector((state) => state.auth);
+
   const toastId = useRef(null);
+  const { t } = useTranslation();
 
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [getSingleProduct, { isLoading: singleProductLoading }] = useGetSingleProductMutation();
@@ -68,10 +70,10 @@ const ChickenStockEntry = () => {
   }));
 
   const radios = [
-    { icon: <Chicken />, name: 'মুরগীর খাবার', value: '1' },
-    { icon: <Chicken />, name: 'মাছের খাবার', value: '2' },
-    { icon: <Chicken />, name: 'গরুর খাবার', value: '3' },
-    { icon: <Chicken />, name: 'ঔষধ', value: '4' }
+    { icon: <Chicken />, name: `${t('chicken_food')}`, value: '1' },
+    { icon: <Chicken />, name: `${t('fish_food')}`, value: '2' },
+    { icon: <Chicken />, name: `${t('cattle_food')}`, value: '3' },
+    { icon: <Chicken />, name: `${t('medicine')}`, value: '4' }
   ];
 
   const handleSelectChange = (selected) => {
@@ -268,10 +270,10 @@ const ChickenStockEntry = () => {
     <div>
       <Card>
         <Card.Header>
-          <Card.Title as="h5">মুরগীর স্টক এন্ট্রি</Card.Title>
+          <Card.Title as="h5">{t('stock_entry')}</Card.Title>
         </Card.Header>
         <Card.Body>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={4}>
                 <div className="form-group w-100 mb-3">
@@ -290,6 +292,7 @@ const ChickenStockEntry = () => {
                 <ButtonGroup className="mb-3 w-100">
                   {radios.map((radio, idx) => (
                     <ToggleButton
+                      className="text-capitalize"
                       size="sm"
                       key={idx}
                       id={`radi-${idx}`}
@@ -313,59 +316,60 @@ const ChickenStockEntry = () => {
                 <Form.Group className="mb-3">
                   <SmallSelect
                     options={selectedProductData}
-                    placeholder="Select One"
+                    placeholder={t('select_one')}
                     value={selectedOption}
                     onChange={handleSelectChange}
                     isLoading={allProductLoading}
+                    required={true}
                   />
                 </Form.Group>
                 {size(singleProducts) ? (
                   <div className="">
-                    <h6> Total KG SUM</h6>
+                    <h5> সর্বমোট (KG)</h5>
                     <div className="px-2">
                       {singleProducts.stock_1 !== undefined && singleProducts.stock_1 !== null && mutationData.stock_1 > 0 ? (
                         <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
-                          <span>1KG</span>
+                          <span>1KG Bag</span>
                           <span>
-                            1* {mutationData.stock_1} = {mutationData.stock_1 * 1}
+                            1*{mutationData.stock_1} = {mutationData.stock_1 * 1} KG
                           </span>
                         </div>
                       ) : null}
                       {singleProducts.stock_5 !== undefined && singleProducts.stock_5 !== null && mutationData.stock_5 > 0 ? (
                         <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
-                          <span>5KG</span>
+                          <span>5KG Bag</span>
                           <span>
-                            5* {mutationData.stock_5} = {mutationData.stock_5 * 5}
+                            5*{mutationData.stock_5} = {mutationData.stock_5 * 5} KG
                           </span>
                         </div>
                       ) : null}
                       {singleProducts.stock_10 !== undefined && singleProducts.stock_10 !== null && mutationData.stock_10 > 0 ? (
                         <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
-                          <span>10KG</span>
+                          <span>10KG Bag</span>
                           <span>
-                            10* {mutationData.stock_10} = {mutationData.stock_10 * 10}
+                            10*{mutationData.stock_10} = {mutationData.stock_10 * 10} KG
                           </span>
                         </div>
                       ) : null}
                       {singleProducts.stock_25 !== undefined && singleProducts.stock_25 !== null && mutationData.stock_25 > 0 ? (
                         <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
-                          <span>25KG</span>
+                          <span>25KG Bag</span>
                           <span>
-                            25* {mutationData.stock_25} = {mutationData.stock_25 * 25}
+                            25*{mutationData.stock_25} = {mutationData.stock_25 * 25} KG
                           </span>
                         </div>
                       ) : null}
                       {singleProducts.stock_50 !== undefined && singleProducts.stock_50 !== null && mutationData.stock_50 > 0 ? (
                         <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
-                          <span>50KG</span>
+                          <span>50KG Bag</span>
                           <span>
-                            50* {mutationData.stock_50} = {mutationData.stock_50 * 50}
+                            50* {mutationData.stock_50} = {mutationData.stock_50 * 50} KG
                           </span>
                         </div>
                       ) : null}
                     </div>
                     <div className="text-end mt-2">
-                      <h6 className="me-3 fw-bold text-primary">total = {totalSum} KG</h6>
+                      <h6 className="me-3 fw-bold text-primary">মোট = {totalSum} KG</h6>
                     </div>
                   </div>
                 ) : null}
@@ -384,7 +388,7 @@ const ChickenStockEntry = () => {
                         className="floating-input"
                       />
                       <Form.Label name="product-name" className="floating-label">
-                        Product name
+                        প্রোডাক্ট নাম
                       </Form.Label>
                     </Form.Group>
                   </Col>
@@ -400,7 +404,7 @@ const ChickenStockEntry = () => {
                         className="floating-input"
                       />
                       <Form.Label name="product-name-bd" className="floating-label">
-                        Product Name (BD)
+                        প্রোডাক্ট নাম (বাংলা )
                       </Form.Label>
                     </Form.Group>
                   </Col>
@@ -416,7 +420,7 @@ const ChickenStockEntry = () => {
                         className="floating-input"
                       />
                       <Form.Label name="product-name-bd" className="floating-label">
-                        Product Code
+                        প্রোডাক্ট কোড
                       </Form.Label>
                     </Form.Group>
                   </Col>
@@ -436,6 +440,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
+                          required
                           // onFocus={handleFocus}
                           value={mutationData.stock_1 === null ? '' : mutationData.stock_1}
                           onChange={(e) => setMutationData({ ...mutationData, stock_1: e.target.value ? Number(e.target.value) : 0 })}
@@ -445,9 +450,9 @@ const ChickenStockEntry = () => {
                         </Form.Label>
                       </Form.Group>
                       <div className="d-flex align-items-center ms-2 mb-3">
-                        <p className="m-0 me-2">Available Stock</p>
+                        <p className="m-0 me-2">বর্তমানে স্টক রয়েছে</p>
                         <span className={`${singleProducts.stock_1 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_1 ?? 0} Bag)
+                          ({singleProducts.stock_1 ?? 0} ব্যাগ)
                         </span>
                       </div>
                     </Col>
@@ -461,6 +466,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
+                          required
                           // onFocus={handleFocus}
                           value={mutationData.stock_5 === null ? '' : mutationData.stock_5}
                           onChange={(e) => setMutationData({ ...mutationData, stock_5: e.target.value ? Number(e.target.value) : 0 })}
@@ -470,9 +476,9 @@ const ChickenStockEntry = () => {
                         </Form.Label>
                       </Form.Group>
                       <div className="d-flex align-items-center ms-2 mb-3">
-                        <p className="m-0 me-2">Available Stock</p>
+                        <p className="m-0 me-2">বর্তমানে স্টক রয়েছে</p>
                         <span className={`${singleProducts.stock_5 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_5 ?? 0} Bag)
+                          ({singleProducts.stock_5 ?? 0} ব্যাগ)
                         </span>
                       </div>
                     </Col>
@@ -486,6 +492,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
+                          required
                           // onFocus={handleFocus}
                           value={mutationData.stock_10 === null ? '' : mutationData.stock_10}
                           onChange={(e) => setMutationData({ ...mutationData, stock_10: e.target.value ? Number(e.target.value) : 0 })}
@@ -495,9 +502,9 @@ const ChickenStockEntry = () => {
                         </Form.Label>
                       </Form.Group>
                       <div className="d-flex align-items-center ms-2 mb-3">
-                        <p className="m-0 me-2">Available Stock</p>
+                        <p className="m-0 me-2">বর্তমানে স্টক রয়েছে</p>
                         <span className={`${singleProducts.stock_10 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_10 ?? 0} Bag)
+                          ({singleProducts.stock_10 ?? 0} ব্যাগ)
                         </span>
                       </div>
                     </Col>
@@ -511,6 +518,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
+                          required
                           // onFocus={handleFocus}
                           value={mutationData.stock_25 === null ? '' : mutationData.stock_25}
                           onChange={(e) => setMutationData({ ...mutationData, stock_25: e.target.value ? Number(e.target.value) : 0 })}
@@ -520,9 +528,9 @@ const ChickenStockEntry = () => {
                         </Form.Label>
                       </Form.Group>
                       <div className="d-flex align-items-center ms-2 mb-3">
-                        <p className="m-0 me-2">Available Stock</p>
+                        <p className="m-0 me-2">বর্তমানে স্টক রয়েছে</p>
                         <span className={`${singleProducts.stock_25 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_25 ?? 0} Bag)
+                          ({singleProducts.stock_25 ?? 0} ব্যাগ)
                         </span>
                       </div>
                     </Col>
@@ -536,6 +544,7 @@ const ChickenStockEntry = () => {
                           type="number"
                           placeholder=""
                           className="floating-input"
+                          required
                           // onFocus={handleFocus}
                           value={mutationData.stock_50 === null ? '' : mutationData.stock_50}
                           onChange={(e) => setMutationData({ ...mutationData, stock_50: e.target.value ? Number(e.target.value) : 0 })}
@@ -545,9 +554,9 @@ const ChickenStockEntry = () => {
                         </Form.Label>
                       </Form.Group>
                       <div className="d-flex align-items-center ms-2 mb-3">
-                        <p className="m-0 me-2">Available Stock</p>
+                        <p className="m-0 me-2">বর্তমানে স্টক রয়েছে</p>
                         <span className={`${singleProducts.stock_50 > 0 ? 'text-primary' : 'text-danger'}`}>
-                          ({singleProducts.stock_50 ?? 0} Bag)
+                          ({singleProducts.stock_50 ?? 0} ব্যাগ)
                         </span>
                       </div>
                     </Col>
@@ -569,12 +578,17 @@ const ChickenStockEntry = () => {
                     onChange={(e) => setMutationData({ ...mutationData, stock_price: Number(e.target.value) })}
                     onFocus={() => setMutationData({ ...mutationData, stock_price: '' })}
                   />
-                  <Form.Label className="floating-label">Stock Price (KG) </Form.Label>
+                  <Form.Label className="floating-label">স্টক মূল্য (KG) </Form.Label>
                 </Form.Group>
                 {singleProducts.stock_price !== undefined && singleProducts.stock_price !== null ? (
-                  <div className="d-flex align-items-center ms-2 mb-3">
-                    <p className="m-0 me-2">previous Price</p>
-                    <span className="text-primary">({singleProducts.stock_price} TK)</span>
+                  <div className="d-flex align-items-center ms-2 mb-3 ">
+                    <p className="m-0 me-2">বর্তমান নির্ধারিত মূল্য</p>
+                    <span
+                      className="text-primary pointer"
+                      onClick={() => setMutationData({ ...mutationData, stock_price: singleProducts?.stock_price })}
+                    >
+                      ({singleProducts.stock_price} TK)
+                    </span>
                   </div>
                 ) : null}
               </Col>
@@ -590,34 +604,41 @@ const ChickenStockEntry = () => {
                     onChange={(e) => setMutationData({ ...mutationData, sell_price: Number(e.target.value) })}
                     onFocus={() => setMutationData({ ...mutationData, sell_price: '' })}
                   />
-                  <Form.Label className="floating-label">Sell Price (KG)</Form.Label>
+                  <Form.Label className="floating-label">বিক্রয় মূল্য (KG)</Form.Label>
                 </Form.Group>
                 {singleProducts.sell_price !== undefined && singleProducts.sell_price !== null ? (
                   <div className="d-flex align-items-center ms-2 mb-3">
-                    <p className="m-0 me-2">previous Price</p>
-                    <span className="text-primary">({singleProducts.sell_price} TK)</span>
+                    <p className="m-0 me-2">বর্তমান নির্ধারিত মূল্য</p>
+                    <span
+                      className="text-primary pointer"
+                      onClick={() => setMutationData({ ...mutationData, sell_price: singleProducts?.sell_price })}
+                    >
+                      ({singleProducts.sell_price} TK)
+                    </span>
                   </div>
                 ) : null}
               </Col>
               <Col md={4}>
                 <Form.Group className="floating-label-group mb-3">
                   <Form.Control
+                    name="chalan_no"
                     size="sm"
                     type="text"
                     placeholder=""
                     className="floating-input"
+                    required
                     value={mutationData.chalan_no}
                     onChange={(e) => setMutationData({ ...mutationData, chalan_no: e.target.value })}
                   />
-                  <Form.Label className="floating-label">Chalan No</Form.Label>
+                  <Form.Label className="floating-label">চালান নম্বর</Form.Label>
                 </Form.Group>
               </Col>
             </Row>
-            <Button variant="primary" onClick={handleSubmit} disabled={takeSupplyLoading}>
+            <Button variant="primary" type="submit" disabled={takeSupplyLoading}>
               সংরক্ষণ
             </Button>
             <Button variant="secondary" onClick={clearAll} disabled={takeSupplyLoading}>
-              clear
+              মুছুন
             </Button>
           </Form>
         </Card.Body>
@@ -629,16 +650,16 @@ const ChickenStockEntry = () => {
         <Tab eventKey="all" title="All" className="custom-tab-content">
           {productTableList}
         </Tab>
-        <Tab eventKey="1" title="মুরগীর খাবার" className="custom-tab-content">
+        <Tab eventKey="1" title={t('chicken_food')} className="custom-tab-content">
           {/* {productTableList} */}
         </Tab>
-        <Tab eventKey="2" title="মাছের খাবার" className="custom-tab-content">
+        <Tab eventKey="2" title={t('fish_food')} className="custom-tab-content">
           {/* {productTableList} */}
         </Tab>
-        <Tab eventKey="3" title="গরুর খাবার" className="custom-tab-content">
+        <Tab eventKey="3" title={t('cattle_food')} className="custom-tab-content">
           {/* {productTableList} */}
         </Tab>
-        <Tab eventKey="4" title="ঔষধ" className="custom-tab-content">
+        <Tab eventKey="4" title={t('medicine')} className="custom-tab-content">
           {/* {productTableList} */}
         </Tab>
       </Tabs>

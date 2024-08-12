@@ -5,5 +5,11 @@
   "ms_porosh_ent": "MS Porosh Enterprise",
   "porosh_ent": "Porosh Enterpris",
   "login": "Login",
-  "bag": "Bag"
+  "bag": "Bag",
+  "chicken_food": "Chicken Food",
+  "fish_food": "Fish Food",
+  "cattle_food": "Cattle Food",
+  "medicine": "Medicine",
+  "stock_entry": "Stock Entry",
+  "select_one": "Select One"
 }

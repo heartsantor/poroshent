@@ -63,6 +63,7 @@ const scrollToTop = () => {
 };
 
 const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => {
+  console.log("🚀 ~ SupplyTable ~ productData:", productData)
   const { t } = useTranslation();
 
   const { accessToken } = useSelector((state) => state.auth);
@@ -111,19 +112,18 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
     <div>
       <Table responsive hover className="recent-users">
         <thead>
-          <tr>
+          <tr className="text-uppercase">
             <th>#</th>
-            <th>DATE</th>
+            <th>তারিখ </th>
             <th>আইটেমের নাম (English)</th>
             <th>আইটেমের নাম (বাংলা)</th>
-            {activeKey === '2' && <th>category</th>}
-            <th>Bag</th>
-            <th>Total KG</th>
-            <th>Price/KG</th>
-            <th>Total Price</th>
-            <th>Sell Price/KG</th>
-            <th>Total Sell Price</th>
-            <th>Chalan No</th>
+            <th>ব্যাগ</th>
+            <th>সর্বমোট (KG)</th>
+            <th>ক্রয় মূল্য (KG)</th>
+            <th>মোট ক্রয় মূল্য</th>
+            <th>বিক্রয় মূল্য (KG)</th>
+            <th>মোট বিক্রয় মূল্য </th>
+            <th>চালান নম্বর</th>
             <th>অ্যাকশন </th>
           </tr>
         </thead>
@@ -140,11 +140,6 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
               <td>
                 <p className="m-0">{item.name}</p>
               </td>
-              {activeKey === '2' && (
-                <td>
-                  <p className="m-0">{item.category}</p>
-                </td>
-              )}
 
               <td>
                 <div className="d-flex">{generateBadges(item, t)}</div>
@@ -156,7 +151,7 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
                 <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>
               </td>
               <td>
-                <div className="d-flex fw-bold text-primary">{moneyFixed(item.total_cost)} টাকা</div>
+                <div className="d-flex fw-bold text-primary">{moneyFixed(getStockTotalAmount(item))} টাকা</div>
               </td>
 
               <td>
@@ -168,9 +163,6 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
               <td>
                 <div className="d-flex">{item.chalan_no ? item.chalan_no : null}</div>
               </td>
-              {/* <td>
-                <p className="m-0">none</p>
-              </td> */}
               <td>
                 <Link to={`/chalan/product-name-entry/${item.id}`} onClick={scrollToTop} className="label theme-bg text-white f-12">
                   এডিট
