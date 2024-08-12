@@ -46,6 +46,9 @@ const cashOption = [
 
 const MakeInvoice = () => {
   const { accessToken } = useSelector((state) => state.auth);
+
+  const MAX_PRODUCT_SELECTION = 10; // Global variable for max product selection
+
   const [getProduct, { isLoading: allProductLoading }] = useGetProductMutation();
   const [allCustomers, { isLoading: allCustomersLoading }] = useAllCustomersMutation();
   const [singleCustomers, { isLoading: singleCustomersLoading }] = useSingleCustomerMutation();
@@ -62,10 +65,8 @@ const MakeInvoice = () => {
     value: 1,
     label: 'Cash'
   });
-  console.log('🚀 ~ MakeInvoice ~ selectedPayment:', selectedPayment);
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
-  console.log('🚀 ~ MakeInvoice ~ tradeProducts:', tradeProducts);
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
@@ -102,6 +103,11 @@ const MakeInvoice = () => {
   };
 
   const handleProductSelectChange = (selected) => {
+    if (selected && tradeProducts.length >= MAX_PRODUCT_SELECTION) {
+      toastAlert('error', 'You can only select up to 10 products.');
+      return;
+    }
+
     if (selected) {
       let initialBagSize = '1KG';
       if (selected.check_stock_50) {
@@ -273,10 +279,7 @@ const MakeInvoice = () => {
     setTrxId(null);
     setTransportCost(0);
     setSelectedOption(null);
-    setSelectedPayment({
-      value: 1,
-      label: 'Cash'
-    });
+    setSelectedPayment(cashOption[0]);
   };
 
   return (
@@ -378,6 +381,7 @@ const MakeInvoice = () => {
                           onChange={(e) => handleQuantityChange(index, e.target.value)}
                           onWheel={(e) => e.target.blur()}
                           inputMode="none"
+                          min="1"
                         />
                         <span className="ms-2"> Bag</span>
                       </div>
@@ -397,6 +401,7 @@ const MakeInvoice = () => {
                         onChange={(e) => handlePriceChange(index, e.target.value)}
                         onWheel={(e) => e.target.blur()}
                         inputMode="none"
+                        min="0"
                       />
                     </td>
                     <td>
@@ -425,6 +430,7 @@ const MakeInvoice = () => {
                       onFocus={() => setDiscount('')}
                       onWheel={(e) => e.target.blur()}
                       inputMode="none"
+                      min="0"
                     />
                     <Form.Label className="floating-label">ডিসকাউন্ট</Form.Label>
                   </Form.Group>
@@ -442,6 +448,7 @@ const MakeInvoice = () => {
                           onFocus={() => setTransportCost('')}
                           onWheel={(e) => e.target.blur()}
                           inputMode="none"
+                          min="0"
                         />
                         <Form.Label className="floating-label">ট্রান্সপোর্ট খরচ</Form.Label>
                       </Form.Group>
@@ -458,6 +465,7 @@ const MakeInvoice = () => {
                           onFocus={() => setLaborCost('')}
                           onWheel={(e) => e.target.blur()}
                           inputMode="none"
+                          min="0"
                         />
                         <Form.Label className="floating-label">লেবার খরচ</Form.Label>
                       </Form.Group>
@@ -504,6 +512,7 @@ const MakeInvoice = () => {
                       value={paidAmount}
                       onChange={(e) => setPaidAmount(Number(e.target.value))}
                       onFocus={() => setPaidAmount('')}
+                      min="0"
                     />
                     <Form.Label className="floating-label">paid</Form.Label>
                   </Form.Group>
