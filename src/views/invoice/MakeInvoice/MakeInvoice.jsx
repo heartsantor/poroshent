@@ -14,6 +14,8 @@ import {
 import { useGetProductMutation } from '../../../store/features/product/productApi';
 import { useMakeTradeMutation } from '../../../store/features/trade/tradeApi';
 
+import { moneyFixed } from '../../../utils/moneyFixed';
+
 import CustomerInfo from '../../../components/CutomerInfo/CustomerInfo';
 const cashOption = [
   {
@@ -60,8 +62,10 @@ const MakeInvoice = () => {
     value: 1,
     label: 'Cash'
   });
+  console.log('🚀 ~ MakeInvoice ~ selectedPayment:', selectedPayment);
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
+  console.log('🚀 ~ MakeInvoice ~ tradeProducts:', tradeProducts);
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
@@ -269,6 +273,10 @@ const MakeInvoice = () => {
     setTrxId(null);
     setTransportCost(0);
     setSelectedOption(null);
+    setSelectedPayment({
+      value: 1,
+      label: 'Cash'
+    });
   };
 
   return (
@@ -342,11 +350,13 @@ const MakeInvoice = () => {
                 {tradeProducts.map((product, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{product.name}</td>
+                    <td>
+                      {product.label} ({product.name})
+                    </td>
                     <td>
                       <Form.Control
                         className="parches-control-form"
-                        id='mySelect'
+                        id="mySelect"
                         as="select"
                         value={product.bagSize}
                         onChange={(e) => handleBagSizeChange(index, e.target.value)}
@@ -389,7 +399,9 @@ const MakeInvoice = () => {
                         inputMode="none"
                       />
                     </td>
-                    <td>{product.totalPrice}</td>
+                    <td>
+                      <span className="fw-bold text-primary">{moneyFixed(product.totalPrice)}</span>
+                    </td>
                     <td>
                       <Button size="sm" variant="danger" onClick={() => setTradeProducts(tradeProducts.filter((_, i) => i !== index))}>
                         x
@@ -411,10 +423,10 @@ const MakeInvoice = () => {
                       value={discount}
                       onChange={(e) => setDiscount(Number(e.target.value))}
                       onFocus={() => setDiscount('')}
-                        onWheel={(e) => e.target.blur()}
-                          inputMode="none"
+                      onWheel={(e) => e.target.blur()}
+                      inputMode="none"
                     />
-                    <Form.Label className="floating-label">Discount</Form.Label>
+                    <Form.Label className="floating-label">ডিসকাউন্ট</Form.Label>
                   </Form.Group>
 
                   <Row>
@@ -428,10 +440,10 @@ const MakeInvoice = () => {
                           value={transportCost}
                           onChange={(e) => setTransportCost(Number(e.target.value))}
                           onFocus={() => setTransportCost('')}
-                            onWheel={(e) => e.target.blur()}
+                          onWheel={(e) => e.target.blur()}
                           inputMode="none"
                         />
-                        <Form.Label className="floating-label">Transport Fee</Form.Label>
+                        <Form.Label className="floating-label">ট্রান্সপোর্ট খরচ</Form.Label>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -444,10 +456,10 @@ const MakeInvoice = () => {
                           value={laborCost}
                           onChange={(e) => setLaborCost(Number(e.target.value))}
                           onFocus={() => setLaborCost('')}
-                            onWheel={(e) => e.target.blur()}
-                          inputMode="none"F
+                          onWheel={(e) => e.target.blur()}
+                          inputMode="none"
                         />
-                        <Form.Label className="floating-label">Labour Cost</Form.Label>
+                        <Form.Label className="floating-label">লেবার খরচ</Form.Label>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -459,12 +471,13 @@ const MakeInvoice = () => {
                         <SmallSelect
                           required={true}
                           options={cashOption}
+                          value={selectedPayment}
                           placeholder="Select Method"
                           onChange={(selected) => setSelectedPayment(selected)}
                         />
                       </Form.Group>
                     </Col>
-                    {selectedPayment && selectedPayment.value === 1 ? null : (
+                    {!selectedPayment || (selectedPayment && selectedPayment.value !== 1) ? (
                       <Col md={6}>
                         <Form.Group className="floating-label-group mb-3">
                           <Form.Control
@@ -476,10 +489,10 @@ const MakeInvoice = () => {
                             onChange={(e) => setTrxId(e.target.value)}
                             onFocus={() => setTrxId('')}
                           />
-                          <Form.Label className="floating-label">Transaction Id</Form.Label>
+                          <Form.Label className="floating-label">ট্রানজেকশন আইডি</Form.Label>
                         </Form.Group>
                       </Col>
-                    )}
+                    ) : null}
                   </Row>
 
                   <Form.Group className="floating-label-group mb-3">
@@ -499,42 +512,45 @@ const MakeInvoice = () => {
                   <table className="overview-table">
                     <tbody>
                       <tr>
-                        <td className="text-bold">Total price</td>
-                        <td className="text-bold color-beguni">{totalAmount ? totalAmount : 0}</td>
+                        <td className="text-bold">মোট মূল্য</td>
+                        <td className="text-bold color-beguni">{moneyFixed(totalAmount ? totalAmount : 0)}</td>
                       </tr>
                       <tr>
-                        <td>discount</td>
-                        <td className="">{discount ? discount : 0}</td>
+                        <td>ডিসকাউন্ট</td>
+                        <td className="">{moneyFixed(discount ? discount : 0)}</td>
                       </tr>
                       <tr>
-                        <td>Labor cost</td>
-                        <td className="">{finalLaborCost}</td>
+                        <td>লেবার খরচ</td>
+                        <td className="">{moneyFixed(finalLaborCost)}</td>
                       </tr>
                       <tr>
-                        <td>Transport cost</td>
-                        <td className="">{finalTransportCost}</td>
+                        <td>ট্রান্সপোর্ট খরচ</td>
+                        <td className="">{moneyFixed(finalTransportCost)}</td>
                       </tr>
                       <tr>
-                        <td className="text-bold">After discount</td>
-                        <td className="text-bold">{discountedAmount ? discountedAmount : 0}</td>
+                        <td className="text-bold">সর্বমোট মূল্য</td>
+                        <td className="text-bold">{moneyFixed(discountedAmount ? discountedAmount : 0)}</td>
                       </tr>
                       <tr>
-                        <td>Paid amount</td>
-                        <td className="text-bold color-green">{paidAmount ? paidAmount : 0}</td>
+                        <td>জমার পরিমান</td>
+                        <td className="text-bold color-green">{moneyFixed(paidAmount ? paidAmount : 0)}</td>
                       </tr>
                       <tr>
-                        <td>Due amount</td>
-                        <td className="text-bold color-red">{dueAmount ? dueAmount : 0}</td>
+                        <td>বাকীর পরিমান</td>
+                        <td className="text-bold color-red">{moneyFixed(dueAmount ? dueAmount : 0)}</td>
                       </tr>
                     </tbody>
                   </table>
                 </Col>
               </Row>
               <Button variant="primary" type="submit" size="sm">
-                Submit
+                সাবমিট
+              </Button>
+              <Button variant="primary" type="submit" size="sm">
+                সাবমিট ও প্রিন্ট
               </Button>
               <Button variant="secondary" type="button" onClick={clearAll} size="sm">
-                Reset
+                ক্লিয়ার
               </Button>
             </div>
           </Form>
