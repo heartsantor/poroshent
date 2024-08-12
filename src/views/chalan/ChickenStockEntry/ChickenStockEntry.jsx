@@ -329,7 +329,7 @@ const ChickenStockEntry = () => {
                         <div className="d-flex align-content-center justify-content-between border-bottom pb-0 p-2">
                           <span>10KG</span>
                           <span>
-                            10* {mutationData.stock_10} = {mutationData.stock_1 * 10}
+                            10* {mutationData.stock_10} = {mutationData.stock_10 * 10}
                           </span>
                         </div>
                       ) : null}
@@ -350,7 +350,9 @@ const ChickenStockEntry = () => {
                         </div>
                       ) : null}
                     </div>
-                    <h4>total = {totalSum} KG</h4>
+                    <div className="text-end mt-2">
+                      <h6 className='me-3 fw-bold text-primary'>total = {totalSum} KG</h6>
+                    </div>
                   </div>
                 ) : null}
               </Col>

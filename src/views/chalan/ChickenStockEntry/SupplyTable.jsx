@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { getBagToKg, getStockTotalAmount, getSellTotalAmount } from '../../../utils/getStocks';
+import { moneyFixed } from '../../../utils/moneyFixed';
+
 import { useDeleteProductMutation } from '../../../store/features/product/productApi';
 import { toastAlert } from '../../../utils/AppHelpers';
 import WarningModal from '../../../components/Modal/WarningModal';
@@ -154,14 +156,14 @@ const SupplyTable = ({ productData, onDeleteSuccess, activeKey, isLoading }) => 
                 <p className="m-0">{item.stock_price === null ? 0 : item.stock_price} টাকা</p>
               </td>
               <td>
-                <div className="d-flex">{item.total_cost.toFixed(2)} টাকা</div>
+                <div className="d-flex fw-bold text-primary">{moneyFixed(item.total_cost)} টাকা</div>
               </td>
 
               <td>
                 <p className="m-0">{item.sell_price === null ? 0 : item.sell_price} টাকা</p>
               </td>
               <td>
-                <div className="d-flex">{getSellTotalAmount(item)} টাকা</div>
+                <div className="d-flex fw-bold text-primary">{moneyFixed(getSellTotalAmount(item))} টাকা</div>
               </td>
               <td>
                 <div className="d-flex">{item.chalan_no ? item.chalan_no : null}</div>

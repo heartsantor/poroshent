@@ -59,7 +59,9 @@ const DashDefault = () => {
 
       <Row>
         {stockDetails?.slice(0, 3).map((data, index) => {
-          const totalStock = data.total_stock_1 + data.total_stock_5 + data.total_stock_10 + data.total_stock_25 + data.total_stock_50;
+          const totalBags = data.total_stock_1 + data.total_stock_5 + data.total_stock_10 + data.total_stock_25 + data.total_stock_50;
+          const totalStocks =
+            data.total_stock_1 + data.total_stock_5 * 5 + data.total_stock_10 * 10 + data.total_stock_25 * 25 + data.total_stock_50 * 50;
           return (
             <Col key={index} xl={6} xxl={3}>
               <Card>
@@ -70,13 +72,11 @@ const DashDefault = () => {
                       <p className="m-0">বর্তমানে স্টকে রয়েছে</p>
                       <h3 className="f-w-300 d-flex align-items-center m-b-0">
                         {/* <i className={`feather ${data.icon} f-30 m-r-5`} />  */}
-                        {totalStock} KG
+                        {totalBags} Bag ({totalStocks} KG)
                       </h3>
                     </div>
                     <div className="col-3 text-end">
-                      <i
-                        className={`feather ${totalStock > 10 ? 'icon-arrow-up text-c-green' : 'icon-arrow-down text-c-red'} f-30 m-r-5`}
-                      />
+                      <i className={`feather ${totalBags > 10 ? 'icon-arrow-up text-c-green' : 'icon-arrow-down text-c-red'} f-30 m-r-5`} />
                     </div>
                   </div>
                   <div className="row mt-2 d-flex align-items-center">
@@ -177,7 +177,6 @@ const DashDefault = () => {
             </Card.Body>
           </Card>
         </Col> */}
-
       </Row>
       <StockTable />
     </React.Fragment>
