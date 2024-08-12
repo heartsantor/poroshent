@@ -11,7 +11,6 @@ export const getBagToKg = (item) => {
 };
 
 export const getStockTotalAmount = (item) => {
-  console.log('🚀 ~ getAmount ~ item:', item);
 
   const stockKeys = [
     { key: 'check_stock_1', bag: 'stock_1', label: 1 },
@@ -39,8 +38,6 @@ export const getStockTotalAmount = (item) => {
 };
 
 export const getSellTotalAmount = (item) => {
-  console.log('🚀 ~ getAmount ~ item:', item);
-
   const stockKeys = [
     { key: 'check_stock_1', bag: 'stock_1', label: 1 },
     { key: 'check_stock_5', bag: 'stock_5', label: 5 },
