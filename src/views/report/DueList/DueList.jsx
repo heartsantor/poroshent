@@ -116,46 +116,55 @@ const DueList = () => {
     content: () => tableRef.current,
     documentTitle: `Due Report ${selectedOption !== null ? `-${selectedOption?.name} (${selectedOption?.value})` : ''}`,
     pageStyle: `
-      @page {
-        size: A4 portrait;
-        margin: 10mm;
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+@media print {
+  .table-container {
+    margin: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .pagination-controls,
+  .print-button {
+    display: none;
+  }
+
+  table {
+    border: 1px solid #ddd;
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      tr {
+        text-transform: uppercase;
+
+        th {
+          padding: 5px;
+          border-bottom: 1px solid #ddd;
+          text-align: left;
+        }
       }
-        
-      @media print {
-        .table-container {
-          margin: 0;
-          box-shadow: none;
-          padding: 0;
-        }
-        .pagination-controls, .print-button {
-          display: none;
-        }
-        table {
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 0px 5px;
           border: 1px solid #ddd;
-          width: 100%;
-          border-collapse: collapse;
+          text-align: center;
 
-          thead {
-            tr {
-              th {
-                padding: 5px;
-                border-bottom: 1px solid #ddd;
-                text-align: left;
-              }
-            }
-          }
-
-          tbody {
-            tr {
-              td {
-                padding: 2px 5px;
-                border-bottom: 1px solid #ddd;
-                text-align: left;
-              }
-            }
+          .customer-tr-info {
+            text-align: left;
           }
         }
       }
+    }
+  }
+}
     `
   });
 

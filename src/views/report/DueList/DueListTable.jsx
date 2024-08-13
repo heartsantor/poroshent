@@ -8,6 +8,16 @@ import { utils, writeFile } from 'xlsx';
 import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
+import {
+  IconChevronLeft,
+  IconChevronsLeft,
+  IconChevronRight,
+  IconChevronsRight,
+  IconPrint,
+  IconFile,
+  IconLibreOffice,
+  IconRepeat
+} from '../../../assets/icon';
 const columns = [
   { Header: 'SL', accessor: (row, i) => i + 1 },
   {
@@ -18,7 +28,7 @@ const columns = [
     Header: 'Customer Info',
     accessor: (row) => `${row.name_en}, ${row.primary_phone}`,
     Cell: ({ cell: { value } }) => (
-      <div>
+      <div className="customer-tr-info">
         <div>
           <span className="fw-bold">Name :</span>
           {value.split(', ')[0]}
@@ -208,7 +218,7 @@ const DueListTable = ({
               <Col md={4}></Col>
               <Col md={4}>
                 <Button variant="primary" size="sm" className="print-button w-100" onClick={handleClearFilters} disabled={loading}>
-                  Reset Filter
+                  <IconRepeat /> <span className="ms-1">Reset Filter</span>
                 </Button>
               </Col>
             </Row>
@@ -216,13 +226,13 @@ const DueListTable = ({
           <Col md={3}>
             <div className="action-btn">
               <Button variant="primary" size="sm" className="print-button" onClick={handlePrintClick} disabled={loading}>
-                Print
+                <IconPrint /> <span className="ms-1">Print</span>
               </Button>
               <Button variant="primary" size="sm" className="pdf-button" onClick={exportToPDF} disabled={loading}>
-                Save as PDF
+                <IconFile /> <span className="ms-1">Save as PDF</span>
               </Button>
               <Button variant="primary" size="sm" className="excel-button" onClick={exportToExcel} disabled={loading}>
-                Save as Excel
+                <IconLibreOffice /> <span className="ms-1">Save as Excel</span>
               </Button>
             </div>
           </Col>
@@ -268,16 +278,16 @@ const DueListTable = ({
         <div className="pagination-controls">
           <div className="d-flex gap-2">
             <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-              {'<<'}
+              <IconChevronsLeft />
             </button>
             <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-              {'<'}
+              <IconChevronLeft />
             </button>
             <button onClick={() => nextPage()} disabled={!canNextPage}>
-              {'>'}
+              <IconChevronRight />
             </button>
             <button onClick={() => gotoPage(pageOptions.length - 1)} disabled={!canNextPage}>
-              {'>>'}
+              <IconChevronsRight />
             </button>
           </div>
 
