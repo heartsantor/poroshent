@@ -48,12 +48,22 @@ const TradeReceipts = () => {
     fetchSingleTrade();
   }, []);
 
+  const date = new Date();
+  const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
+  const originalTitle = document.title;
+
+  useEffect(() => {
+    document.title = `invoice_${formattedDate}_${tradeId}`;
+  }, [tradeId]);
+
+
   const [isPrinting, setIsPrinting] = useState(false);
 
   const handlePrint = () => {
     setIsPrinting(true);
     setTimeout(() => {
       window.print();
+      document.title = originalTitle;
       setIsPrinting(false);
     }, 0);
   };
