@@ -40,6 +40,10 @@
     border-collapse: collapse;
     border: 1px solid #dee2e6; // Add a border to the entire table
 
+    @media (max-width: 992px) {
+      min-width: 100%;
+      width: 100%;
+    }
     th {
       background-color: #f8f9fa;
     }
@@ -80,7 +84,7 @@
     .color-yellow {
       color: #fdcb6e;
     }
-
+   
   }
 }
 
