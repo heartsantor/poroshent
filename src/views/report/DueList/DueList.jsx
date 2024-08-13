@@ -2,10 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import { size } from 'lodash';
 import { useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
+
+import { useAllCustomersMutation } from '../../../store/features/customer/customerApi';
 import { useGetAllDuesMutation } from '../../../store/features/due/dueApi';
+
 import { formatDateAndTime } from '../../../utils/dateTime';
 
-import LoadingSpinner from '../../../components/Loader/LoadingSpinner';
 import DueListTable from './DueListTable';
 
 const DueList = () => {
@@ -13,11 +15,22 @@ const DueList = () => {
   const tableRef = useRef();
 
   const [getAllDues, { isLoading: isGetAllDuesLoading }] = useGetAllDuesMutation();
+  const [allCustomers, { isLoading: allCustomersLoading }] = useAllCustomersMutation();
 
   const [allDueData, setAllDueData] = useState([]);
-  console.log('🚀 ~ DueList ~ allDueData:', allDueData);
+  const [customersData, setCustomersData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const selectedCustomerData = (customersData || []).map((item) => ({
+    value: item.id,
+    label: item.primary_phone,
+    name: item.name_en,
+    note: item.area_en
+  }));
 
   const formatData = (data) => {
     return data.map((item) => ({
@@ -34,7 +47,8 @@ const DueList = () => {
     try {
       const res = await getAllDues(data).unwrap();
       if (size(res)) {
-        setAllDueData(formatData(res?.customers ? res?.customers : []));
+        const formattedData = formatData(res?.customers ? res?.customers : []);
+        setAllDueData(formattedData); // Filter data after formatting
       }
     } catch (error) {
       setAllDueData({});
@@ -42,16 +56,39 @@ const DueList = () => {
     } finally {
       setLoading(false); // End loading
     }
+  };
 
+  const fetchCustomersData = async () => {
+    try {
+      const res = await allCustomers({ accessToken }).unwrap();
+      setCustomersData(res?.Customers || []);
+    } catch (error) {
+      setCustomersData([]);
+      console.error('Error:', error);
+    }
   };
 
   useEffect(() => {
     fetchAllDues();
   }, []);
 
+  useEffect(() => {
+    fetchCustomersData();
+  }, []);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setSelectedCustomerId(null);
+    setSelectedOption(null);
+  };
+
   const handlePrint = useReactToPrint({
     content: () => tableRef.current,
-    documentTitle: 'Due Reports',
+    documentTitle: `Due Report ${selectedOption !== null ? `-${selectedOption?.name} (${selectedOption?.value})` : ''}`,
     pageStyle: `
       @page {
         size: A4 portrait;
@@ -96,33 +133,48 @@ const DueList = () => {
     `
   });
 
-  const data =
-    allDueData.length > 0
-      ? allDueData
-      : [
-          {
-            customer_id: 0,
-            name: '',
-            name_en: '',
-            primary_phone: '',
-            secondary_phone: null,
-            address: '',
-            area: '',
-            area_en: '',
-            created_at: '',
-            total_final_price: 0,
-            total_paid: 0,
-            total_due: 0
-          }
-        ];
+  const filterData = (data) => {
+    // Ensure that data is an array
+    if (!Array.isArray(data)) return [];
 
-  if (isGetAllDuesLoading) {
-    return <LoadingSpinner isInitialLoading={true} />;
-  }
+    return data.filter((item) => {
+      const matchesSearchTerm = searchTerm
+        ? item.name_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.primary_phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.area_en.toLowerCase().includes(searchTerm.toLowerCase())
+        : true;
+
+      const matchesCustomerFilter = selectedCustomerId ? item.customer_id === selectedCustomerId : true;
+
+      return matchesSearchTerm && matchesCustomerFilter;
+    });
+  };
+
+  const data = filterData(allDueData);
+
+  // if (isGetAllDuesLoading) {
+  //   return <LoadingSpinner isInitialLoading={true} />;
+  // }
 
   return (
     <div>
-      <DueListTable handlePrint={handlePrint} tableRef={tableRef} data={data} loading={loading}/>
+      <DueListTable
+        handlePrint={handlePrint}
+        tableRef={tableRef}
+        data={data}
+        loading={loading}
+        selectedCustomerData={selectedCustomerData}
+        selectedOption={selectedOption}
+        handleSelectChange={(selected) => {
+          setSelectedOption(selected);
+          setSelectedCustomerId(selected ? selected.value : null);
+        }}
+        allCustomersLoading={allCustomersLoading}
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
+        handleClearFilters={handleClearFilters}
+      />
     </div>
   );
 };

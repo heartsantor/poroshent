@@ -4440,7 +4440,6 @@ __metadata:
     jspdf: "npm:^2.5.1"
     jspdf-autotable: "npm:^3.8.2"
     jwt-decode: "npm:^4.0.0"
-    lodash: "npm:^4.17.21"
     mathjs: "npm:^13.0.3"
     prettier: "npm:3.3.2"
     process: "npm:^0.11.10"

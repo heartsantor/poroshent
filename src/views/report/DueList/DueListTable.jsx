@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useTable, usePagination } from 'react-table';
 import { Row, Col, Card, Form, Button } from 'react-bootstrap';
-
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { utils, writeFile } from 'xlsx';
 
+import SmallSelect from '../../../components/CustomSelect/SmallSelect';
 import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
 const columns = [
@@ -34,7 +34,19 @@ const columns = [
   { Header: 'Due ', accessor: 'total_due' }
 ];
 
-const DueListTable = ({ handlePrint, tableRef, data, loading }) => {
+const DueListTable = ({
+  handlePrint,
+  tableRef,
+  data,
+  loading,
+  selectedCustomerData,
+  selectedOption,
+  handleSelectChange,
+  allCustomersLoading,
+  searchTerm,
+  handleSearchChange,
+  handleClearFilters
+}) => {
   const [printMode, setPrintMode] = useState(false);
 
   const {
@@ -150,11 +162,42 @@ const DueListTable = ({ handlePrint, tableRef, data, loading }) => {
           <Col md={9}>
             <Row>
               <Col md={6}>
-               sd
+                <Form.Group className="floating-label-group mb-3">
+                  <Form.Control
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="floating-input"
+                    size="sm"
+                    type="text"
+                    placeholder=""
+                  />
+                  <Form.Label className="floating-label">Search (Any)</Form.Label>
+                </Form.Group>
               </Col>
-              <Col md={6}>sdf</Col>
-              <Col md={6}>sdf</Col>
-              <Col md={6}>sdf</Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <SmallSelect
+                    options={selectedCustomerData}
+                    placeholder="কাস্টমার সিলেক্ট"
+                    value={selectedOption}
+                    onChange={handleSelectChange}
+                    isLoading={allCustomersLoading}
+                    header={true}
+                    required={true}
+                    headerLeftText="কাস্টমার নাম"
+                    headerRightText="এরিয়া"
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={4}>sdf</Col>
+              <Col md={4}>sdf</Col>
+              <Col md={4}>
+                <Button variant="primary" size="md" className="print-button w-100" onClick={handleClearFilters} disabled={loading}>
+                  Reset Filter
+                </Button>
+              </Col>
             </Row>
           </Col>
           <Col md={3}>
