@@ -272,7 +272,6 @@ const DueListTable = ({
               );
             })}
           </tbody>
-       
         </table>
       </div>
       {!printMode && (
@@ -304,7 +303,7 @@ const DueListTable = ({
               setPageSize(Number(e.target.value));
             }}
           >
-            {[5, 10, 20].map((pageSize) => (
+            {[10, 20, 50, 100].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
               </option>
