@@ -208,7 +208,15 @@ const CustomerAdd = () => {
             <Form className="form-content" onSubmit={handleSubmit}>
               <Row>
                 <Col md={6}>
-                  <SmallSelect value={selectedOption} onChange={handleSelectChange} options={selectedAreasData} header={true} />
+                  <SmallSelect
+                    value={selectedOption}
+                    onChange={handleSelectChange}
+                    options={selectedAreasData}
+                    header={true}
+                    placeholder="এরিয়া সিলেক্ট"
+                    headerLeftText="এরিয়া"
+                    headerRightText="নোট"
+                  />
                 </Col>
                 <Col md={6}>
                   <Form.Group className="floating-label-group mb-3">

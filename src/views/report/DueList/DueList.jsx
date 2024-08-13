@@ -5,6 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 
 import { useAllCustomersMutation } from '../../../store/features/customer/customerApi';
 import { useGetAllDuesMutation } from '../../../store/features/due/dueApi';
+import { useAllAreasMutation } from '../../../store/features/area/areaApi';
 
 import { formatDateAndTime } from '../../../utils/dateTime';
 
@@ -16,10 +17,14 @@ const DueList = () => {
 
   const [getAllDues, { isLoading: isGetAllDuesLoading }] = useGetAllDuesMutation();
   const [allCustomers, { isLoading: allCustomersLoading }] = useAllCustomersMutation();
+  const [getAllAreas, { isLoading: isGetAreasLoading }] = useAllAreasMutation();
 
   const [allDueData, setAllDueData] = useState([]);
   const [customersData, setCustomersData] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+
+  const [allAreas, setAllAreas] = useState([]);
+  const [selectedAreaOption, setSelectedAreaOption] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
@@ -29,6 +34,13 @@ const DueList = () => {
     label: item.primary_phone,
     name: item.name_en,
     note: item.area_en
+  }));
+
+  const selectedAreasData = (allAreas || []).map((item) => ({
+    value: item.id,
+    label: item.area_name_bd,
+    name: item.area_name_en,
+    note: item.note
   }));
 
   const formatData = (data) => {
@@ -67,11 +79,26 @@ const DueList = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAllDues();
-  }, []);
+  const fetchAreaData = async () => {
+    const data = {
+      accessToken: accessToken
+    };
+    try {
+      const res = await getAllAreas(data).unwrap();
+      if (size(res)) {
+        setAllAreas(res.data);
+      } else {
+        setAllAreas([]);
+      }
+    } catch (error) {
+      setAllAreas([]);
+      console.error('Error:', error);
+    }
+  };
 
   useEffect(() => {
+    fetchAllDues();
+    fetchAreaData();
     fetchCustomersData();
   }, []);
 
@@ -82,6 +109,7 @@ const DueList = () => {
   const handleClearFilters = () => {
     setSearchTerm('');
     setSelectedOption(null);
+    setSelectedAreaOption(null);
   };
 
   const handlePrint = useReactToPrint({
@@ -144,8 +172,9 @@ const DueList = () => {
         : true;
 
       const matchesCustomerFilter = selectedOption ? item.customer_id === selectedOption.value : true;
+      const matchesAreaFilter = selectedAreaOption ? item.area_en === selectedAreaOption.name : true;
 
-      return matchesSearchTerm && matchesCustomerFilter;
+      return matchesSearchTerm && matchesCustomerFilter && matchesAreaFilter;
     });
   };
 
@@ -171,6 +200,11 @@ const DueList = () => {
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
         handleClearFilters={handleClearFilters}
+        selectedAreaOption={selectedAreaOption}
+        handleSelectAreaChange={(selected) => {
+          setSelectedAreaOption(selected);
+        }}
+        selectedAreasData={selectedAreasData}
       />
     </div>
   );

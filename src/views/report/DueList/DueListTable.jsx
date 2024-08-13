@@ -45,7 +45,10 @@ const DueListTable = ({
   allCustomersLoading,
   searchTerm,
   handleSearchChange,
-  handleClearFilters
+  handleClearFilters,
+  selectedAreaOption,
+  handleSelectAreaChange,
+  selectedAreasData
 }) => {
   const [printMode, setPrintMode] = useState(false);
 
@@ -157,7 +160,7 @@ const DueListTable = ({
 
   return (
     <div className="table-container">
-      <div className="action-container">
+      <div className="action-container mb-3">
         <Row>
           <Col md={9}>
             <Row>
@@ -175,6 +178,19 @@ const DueListTable = ({
                 </Form.Group>
               </Col>
               <Col md={6}>
+                <SmallSelect
+                  value={selectedAreaOption}
+                  onChange={handleSelectAreaChange}
+                  options={selectedAreasData}
+                  placeholder="এরিয়া সিলেক্ট"
+                  header={true}
+                  headerLeftText="এরিয়া"
+                  headerRightText="নোট"
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col md={4}>
                 <Form.Group className="mb-3">
                   <SmallSelect
                     options={selectedCustomerData}
@@ -189,10 +205,7 @@ const DueListTable = ({
                   />
                 </Form.Group>
               </Col>
-            </Row>
-            <Row>
-              <Col md={4}>sdf</Col>
-              <Col md={4}>sdf</Col>
+              <Col md={4}></Col>
               <Col md={4}>
                 <Button variant="primary" size="sm" className="print-button w-100" onClick={handleClearFilters} disabled={loading}>
                   Reset Filter
