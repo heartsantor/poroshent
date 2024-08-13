@@ -272,6 +272,7 @@ const DueListTable = ({
               );
             })}
           </tbody>
+       
         </table>
       </div>
       {!printMode && (

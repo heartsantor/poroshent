@@ -122,6 +122,11 @@ const DueList = () => {
 }
 
 @media print {
+  body {
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+  }
   .table-container {
     margin: 0;
     box-shadow: none;
