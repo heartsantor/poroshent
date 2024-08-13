@@ -23,6 +23,7 @@ const tableHeaders = [
   'Invoice No',
   'Client',
   'Payment Type',
+  'Trx Id',
   'Description',
   'Amount',
   'Money Receipt',
@@ -65,6 +66,7 @@ const scrollToTop = () => {
 };
 
 const DraftTable = ({ productData = [], isLoading }) => {
+  console.log("🚀 ~ DraftTable ~ productData:", productData)
   const { t } = useTranslation();
 
   const { accessToken } = useSelector((state) => state.auth);
@@ -143,6 +145,7 @@ const DraftTable = ({ productData = [], isLoading }) => {
                 </span>
               </td>
               <td className="text-center">{getPaymentType(item.type)}</td>
+              <td className="text-center">{item.trx_id}</td>
               <td className="text-center">{item.trx_description ? item.trx_description : 'null'}</td>
               <td className="text-center">{item.amount} Taka</td>
               <td className="text-center">
