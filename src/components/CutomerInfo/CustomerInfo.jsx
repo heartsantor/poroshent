@@ -11,7 +11,9 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
             <h5>{customersDate?.name_en ? customersDate?.name_en : '_ _ _ _ _ _ _ _ _ _'}</h5>
             <span>{customersDate?.primary_phone ? customersDate?.primary_phone : '_ _ _ _ _ _ _ _ _ _'}</span>
           </div>
-          <h6 className="m-0">আইডি: <span className='custom-text-1'>{customersDate.id ? customersDate.id : '_ _ _'}</span></h6>
+          <h6 className="m-0">
+            আইডি: <span className="custom-text-1">{customersDate.id ? customersDate.id : '_ _ _'}</span>
+          </h6>
           <div className="action-buttons">
             <Button variant="light">নিউ কাস্টমার</Button>
           </div>
@@ -49,7 +51,9 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
         <div className="total-due-card">
           <div className="card-due-info">
             <h5>মোট বাকী</h5>
-            <span><span className='fw-bold text-danger'>{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'}</span> টাকা</span>
+            <span>
+              <span className="fw-bold text-danger">{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'}</span> টাকা
+            </span>
           </div>
         </div>
         {customersDueDate?.trades?.length > 0 ? (
@@ -77,7 +81,11 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
               </tbody>
             </table>
           </div>
-        ) : null}
+        ) : (
+          <div className="d-flex align-items-center justify-content-center">
+            <span className='p-3'>কোনো বাকি নেই</span>
+          </div>
+        )}
       </div>
     </div>
   );

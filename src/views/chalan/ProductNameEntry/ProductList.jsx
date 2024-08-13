@@ -11,13 +11,13 @@ import ProductEntryForm from './ProductEntryForm';
 const ProductList = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading, isError }] = useGetProductMutation();
-  const [activeKey, setActiveKey] = useState('1');
+  const [activeKey, setActiveKey] = useState('0');
   const [products, setProducts] = useState([]);
 
   const fetchProductData = async (type) => {
     const data = {
       accessToken: accessToken,
-      type: type
+      type: type === '0' ? null : type
     };
     try {
       const res = await getProduct(data).unwrap();
@@ -64,6 +64,9 @@ const ProductList = () => {
       <h5 className="mt-4">প্রোডাক্ট লিস্ট</h5>
       <hr />
       <Tabs variant="pills" activeKey={activeKey} onSelect={(k) => setActiveKey(k)} className="mb-3">
+        <Tab eventKey="0" title="সকল" className="custom-tab-content">
+          {productTableList}
+        </Tab>
         <Tab eventKey="1" title="মুরগীর খাবার" className="custom-tab-content">
           {productTableList}
         </Tab>

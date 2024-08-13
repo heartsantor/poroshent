@@ -123,6 +123,13 @@ const MakeInvoice = () => {
 
       const initialTotalPrice = selected.sell_price * getBagSizeMultiplier(initialBagSize);
       const availableStock = getAvailableStock(selected?.value, initialBagSize);
+
+      // Check if there's available stock before proceeding
+      if (availableStock <= 0) {
+        toastAlert('error', 'No Stock');
+        return;
+      }
+
       const newProduct = {
         ...selected,
         quantity: 1,
@@ -131,8 +138,6 @@ const MakeInvoice = () => {
         bagSize: initialBagSize,
         availableStock
       };
-
-      console.log('🚀 ~ handleProductSelectChange ~ availableStock:', availableStock);
 
       setTradeProducts((prevTradeProducts) => {
         const updatedTradeProducts = [...prevTradeProducts, newProduct];
@@ -227,15 +232,29 @@ const MakeInvoice = () => {
 
   const handleQuantityChange = (index, value) => {
     const updatedProducts = [...tradeProducts];
-    updatedProducts[index].quantity = value;
+
+    // Convert value to integer
+    let quantity = parseInt(value, 10);
+
+    // Restrict quantity to be within 1 and availableStock
+    if (quantity > updatedProducts[index].availableStock) {
+      quantity = updatedProducts[index].availableStock;
+    } else if (quantity < 1 || isNaN(quantity)) {
+      quantity = 1;
+    }
+
+    // Update the product quantity
+    updatedProducts[index].quantity = quantity;
+
+    // Calculate the total price based on the updated quantity
     const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
-    updatedProducts[index].totalPrice = value * updatedProducts[index].price * bagSizeMultiplier;
+    updatedProducts[index].totalPrice = quantity * updatedProducts[index].price * bagSizeMultiplier;
+
+    // Update the state with the new product details
     setTradeProducts(updatedProducts);
   };
 
   const handlePriceChange = (index, value) => {
-    console.log('🚀 ~ handlePriceChange ~ value:', value);
-
     const updatedProducts = [...tradeProducts];
     updatedProducts[index].price = value;
     const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
