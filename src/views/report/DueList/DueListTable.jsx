@@ -194,7 +194,7 @@ const DueListTable = ({
               <Col md={4}>sdf</Col>
               <Col md={4}>sdf</Col>
               <Col md={4}>
-                <Button variant="primary" size="md" className="print-button w-100" onClick={handleClearFilters} disabled={loading}>
+                <Button variant="primary" size="sm" className="print-button w-100" onClick={handleClearFilters} disabled={loading}>
                   Reset Filter
                 </Button>
               </Col>

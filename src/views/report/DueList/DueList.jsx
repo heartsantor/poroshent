@@ -22,7 +22,6 @@ const DueList = () => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const selectedCustomerData = (customersData || []).map((item) => ({
@@ -82,7 +81,6 @@ const DueList = () => {
 
   const handleClearFilters = () => {
     setSearchTerm('');
-    setSelectedCustomerId(null);
     setSelectedOption(null);
   };
 
@@ -145,7 +143,7 @@ const DueList = () => {
           item.area_en.toLowerCase().includes(searchTerm.toLowerCase())
         : true;
 
-      const matchesCustomerFilter = selectedCustomerId ? item.customer_id === selectedCustomerId : true;
+      const matchesCustomerFilter = selectedOption ? item.customer_id === selectedOption.value : true;
 
       return matchesSearchTerm && matchesCustomerFilter;
     });
@@ -168,7 +166,6 @@ const DueList = () => {
         selectedOption={selectedOption}
         handleSelectChange={(selected) => {
           setSelectedOption(selected);
-          setSelectedCustomerId(selected ? selected.value : null);
         }}
         allCustomersLoading={allCustomersLoading}
         searchTerm={searchTerm}
