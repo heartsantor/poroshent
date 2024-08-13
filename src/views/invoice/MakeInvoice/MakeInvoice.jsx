@@ -67,6 +67,7 @@ const MakeInvoice = () => {
   });
   const [selectedProductOption, setSelectedProductOption] = useState(null);
   const [tradeProducts, setTradeProducts] = useState([]);
+
   const [discount, setDiscount] = useState(0);
   const [paidAmount, setPaidAmount] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
@@ -110,25 +111,28 @@ const MakeInvoice = () => {
 
     if (selected) {
       let initialBagSize = '1KG';
-      if (selected.check_stock_50) {
+      if (selected?.check_stock_50) {
         initialBagSize = '50KG';
-      } else if (selected.check_stock_25) {
+      } else if (selected?.check_stock_25) {
         initialBagSize = '25KG';
-      } else if (selected.check_stock_10) {
+      } else if (selected?.check_stock_10) {
         initialBagSize = '10KG';
-      } else if (selected.check_stock_5) {
+      } else if (selected?.check_stock_5) {
         initialBagSize = '5KG';
       }
 
       const initialTotalPrice = selected.sell_price * getBagSizeMultiplier(initialBagSize);
-
+      const availableStock = getAvailableStock(selected?.value, initialBagSize);
       const newProduct = {
         ...selected,
         quantity: 1,
-        price: selected.sell_price,
+        price: selected?.sell_price,
         totalPrice: initialTotalPrice,
-        bagSize: initialBagSize
+        bagSize: initialBagSize,
+        availableStock
       };
+
+      console.log('🚀 ~ handleProductSelectChange ~ availableStock:', availableStock);
 
       setTradeProducts((prevTradeProducts) => {
         const updatedTradeProducts = [...prevTradeProducts, newProduct];
@@ -136,7 +140,7 @@ const MakeInvoice = () => {
       });
 
       setTimeout(() => {
-        handleBagSizeChange(tradeProducts.length, initialBagSize); // Trigger handleBagSizeChange initially
+        handleBagSizeChange(tradeProducts?.length, initialBagSize); // Trigger handleBagSizeChange initially
       }, 0);
 
       setSelectedProductOption(null); // Reset product selection
@@ -191,6 +195,36 @@ const MakeInvoice = () => {
     }
   }, [selectedOption]);
 
+  const getAvailableStock = (productId, bagSize) => {
+    const product = products.find((p) => p.id === productId);
+
+    if (!product) return 0;
+
+    // Get stock based on bagSize
+    let availableStock = 0;
+    switch (bagSize) {
+      case '1KG':
+        availableStock = product.stock_1;
+        break;
+      case '5KG':
+        availableStock = product.stock_5;
+        break;
+      case '10KG':
+        availableStock = product.stock_10;
+        break;
+      case '25KG':
+        availableStock = product.stock_25;
+        break;
+      case '50KG':
+        availableStock = product.stock_50;
+        break;
+      default:
+        availableStock = 0;
+    }
+
+    return availableStock;
+  };
+
   const handleQuantityChange = (index, value) => {
     const updatedProducts = [...tradeProducts];
     updatedProducts[index].quantity = value;
@@ -200,6 +234,8 @@ const MakeInvoice = () => {
   };
 
   const handlePriceChange = (index, value) => {
+    console.log('🚀 ~ handlePriceChange ~ value:', value);
+
     const updatedProducts = [...tradeProducts];
     updatedProducts[index].price = value;
     const bagSizeMultiplier = getBagSizeMultiplier(updatedProducts[index].bagSize);
@@ -208,9 +244,13 @@ const MakeInvoice = () => {
   };
 
   const handleBagSizeChange = (index, value) => {
+    const selectedProduct = tradeProducts[index];
+    const availableStock = getAvailableStock(selectedProduct.value, value);
+
     const updatedProducts = [...tradeProducts];
     if (updatedProducts[index]) {
       updatedProducts[index].bagSize = value;
+      updatedProducts[index].availableStock = availableStock;
       const bagSizeMultiplier = getBagSizeMultiplier(value);
       updatedProducts[index].totalPrice = updatedProducts[index].quantity * updatedProducts[index].price * bagSizeMultiplier;
       setTradeProducts(updatedProducts);
@@ -335,87 +375,93 @@ const MakeInvoice = () => {
               </Col>
             </Row>
             <hr />
-            <table className="table">
-              <thead>
-                <tr className="text-uppercase">
-                  <th>SL</th>
-                  <th>Product Name</th>
-                  <th>Bag size</th>
-                  <th>Available QTY</th>
-                  <th>Product QTY</th>
-                  <th>Product Unit</th>
-                  <th>Product price</th>
-                  <th>Product Total price</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tradeProducts.map((product, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {product.label} ({product.name})
-                    </td>
-                    <td>
-                      <Form.Control
-                        className="parches-control-form"
-                        id="mySelect"
-                        as="select"
-                        value={product.bagSize}
-                        onChange={(e) => handleBagSizeChange(index, e.target.value)}
-                      >
-                        {product.check_stock_1 ? <option value="1KG">1KG</option> : null}
-                        {product.check_stock_5 ? <option value="5KG">5KG</option> : null}
-                        {product.check_stock_10 ? <option value="10KG">10KG</option> : null}
-                        {product.check_stock_25 ? <option value="25KG">25KG</option> : null}
-                        {product.check_stock_50 ? <option value="50KG">50KG</option> : null}
-                      </Form.Control>
-                    </td>
-                    <td>10</td>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <Form.Control
-                          className="invoice-input parches-control-form"
-                          type="number"
-                          value={product.quantity}
-                          onChange={(e) => handleQuantityChange(index, e.target.value)}
-                          onWheel={(e) => e.target.blur()}
-                          inputMode="none"
-                          min="1"
-                        />
-                        <span className="ms-2"> Bag</span>
-                      </div>
-                    </td>
-                    <td>
-                      {product.bagSize === '1KG' ? `1KG x ${product.quantity} = ${1 * product.quantity} KG` : ''}
-                      {product.bagSize === '5KG' ? `5KG x ${product.quantity} = ${5 * product.quantity} KG` : ''}
-                      {product.bagSize === '10KG' ? `10KG x ${product.quantity} = ${10 * product.quantity} KG` : ''}
-                      {product.bagSize === '25KG' ? `25KG x ${product.quantity} = ${25 * product.quantity} KG` : ''}
-                      {product.bagSize === '50KG' ? `50KG x ${product.quantity} = ${50 * product.quantity} KG` : ''}
-                    </td>
-                    <td>
-                      <Form.Control
-                        className="parches-control-form"
-                        type="number"
-                        value={product.price}
-                        onChange={(e) => handlePriceChange(index, e.target.value)}
-                        onWheel={(e) => e.target.blur()}
-                        inputMode="none"
-                        min="0"
-                      />
-                    </td>
-                    <td>
-                      <span className="fw-bold text-primary">{moneyFixed(product.totalPrice)}</span>
-                    </td>
-                    <td>
-                      <Button size="sm" variant="danger" onClick={() => setTradeProducts(tradeProducts.filter((_, i) => i !== index))}>
-                        x
-                      </Button>
-                    </td>
+            <div className="table-responsive-wrapper">
+              <table className="table">
+                <thead>
+                  <tr className="text-uppercase">
+                    <th>SL</th>
+                    <th>Product Name</th>
+                    <th>Bag size</th>
+                    <th>Available QTY</th>
+                    <th>Product QTY</th>
+                    <th>Product Unit</th>
+                    <th>Product price</th>
+                    <th>Product Total price</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {tradeProducts.map((product, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {product.label} ({product.name})
+                      </td>
+                      <td>
+                        <Form.Control
+                          className="parches-control-form"
+                          id="mySelect"
+                          as="select"
+                          value={product.bagSize}
+                          onChange={(e) => handleBagSizeChange(index, e.target.value)}
+                        >
+                          {product.check_stock_1 ? <option value="1KG">1KG</option> : null}
+                          {product.check_stock_5 ? <option value="5KG">5KG</option> : null}
+                          {product.check_stock_10 ? <option value="10KG">10KG</option> : null}
+                          {product.check_stock_25 ? <option value="25KG">25KG</option> : null}
+                          {product.check_stock_50 ? <option value="50KG">50KG</option> : null}
+                        </Form.Control>
+                      </td>
+                      <td>{product.availableStock} ব্যাগ</td>
+                      <td>
+                        <div className="d-flex align-items-center">
+                          <Form.Control
+                            className="invoice-input parches-control-form"
+                            type="number"
+                            value={product.quantity}
+                            onChange={(e) => handleQuantityChange(index, e.target.value)}
+                            onWheel={(e) => e.target.blur()}
+                            inputMode="none"
+                            min="1"
+                            max={product.availableStock}
+                          />
+                          <span className="ms-2"> Bag</span>
+                        </div>
+                      </td>
+                      <td>
+                        {product.bagSize === '1KG' ? `1KG x ${product.quantity} = ${1 * product.quantity} KG` : ''}
+                        {product.bagSize === '5KG' ? `5KG x ${product.quantity} = ${5 * product.quantity} KG` : ''}
+                        {product.bagSize === '10KG' ? `10KG x ${product.quantity} = ${10 * product.quantity} KG` : ''}
+                        {product.bagSize === '25KG' ? `25KG x ${product.quantity} = ${25 * product.quantity} KG` : ''}
+                        {product.bagSize === '50KG' ? `50KG x ${product.quantity} = ${50 * product.quantity} KG` : ''}
+                      </td>
+                      <td>
+                        <Form.Control
+                          className="parches-control-form"
+                          type="number"
+                          value={product.price}
+                          onChange={(e) => handlePriceChange(index, parseFloat(e.target.value))}
+                          onWheel={(e) => e.target.blur()}
+                          inputMode="decimal"
+                          min="0"
+                          step="0.01"
+                          disabled
+                        />
+                      </td>
+                      <td className="text-end">
+                        <span className="fw-bold h6 text-primary">{moneyFixed(product.totalPrice)}</span>
+                      </td>
+                      <td>
+                        <Button size="sm" variant="danger" onClick={() => setTradeProducts(tradeProducts.filter((_, i) => i !== index))}>
+                          x
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
             <div>
               <Row>
                 <Col md={6}>
@@ -517,39 +563,42 @@ const MakeInvoice = () => {
                     <Form.Label className="floating-label">paid</Form.Label>
                   </Form.Group>
                 </Col>
-                <Col md={6}>
-                  <table className="overview-table">
-                    <tbody>
-                      <tr>
-                        <td className="text-bold">মোট মূল্য</td>
-                        <td className="text-bold color-beguni">{moneyFixed(totalAmount ? totalAmount : 0)}</td>
-                      </tr>
-                      <tr>
-                        <td>ডিসকাউন্ট</td>
-                        <td className="">{moneyFixed(discount ? discount : 0)}</td>
-                      </tr>
-                      <tr>
-                        <td>লেবার খরচ</td>
-                        <td className="">{moneyFixed(finalLaborCost)}</td>
-                      </tr>
-                      <tr>
-                        <td>ট্রান্সপোর্ট খরচ</td>
-                        <td className="">{moneyFixed(finalTransportCost)}</td>
-                      </tr>
-                      <tr>
-                        <td className="text-bold">সর্বমোট মূল্য</td>
-                        <td className="text-bold">{moneyFixed(discountedAmount ? discountedAmount : 0)}</td>
-                      </tr>
-                      <tr>
-                        <td>জমার পরিমান</td>
-                        <td className="text-bold color-green">{moneyFixed(paidAmount ? paidAmount : 0)}</td>
-                      </tr>
-                      <tr>
-                        <td>বাকীর পরিমান</td>
-                        <td className="text-bold color-red">{moneyFixed(dueAmount ? dueAmount : 0)}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <Col md={2}></Col>
+                <Col md={4}>
+                  <div className="overview-table-wrapper">
+                    <table className="overview-table">
+                      <tbody>
+                        <tr>
+                          <td className="text-bold">মোট মূল্য</td>
+                          <td className="text-bold color-beguni">{moneyFixed(totalAmount ? totalAmount : 0)}</td>
+                        </tr>
+                        <tr>
+                          <td>ডিসকাউন্ট</td>
+                          <td className="">{moneyFixed(discount ? discount : 0)}</td>
+                        </tr>
+                        <tr>
+                          <td>লেবার খরচ</td>
+                          <td className="">{moneyFixed(finalLaborCost)}</td>
+                        </tr>
+                        <tr>
+                          <td>ট্রান্সপোর্ট খরচ</td>
+                          <td className="">{moneyFixed(finalTransportCost)}</td>
+                        </tr>
+                        <tr>
+                          <td className="text-bold">সর্বমোট মূল্য</td>
+                          <td className="text-bold">{moneyFixed(discountedAmount ? discountedAmount : 0)}</td>
+                        </tr>
+                        <tr>
+                          <td>জমার পরিমান</td>
+                          <td className="text-bold color-green">{moneyFixed(paidAmount ? paidAmount : 0)}</td>
+                        </tr>
+                        <tr>
+                          <td>বাকীর পরিমান</td>
+                          <td className="text-bold color-red">{moneyFixed(dueAmount ? dueAmount : 0)}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </Col>
               </Row>
               <Button variant="primary" type="submit" size="sm">

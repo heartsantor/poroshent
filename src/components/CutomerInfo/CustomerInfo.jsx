@@ -49,7 +49,7 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
         <div className="total-due-card">
           <div className="card-due-info">
             <h5>মোট বাকী</h5>
-            <span>{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'} টাকা</span>
+            <span><span className='fw-bold text-danger'>{customersDueDate.total_due ? customersDueDate.total_due : '_ _ _'}</span> টাকা</span>
           </div>
         </div>
         {customersDueDate?.trades?.length > 0 ? (
@@ -67,10 +67,10 @@ const CustomerInfo = ({ customersDate, customersDueDate }) => {
                 {customersDueDate?.trades?.map((item, i) => (
                   <tr key={i}>
                     <td>{item.id}</td>
-                    <td>{item.total_price} Taka</td>
-                    <td>{item.paid} Taka</td>
+                    <td>{item.total_price} টাকা</td>
+                    <td>{item.paid} টাকা</td>
                     <td>
-                      <span className="text-bold color-red">{item.due}</span> Taka
+                      <span className="fw-bold text-danger">{item.due}</span> টাকা
                     </td>
                   </tr>
                 ))}

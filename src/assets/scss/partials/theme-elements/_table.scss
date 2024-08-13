@@ -27,48 +27,69 @@
  }
 }
 
-.overview-table {
+.overview-table-wrapper {
  width: 100%;
- margin-bottom: 1rem;
- color: #212529;
- border-collapse: collapse;
- border: 1px solid #dee2e6; // Add a border to the entire table
 
- th{
-  background-color: #f8f9fa;
+ .overview-table {
+  margin-bottom: 1rem;
+  color: #212529;
+  border-collapse: collapse;
+  border: 1px solid #dee2e6; // Add a border to the entire table
+
+  th {
+   background-color: #f8f9fa;
+  }
+
+  td,
+  th {
+   padding: 5px 10px;
+   border: 1px solid #dee2e6;
+  }
+
+  td {
+   background-color: #fff;
+   font-size: 15px;
+   color: #000;
+  }
+
+  tr:hover {
+   background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .text-bold {
+   font-size: 16px;
+   font-weight: bold;
  }
-
- td,th {
-  padding: 5px 10px;
-  border: 1px solid #dee2e6;
- }
-
- td {
-  background-color: #fff;
-  font-size: 15px;
-  color: #000;
- }
-
- tr:hover {
-  background-color: rgba(0, 0, 0, 0.1);
- }
-
- .text-bold {
-  font-size: 16px;
-  font-weight: bold;
- }
-
+ 
  .color-red {
-  color: #e17055;
+   color: #e17055;
  }
-
+ 
  .color-green {
-  color: #00b894;
+   color: #00b894;
  }
+ 
  .color-beguni {
-  color: #6c5ce7;
+   color: #6c5ce7;
  }
+ 
  .color-yellow {
-  color: #fdcb6e;
+   color: #fdcb6e;
+ }
+ 
+ }
+}
+
+.table-responsive-wrapper {
+ width: 100%;
+ overflow-x: auto; // Enable horizontal scrolling on smaller screens
+ -webkit-overflow-scrolling: touch; // For smooth scrolling on iOS devices
+
+ .table {
+   width: 100%; // Ensure the table takes up the full width of its container
+   min-width: 700px; // Set a minimum width to force horizontal scroll on small screens
+   margin-bottom: 1rem;
+   border-collapse: collapse;
+   border: 1px solid #dee2e6; // Add a border to the entire table
  }
 }
