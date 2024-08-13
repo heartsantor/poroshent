@@ -301,11 +301,11 @@ const MakeInvoice = () => {
       transport_cost: transportCost,
       products: tradeProducts.map((product) => ({
         product_id: product.value,
-        stock_1: product.bagSize === '1KG' ? Number(product.quantity) : 0,
-        stock_5: product.bagSize === '5KG' ? Number(product.quantity) : 0,
-        stock_10: product.bagSize === '10KG' ? Number(product.quantity) : 0,
-        stock_25: product.bagSize === '25KG' ? Number(product.quantity) : 0,
-        stock_50: product.bagSize === '50KG' ? Number(product.quantity) : 0
+        stock_1: product.bagSize === '1KG' ? parseFloat(product.quantity) : 0,
+        stock_5: product.bagSize === '5KG' ? parseFloat(product.quantity) : 0,
+        stock_10: product.bagSize === '10KG' ? parseFloat(product.quantity) : 0,
+        stock_25: product.bagSize === '25KG' ? parseFloat(product.quantity) : 0,
+        stock_50: product.bagSize === '50KG' ? parseFloat(product.quantity) : 0
       }))
     };
 
@@ -491,11 +491,12 @@ const MakeInvoice = () => {
                       size="sm"
                       placeholder=""
                       value={discount}
-                      onChange={(e) => setDiscount(Number(e.target.value))}
+                      onChange={(e) => setDiscount(parseFloat(e.target.value))}
                       onFocus={() => setDiscount('')}
                       onWheel={(e) => e.target.blur()}
-                      inputMode="none"
+                      inputMode="decimal"
                       min="0"
+                      step="0.01"
                     />
                     <Form.Label className="floating-label">ডিসকাউন্ট</Form.Label>
                   </Form.Group>
@@ -509,11 +510,12 @@ const MakeInvoice = () => {
                           type="number"
                           size="sm"
                           value={transportCost}
-                          onChange={(e) => setTransportCost(Number(e.target.value))}
+                          onChange={(e) => setTransportCost(parseFloat(e.target.value))}
                           onFocus={() => setTransportCost('')}
                           onWheel={(e) => e.target.blur()}
-                          inputMode="none"
+                          inputMode="decimal"
                           min="0"
+                          step="0.01"
                         />
                         <Form.Label className="floating-label">ট্রান্সপোর্ট খরচ</Form.Label>
                       </Form.Group>
@@ -526,11 +528,12 @@ const MakeInvoice = () => {
                           type="number"
                           size="sm"
                           value={laborCost}
-                          onChange={(e) => setLaborCost(Number(e.target.value))}
+                          onChange={(e) => setLaborCost(parseFloat(e.target.value))}
                           onFocus={() => setLaborCost('')}
                           onWheel={(e) => e.target.blur()}
-                          inputMode="none"
+                          inputMode="decimal"
                           min="0"
+                          step="0.01"
                         />
                         <Form.Label className="floating-label">লেবার খরচ</Form.Label>
                       </Form.Group>
@@ -575,9 +578,11 @@ const MakeInvoice = () => {
                       type="number"
                       placeholder=""
                       value={paidAmount}
-                      onChange={(e) => setPaidAmount(Number(e.target.value))}
+                      onChange={(e) => setPaidAmount(parseFloat(e.target.value))}
                       onFocus={() => setPaidAmount('')}
                       min="0"
+                      inputMode="decimal"
+                      step="0.01"
                     />
                     <Form.Label className="floating-label">paid</Form.Label>
                   </Form.Group>
@@ -620,13 +625,13 @@ const MakeInvoice = () => {
                   </div>
                 </Col>
               </Row>
-              <Button variant="primary" type="submit" size="sm">
+              <Button variant="primary" type="submit" size="sm" disabled={makeTradeLoading}>
                 সাবমিট
               </Button>
-              <Button variant="primary" type="submit" size="sm">
+              <Button variant="primary" type="submit" size="sm" disabled={makeTradeLoading}>
                 সাবমিট ও প্রিন্ট
               </Button>
-              <Button variant="secondary" type="button" onClick={clearAll} size="sm">
+              <Button variant="secondary" type="button" onClick={clearAll} size="sm" disabled={makeTradeLoading}>
                 ক্লিয়ার
               </Button>
             </div>

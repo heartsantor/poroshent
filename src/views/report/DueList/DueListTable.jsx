@@ -1,58 +1,40 @@
 import React, { useState } from 'react';
 import { useTable, usePagination } from 'react-table';
+import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { utils, writeFile } from 'xlsx';
-import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
-const data = [
-  {
-    customer_name: 'Katelyn Huber',
-    customer_address: 'Id dolor minus omni',
-    pre_due: 6760,
-    sales: 6904,
-    total_bill: 0,
-    return_sale: 6914,
-    cash_amount: 0,
-    discount: 0,
-    due: -65
-  },
-  {
-    customer_name: 'Katelyn Huber',
-    customer_address: 'Id dolor minus omni',
-    pre_due: 6760,
-    sales: 6904,
-    total_bill: 0,
-    return_sale: 6914,
-    cash_amount: 0,
-    discount: 0,
-    due: -65
-  }
-];
+import ReportHeader from '../../../components/PrintHeader/ReportHeader';
 
 const columns = [
   { Header: 'SL', accessor: (row, i) => i + 1 },
   {
-    Header: 'কাস্টমার তথ্য',
-    accessor: (row) => `${row.customer_name}, ${row.customer_address}`,
+    Header: 'Date',
+    accessor: 'created_at'
+  },
+  {
+    Header: 'Customer Info',
+    accessor: (row) => `${row.name_en}, ${row.primary_phone}`,
     Cell: ({ cell: { value } }) => (
       <div>
-        <strong>name :{value.split(', ')[0]}</strong>
-        <div>address: {value.split(', ')[1]}</div>
+        <div>
+          <span className="fw-bold">Name :</span>
+          {value.split(', ')[0]}
+        </div>
+        <div>
+          <span className="fw-bold">Phone:</span> {value.split(', ')[1]}
+        </div>
       </div>
     )
   },
-  { Header: 'পূর্বের বাকি', accessor: 'pre_due' },
-  { Header: 'বিক্রয় ', accessor: 'sales' },
-  { Header: 'মোট বিল', accessor: 'total_bill' },
-  { Header: 'বিক্রয় ফেরত', accessor: 'return_sale' },
-  { Header: 'আদায়', accessor: 'cash_amount' },
-  { Header: 'ডিসকাউন্ট', accessor: 'discount' },
-  { Header: 'বাকি', accessor: 'due' }
+  { Header: 'Total Price', accessor: 'total_final_price' },
+  { Header: 'Paid', accessor: 'total_paid' },
+  { Header: 'Due ', accessor: 'total_due' }
 ];
 
-const DueListTable = ({ handlePrint, tableRef }) => {
+const DueListTable = ({ handlePrint, tableRef, data, loading }) => {
   const [printMode, setPrintMode] = useState(false);
 
   const {
@@ -79,6 +61,16 @@ const DueListTable = ({ handlePrint, tableRef }) => {
     usePagination
   );
 
+  const totals = data.reduce(
+    (acc, row) => {
+      acc.total_final_price += row.total_final_price || 0;
+      acc.total_paid += row.total_paid || 0;
+      acc.total_due += row.total_due || 0;
+      return acc;
+    },
+    { total_final_price: 0, total_paid: 0, total_due: 0 }
+  );
+
   const handlePrintClick = () => {
     setPrintMode(true);
     setTimeout(() => {
@@ -90,8 +82,24 @@ const DueListTable = ({ handlePrint, tableRef }) => {
   const exportToPDF = () => {
     const doc = new jsPDF();
 
-    const headers = columns.map((col) => col.Header);
-    const body = rows.map((row) => row.cells.map((cell) => cell.value));
+    // Define headers including 'SL'
+    const headers = [...columns.map((col) => col.Header)];
+
+    // Prepare body data including the SL column
+    const body = data.map((row, index) => {
+      return [
+        ...columns.map((col) => {
+          // Access the value based on accessor
+          const accessor = col.accessor;
+          // Handle different types of accessors
+          if (typeof accessor === 'function') {
+            return accessor(row, index); // Handle function accessors
+          } else {
+            return row[accessor] !== undefined ? row[accessor] : ''; // Handle direct accessors
+          }
+        })
+      ];
+    });
 
     doc.autoTable({
       head: [headers],
@@ -102,40 +110,73 @@ const DueListTable = ({ handlePrint, tableRef }) => {
   };
 
   const exportToExcel = () => {
-    const worksheet = utils.json_to_sheet(
-      rows.map((row) => {
-        const rowObj = {};
-        row.cells.forEach((cell) => {
-          const header = cell.column.Header;
-          rowObj[header] = cell.value;
-        });
-        return rowObj;
-      })
-    );
+    // Define headers including 'SL'
+    const headers = [...columns.map((col) => col.Header)];
 
+    // Prepare body data including the SL column
+    const body = data.map((row, index) => {
+      return {
+        SL: index + 1, // SL column
+        ...columns.reduce((acc, col) => {
+          const accessor = col.accessor;
+          // Handle different types of accessors
+          if (typeof accessor === 'function') {
+            acc[col.Header] = accessor(row, index); // Handle function accessors
+          } else {
+            acc[col.Header] = row[accessor] !== undefined ? row[accessor] : ''; // Handle direct accessors
+          }
+          return acc;
+        }, {})
+      };
+    });
+
+    // Convert body data to worksheet
+    const worksheet = utils.json_to_sheet(body, { header: headers });
+
+    // Create workbook and add worksheet
     const workbook = {
       Sheets: { 'Due List': worksheet },
       SheetNames: ['Due List']
     };
 
+    // Write workbook to file
     writeFile(workbook, 'due-list.xlsx');
   };
 
   return (
     <div className="table-container">
-      <button className="print-button" onClick={handlePrintClick}>
-        Print
-      </button>
-      <button className="pdf-button" onClick={exportToPDF}>
-        Save as PDF
-      </button>
-      <button className="excel-button" onClick={exportToExcel}>
-        Save as Excel
-      </button>
-      <div ref={tableRef}>
+      <div className="action-container">
+        <Row>
+          <Col md={9}>
+            <Row>
+              <Col md={6}>
+               sd
+              </Col>
+              <Col md={6}>sdf</Col>
+              <Col md={6}>sdf</Col>
+              <Col md={6}>sdf</Col>
+            </Row>
+          </Col>
+          <Col md={3}>
+            <div className="action-btn">
+              <Button variant="primary" size="sm" className="print-button" onClick={handlePrintClick} disabled={loading}>
+                Print
+              </Button>
+              <Button variant="primary" size="sm" className="pdf-button" onClick={exportToPDF} disabled={loading}>
+                Save as PDF
+              </Button>
+              <Button variant="primary" size="sm" className="excel-button" onClick={exportToExcel} disabled={loading}>
+                Save as Excel
+              </Button>
+            </div>
+          </Col>
+        </Row>
+      </div>
+
+      <div ref={tableRef} className="table-wrapper">
         <ReportHeader />
-        <h4 className="text-center">বাকির রিপোর্ট</h4>
-        <table {...getTableProps()}>
+        <h4 className="text-center table-header">বাকির রিপোর্ট</h4>
+        <table {...getTableProps()} className="invoice-table">
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -146,6 +187,14 @@ const DueListTable = ({ handlePrint, tableRef }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
+            <tr className="total-header">
+              <td colSpan="3" style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                Total
+              </td>
+              <td className="fw-bold text-primary p-2">{totals.total_final_price.toFixed(2)}</td>
+              <td className="fw-bold text-primary p-2">{totals.total_paid.toFixed(2)}</td>
+              <td className="fw-bold text-primary p-2">{totals.total_due.toFixed(2)}</td>
+            </tr>
             {(printMode ? rows : page).map((row, i) => {
               prepareRow(row);
               return (
