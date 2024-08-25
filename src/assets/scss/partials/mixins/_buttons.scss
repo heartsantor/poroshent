@@ -94,6 +94,15 @@
   color: #000 !important;
 }
 
-.btn-outline-primary {
+// .btn-outline-primary {
+//   background-color: #04a9f5 !important
+// }
+
+.btn-check+.btn:hover {
+  background-color: #ddd !important;
+  // color: #fff;
+}
+
+.btn-check:checked+.btn {
   background-color: #04a9f5 !important
 }

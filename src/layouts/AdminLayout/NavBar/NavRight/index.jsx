@@ -59,9 +59,9 @@ const NavRight = () => {
             <ToggleButton
               className="toggle-button"
               key={idx}
-              id={`radio-${idx}`}
+              id={`radios-${idx}`}
               type="radio"
-              variant={radioValue === radio.value ? 'outline-primary' : 'outline-light'}
+              variant={radioValue === radio.value ? 'primary' : 'light'}
               name="radio"
               value={radio.value}
               checked={radioValue === radio.value}

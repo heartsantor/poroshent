@@ -235,7 +235,7 @@ const DraftInvoice = () => {
                   id={`radioz-${idx}`}
                   type="radio"
                   size="lg"
-                  variant={radioValue === radio.value ? 'outline-primary' : 'outline-light'}
+                  variant={radioValue === radio.value ? 'primary' : 'light'}
                   name="radio"
                   value={radio.value}
                   checked={radioValue === radio.value}

@@ -7,6 +7,9 @@ import IconChevronRight from './IconChevronRight';
 import IconChevronsRight from './IconChevronsRight';
 import IconLibreOffice from './IconLibreOffice';
 import IconRepeat from './IconRepeat';
+import IconMessage from './IconMessage';
+import IconReload from './IconReload';
+import IconSettings from './IconSettings';
 
 export {
   Chicken,
@@ -17,5 +20,8 @@ export {
   IconChevronRight,
   IconChevronsRight,
   IconLibreOffice,
-  IconRepeat
+  IconRepeat,
+  IconMessage,
+  IconReload,
+  IconSettings
 };
