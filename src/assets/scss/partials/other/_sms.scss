@@ -1,0 +1,51 @@
+.send-sms-form {
+ padding: 20px;
+ border: 1px solid #ddd;
+ border-radius: 4px;
+ background-color: #fff;
+
+ h5 {
+  margin-bottom: 20px;
+ }
+
+ .form-group {
+  margin-bottom: 15px;
+
+  label {
+   font-weight: bold;
+  }
+
+  .form-control {
+   background-color: #f9f9f9;
+   border-radius: 4px;
+  }
+
+  .form-check-input {
+   cursor: pointer;
+  }
+ }
+
+ .sms-stats {
+  margin-top: 20px;
+  font-size: 14px;
+
+  .text-right {
+   display: flex;
+   justify-content: flex-end;
+   color: green;
+   font-weight: bold;
+
+   div {
+    margin-right: 10px;
+   }
+  }
+ }
+
+ .sms-buttons {
+  margin-top: 20px;
+
+  button {
+   min-width: 100px;
+  }
+ }
+}

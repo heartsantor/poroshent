@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Row, Col, Card, Form, ButtonGroup, ToggleButton, Button } from 'react-bootstrap';
 
 import SmsStatus from './SmsStatus';
 import SmsBalance from './SmsBalance';
+import SendSMSForm from './SendSMSForm';
+import SmsDraft from './SmsDraft';
 
 const radios = [
   { name: 'My Own SMS', value: '0' },
@@ -10,7 +12,10 @@ const radios = [
 ];
 
 const SmsDashboard = () => {
+  const ws = useRef(null);
+
   const [radioValue, setRadioValue] = useState('0');
+
   return (
     <div>
       <Card>
@@ -45,6 +50,8 @@ const SmsDashboard = () => {
               <SmsBalance />
             </Col>
           </Row>
+          <SendSMSForm />
+          {/* <SmsDraft /> */}
         </Card.Body>
       </Card>
     </div>

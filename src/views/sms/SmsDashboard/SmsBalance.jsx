@@ -1,26 +1,57 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Row, Col, Card, Table, Tabs, Tab } from 'react-bootstrap';
+import { Row, Col, Card, Form, ButtonGroup, ToggleButton, Button } from 'react-bootstrap';
 
 import { IconMessage, IconReload, IconSettings } from '../../../assets/icon';
+
+const radios = [
+  { name: 'grameenphone', value: '0' },
+  { name: 'banglalink', value: '1' },
+  { name: 'teletalk', value: '2' }
+];
+
 const SmsBalance = () => {
+  const [radioValue, setRadioValue] = useState('0');
   return (
     <div>
       <Card>
-        <Card.Body className="p-4">
+        <Card.Body className="p-0">
           {/* <h4 className="mb-4">getItemName</h4> */}
-          <div className="d-flex align-items-center justify-content-between px-3 pb-2">
-            <div className="d-flex text-info">
-              <h5 className="me-2">Banglalink</h5>
-              <div style={{ cursor: 'pointer' }}>
-                <IconReload isLoading={true} />
+          <div className="shadow-sm">
+            <div className="d-flex align-items-center justify-content-between px-4 py-3">
+              <div className="d-flex text-info">
+                <h5 className="mb-0 me-2">Banglalink</h5>
+                <div style={{ cursor: 'pointer' }}>
+                  <IconReload isLoading={true} />
+                </div>
+              </div>
+              <div>
+                <ButtonGroup toggle>
+                  {radios.map((radio, idx) => (
+                    <ToggleButton
+                      className="toggle-button"
+                      key={idx}
+                      id={`radiosms-b-${idx}`}
+                      type="radio"
+                      size="sm"
+                      variant={radioValue === radio.value ? 'primary' : 'light'}
+                      name="radio"
+                      value={radio.value}
+                      checked={radioValue === radio.value}
+                      onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    >
+                      {radio.name}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+              </div>
+              <div className="text-info" style={{ cursor: 'pointer' }}>
+                <IconSettings />
               </div>
             </div>
-            <div className="text-info" style={{ cursor: 'pointer' }}>
-              <IconSettings />
-            </div>
           </div>
-          <div className="row d-flex align-items-center">
+
+          <div className="row d-flex align-items-center px-3 py-3">
             <div className="col-6">
               <div className="d-flex align-items-center">
                 <div
