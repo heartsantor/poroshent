@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import useAuthCheck from './hooks/useAuthCheck';
+
 import routes, { renderRoutes } from './routes';
 import LoadingSpinner from './components/Loader/LoadingSpinner';
 import NetworkWarningModal from './components/Modal/NetworkWarningModal';
 
 const App = () => {
   const isAuthChecked = useAuthCheck();
+
   const [showNetworkWarning, setShowNetworkWarning] = useState(false);
-  console.log('🚀 ~ App ~ showNetworkWarning:', showNetworkWarning);
 
   // useEffect(() => {
   //   const handleOnlineStatus = () => {
@@ -33,6 +34,8 @@ const App = () => {
   //     window.removeEventListener('offline', handleOnlineStatus);
   //   };
   // }, []);
+
+  // Call initial data setup only after auth check is complete
 
   if (!isAuthChecked) {
     return <LoadingSpinner />;

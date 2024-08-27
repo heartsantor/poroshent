@@ -11,7 +11,6 @@ export const renderRoutes = (routes = []) => (
         const Guard = route.guard || Fragment;
         const Layout = route.layout || Fragment;
         const Element = route.element;
-
         return (
           <Route
             key={i}
@@ -127,7 +126,7 @@ const routes = [
         exact: 'true',
         path: '/sms/sms-history',
         element: lazy(() => import('./views/sms/SmsHistory/SmsHistory'))
-      },
+      }
     ]
   }
 ];

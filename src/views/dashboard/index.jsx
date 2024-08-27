@@ -32,7 +32,6 @@ const DashDefault = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].key);
 
   const [stockDetails, setStockDetails] = useState([]);
-  console.log('🚀 ~ DashDefault ~ stockDetails:', stockDetails);
 
   const fetchStockDetails = async () => {
     const data = {

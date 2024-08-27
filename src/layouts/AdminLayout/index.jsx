@@ -11,6 +11,8 @@ import useOutsideClick from '../../hooks/useOutsideClick';
 import { ConfigContext } from '../../contexts/ConfigContext';
 import * as actionType from '../../store/actions';
 
+import initialCallData from '../../hooks/initialCallData';
+
 const AdminLayout = ({ children }) => {
   const { accessToken } = useSelector((state) => state.auth);
 
@@ -20,6 +22,8 @@ const AdminLayout = ({ children }) => {
 
   const { collapseMenu, headerFixedLayout } = configContext.state;
   const { dispatch } = configContext;
+
+  initialCallData();
 
   useEffect(() => {
     if (windowSize.width > 992 && windowSize.width <= 1024) {

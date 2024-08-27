@@ -99,7 +99,6 @@ const StockTable = () => {
   const { accessToken } = useSelector((state) => state.auth);
   const [getProduct, { isLoading, isError }] = useGetProductMutation();
   const [products, setProducts] = useState([]);
-  console.log('🚀 ~ StockTable ~ products:', products);
 
   const fetchProductData = async () => {
     const data = {
