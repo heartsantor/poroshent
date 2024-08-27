@@ -10,6 +10,10 @@ import IconRepeat from './IconRepeat';
 import IconMessage from './IconMessage';
 import IconReload from './IconReload';
 import IconSettings from './IconSettings';
+import IconTrash from './IconTrash';
+import IconX from './IconX';
+import IconEdit from './IconEdit';
+import IconCheck from './IconCheck';
 
 export {
   Chicken,
@@ -23,5 +27,9 @@ export {
   IconRepeat,
   IconMessage,
   IconReload,
-  IconSettings
+  IconSettings,
+  IconTrash,
+  IconX,
+  IconEdit,
+  IconCheck
 };

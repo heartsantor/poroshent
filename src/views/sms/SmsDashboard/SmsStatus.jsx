@@ -4,6 +4,8 @@ import { Row, Col, Card, Form, ButtonGroup, ToggleButton, Button } from 'react-b
 
 import { IconMessage, IconReload, IconSettings } from '../../../assets/icon';
 
+import SmsConfigModal from '../../../components/Modal/SmsConfigModal';
+
 const radios = [
   { name: 'Local Server', value: '0' },
   { name: 'Cloud Server', value: '1' }
@@ -11,6 +13,14 @@ const radios = [
 
 const SmsStatus = () => {
   const [radioValue, setRadioValue] = useState('0');
+
+  const [showModal, setShowModal] = useState(true);
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => {
+    setShowModal(true);
+  };
+
   return (
     <div>
       <Card>
@@ -48,7 +58,7 @@ const SmsStatus = () => {
                   ))}
                 </ButtonGroup>
               </div>
-              <div className="text-info" style={{ cursor: 'pointer' }}>
+              <div className="text-info" style={{ cursor: 'pointer' }} onClick={handleShow}>
                 <IconSettings />
               </div>
             </div>
@@ -74,6 +84,7 @@ const SmsStatus = () => {
           </div>
         </Card.Body>
       </Card>
+      <SmsConfigModal show={showModal} handleClose={handleClose} />
     </div>
   );
 };

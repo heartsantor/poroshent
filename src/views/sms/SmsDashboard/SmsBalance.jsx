@@ -5,9 +5,10 @@ import { Row, Col, Card, Form, ButtonGroup, ToggleButton, Button } from 'react-b
 import { IconMessage, IconReload, IconSettings } from '../../../assets/icon';
 
 const radios = [
-  { name: 'grameenphone', value: '0' },
-  { name: 'banglalink', value: '1' },
-  { name: 'teletalk', value: '2' }
+  { name: 'gp', value: '0' },
+  { name: 'bl', value: '1' },
+  { name: 'teletalk', value: '2' },
+  { name: 'robi', value: '3' }
 ];
 
 const SmsBalance = () => {
@@ -30,6 +31,7 @@ const SmsBalance = () => {
                   {radios.map((radio, idx) => (
                     <ToggleButton
                       className="toggle-button"
+                      style={{ minWidth: '50px' }}
                       key={idx}
                       id={`radiosms-b-${idx}`}
                       type="radio"
