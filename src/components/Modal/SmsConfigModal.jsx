@@ -9,7 +9,7 @@ const SmsConfigModal = ({ show, handleClose, option = 'sms' }) => {
     smsPublicUrl: 'http://103.181.163.105:8080',
     smsCloudUrl: 'https://sms.capcom.me:443/api/3rdparty/v1'
   });
-  console.log('🚀 ~ SmsConfigModal ~ formValues:', formValues);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });

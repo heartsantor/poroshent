@@ -28,9 +28,15 @@ const credentialsSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.credentialData = action.payload.credentialData;
+    },
+    setServerActive: (state, action) => {
+      state.credentialData.sms_server_active = action.payload;
+    },
+    setOperatorActive: (state, action) => {
+      state.credentialData.sms_operator_active = action.payload;
     }
   }
 });
 
-export const { setCredentials } = credentialsSlice.actions;
+export const { setCredentials, setServerActive, setOperatorActive } = credentialsSlice.actions;
 export default credentialsSlice.reducer;
